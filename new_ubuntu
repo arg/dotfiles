@@ -1,0 +1,72 @@
+#!/bin/bash
+
+set -eu
+
+echo -e "\U0001f538 Setting up a new remote Ubuntu 19.04 workstation..."
+
+echo -e "\U0001f538 Please change your root password first"
+passwd
+
+echo -e "\U0001f538 Now let's answer few questions."
+read -p "What SSH port you want to use? " -e ssh_port
+read -p "What Mosh port you want to use? " -e mosh_port
+read -p "What login your regular user should have? " -e user_login
+
+echo -e "\U0001f538 Adding PPAs..."
+add-apt-repository ppa:neovim-ppa/stable -y
+add-apt-repository ppa:keithw/mosh-dev -y
+add-apt-repository ppa:nginx/mainline -y
+add-apt-repository ppa:certbot/certbot -y
+curl -sLS https://deb.nodesource.com/setup_12.x | bash -
+curl -sLS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+apt-get update
+
+echo -e "\U0001f538 Upgrading system packages..."
+apt-get upgrade -y
+
+echo -e "\U0001f538 Installing new packages..."
+apt-get install -q -y zsh neovim mc nginx python-certbot-nginx htop universal-ctags ripgrep wget curl \
+  git mosh tmux nodejs yarn
+
+echo -e "\U0001f538 Installing additional tools..."
+curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v0.5.7/op_linux_amd64_v0.5.7.zip"
+unzip 1password.zip op -d /usr/local/bin
+rm 1password.zip
+
+echo -e "\U0001f538 Configuring SSH access..."
+# commenting existing options
+sed -i "s/^Port/#&/" /etc/ssh/sshd_config
+sed -i "s/^PermitRootLogin/#&/" /etc/ssh/sshd_config
+sed -i "s/^IgnoreUserKnownHosts/#&/" /etc/ssh/sshd_config
+sed -i "s/^PasswordAuthentication/#&/" /etc/ssh/sshd_config
+# adding new options
+tee -a /etc/ssh/sshd_config << END
+# added by arg
+Port $ssh_port
+PermitRootLogin no
+IgnoreUserKnownHosts yes
+PasswordAuthentication no
+AllowUsers $user_login
+END
+
+echo -e "\U0001f538 Setting firewall rules..."
+ufw allow $ssh_port/tcp
+ufw allow $mosh_port/udp
+
+echo -e "\U0001f538 Creating user..."
+adduser $user_login
+usermod -a -G sudo -s /usr/bin/zsh $user_login
+sudo -H -u $user_login sh -c 'mkdir $HOME/.ssh'
+sudo -H -u $user_login sh -c 'chmod 0700 $HOME/.ssh'
+echo -e "\U0001f538 Now paste your public SSH key end press <Return>"
+read public_key
+sudo -H -u $user_login sh -c 'touch $HOME/.ssh/authorized_keys'
+echo $public_key > /home/$user_login/.ssh/authorized_keys
+sudo -H -u $user_login sh -c 'chmod 0600 $HOME/.ssh/authorized_keys'
+echo ""
+echo -e "\U0001f539 Everything done. Press <Return> to reboot the machine with new settings."
+echo -e "\U0001f539 Then you will be able to login as $user_login to $ssh_port (SSH) or $mosh_port (Mosh) port."
+read
+ufw --force enable
+reboot

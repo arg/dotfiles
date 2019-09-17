@@ -1,0 +1,56 @@
+require:
+  - 'rubocop-rails'
+  - 'rubocop-rspec'
+
+Metrics/LineLength:
+  Max: 103
+
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: required
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Metrics/BlockLength:
+  ExcludedMethods:
+    - 'namespace'
+    - 'describe'
+    - 'shared_examples'
+    - 'shared_context'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/ExpandPathArguments:
+  Exclude:
+    - 'bin/*'
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/MixinUsage:
+  Exclude:
+    - 'bin/*'
+
+RSpec/NestedGroups:
+  Max: 5
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MessageChain:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'spec/**/*_examples.rb'

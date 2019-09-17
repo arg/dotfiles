@@ -1,0 +1,52 @@
+[user]
+  name = Andrei Gladkyi
+  email = arg+work@arg.zone
+  signingkey = 3660FAA76C043E51
+
+[color]
+  ui = true
+
+[core]
+  editor = mcedit
+  autocrlf = input
+  excludesfile = ~/.gitignore
+
+[push]
+  default = simple
+
+[format]
+  pretty = %C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s - %C(green)%cr%C(reset), %C(blue)%an%C(reset)
+  graph = true
+
+[status]
+  branch = true
+
+[github]
+  user = arg
+
+[help]
+  autocorrect = 40
+
+[url "git@github.com:"]
+  insteadOf = "gh:"
+  pushInsteadOf = "gh:"
+  pushInsteadOf = "git://github.com/"
+
+[url "git@gist.github.com:"]
+  insteadOf = "gist:"
+  pushInsteadOf = "gist:"
+  pushInsteadOf = "git://gist.github.com/"
+
+[commit]
+  gpgsign = true
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  required = true
+  process = git-lfs filter-process
+
+[alias]
+  commend = commit --amend --no-edit
+  please = push --force-with-lease
+  first = rev-list --max-parents=0 HEAD

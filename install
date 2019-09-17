@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+dotfiles_path="$HOME/.dotfiles"
+
+echo -e "\U0001f538 Installing dotfiles to $dotfiles_path..."
+
+git clone https://github.com/arg/dotfiles.git $dotfiles_path
+git -C $dotfiles_path remote set-url origin git@github.com:arg/dotfiles.git
+
+$dotfiles_path/home/.bin/sync_dotfiles --noupdate --secrets --silent
+
+echo -e "\U0001f539 Dotfiles have been successfully installed."

@@ -1,0 +1,10 @@
+--exclude=*.min.js
+--exclude=package.json
+--exclude=public
+--exclude=dist
+--exclude=node_modules
+--exclude=.bundle
+--exclude=bin
+--exclude=db
+--exclude=tmp
+--exclude=*.md
