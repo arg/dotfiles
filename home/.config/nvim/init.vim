@@ -26,7 +26,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
 Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'natebosch/vim-lsc'
 Plug 'jiangmiao/auto-pairs'
+Plug 'rhysd/git-messenger.vim'
+Plug 'janko/vim-test'
 call plug#end()
 " }}}
 
@@ -118,6 +121,28 @@ let g:auto_save_silent = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged"]
 " }}}
 
+" Vim-LSC {{{
+let g:lsc_server_commands = {
+\  'ruby': {
+\    'command': 'solargraph stdio',
+\    'log_level': -1,
+\    'suppress_stderr': v:true,
+\  },
+\}
+let g:lsc_enable_autocomplete = v:true
+let g:lsc_enable_diagnostics = v:false
+let g:lsc_reference_highlights = v:false
+let g:lsc_trace_level = 'off'
+" }}}
+
+" VimTest {{{
+let test#ruby#rspec#options = {
+  \ 'nearest': '--backtrace',
+  \ 'file':    '--format documentation',
+  \ 'suite':   '',
+\}
+" }}}
+
 " Airline {{{
 let g:airline_theme='gruvbox'
 let g:airline#extensions#ale#enabled = 1
@@ -152,8 +177,23 @@ cnoremap <C-l> <Right>
 " open a new empty buffer
 nnoremap <silent> <C-t> :enew<CR>
 
-" Toggle NERDTree
+" toggle NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+
+" toggle GitMessenger
+nmap <silent> <F8> <Plug>(git-messenger)
+
+" complete by TAB key
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+
+" run nearest test
+nnoremap <silent> tn :TestNearest<CR>
+
+" test file
+nnoremap <silent> tf :TestFile<CR>
+
+" test suite
+nnoremap <silent> ts :TestSuite<CR>
 
 " move to the previous buffer
 nnoremap <silent> <C-h> :bprevious<CR>
