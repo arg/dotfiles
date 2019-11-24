@@ -1,48 +1,175 @@
 require:
   - 'rubocop-rails'
   - 'rubocop-rspec'
+  - 'rubocop-performance'
 
-Metrics/LineLength:
-  Max: 103
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - 'db/schema.rb'
+    - 'bin/*'
+    - 'vendor/*'
 
-Naming/MemoizedInstanceVariableName:
-  EnforcedStyleForLeadingUnderscores: required
+# TODO: rename with Layout/ArgumentAllignment:
+Layout/AlignArguments:
+  EnforcedStyle: with_fixed_indentation
 
-Style/Documentation:
-  Enabled: false
+Layout/CaseIndentation:
+  EnforcedStyle: end
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
+Layout/DefEndAlignment:
+  AutoCorrect: true
 
-Bundler/OrderedGems:
-  Enabled: false
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+  AutoCorrect: true
+
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+Layout/ExtraSpacing:
+  AllowForAlignment: false
+
+# TODO: rename with Layout/FirstArrayElementIndentation:
+Layout/IndentFirstArrayElement:
+  EnforcedStyle: consistent
+
+# TODO: rename with Layout/FirstHashElementIndentation:
+Layout/IndentFirstHashElement:
+  EnforcedStyle: consistent
+
+Layout/HeredocArgumentClosingParenthesis:
+  Enabled: true
+
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+  EnforcedStyle: same_line
+
+Layout/MultilineHashKeyLineBreaks:
+  Enabled: true
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/MultilineMethodDefinitionBraceLayout:
+  EnforcedStyle: same_line
+
+# TODO: rename with Layout/ParameterAlignment:
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Lint/AssignmentInCondition:
+  AllowSafeAssignment: false
+
+Lint/HeredocMethodCallPosition:
+  Enabled: true
+
+Lint/UnusedBlockArgument:
+  IgnoreEmptyBlocks: false
+
+Lint/UnusedMethodArgument:
+  IgnoreEmptyMethods: false
 
 Metrics/BlockLength:
   ExcludedMethods:
     - 'namespace'
-    - 'describe'
-    - 'shared_examples'
-    - 'shared_context'
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'db/migrate/*.rb'
+
+Metrics/LineLength:
+  Max: 103
+
+Metrics/MethodLength:
+  Exclude:
+    - 'db/migrate/*.rb'
+
+# TODO: rename with Naming/BlockParameterName:
+Naming/UncommunicativeBlockParamName:
+  AllowNamesEndingInNumbers: false
+
+Naming/MemoizedInstanceVariableName:
+  EnforcedStyleForLeadingUnderscores: required
+
+# TODO: rename with Naming/MethodParameterName:
+Naming/UncommunicativeMethodParamName:
+  AllowNamesEndingInNumbers: false
+
+Naming/VariableNumber:
+  EnforcedStyle: non_integer
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/AutoResourceCleanup:
+  Enabled: true
 
 Style/ClassAndModuleChildren:
   Enabled: false
 
-Style/ExpandPathArguments:
-  Exclude:
-    - 'bin/*'
+Style/CollectionMethods:
+  Enabled: true
 
-Style/FormatString:
-  EnforcedStyle: percent
+Style/DateTime:
+  Enabled: true
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyElse:
+  EnforcedStyle: empty
+
+Style/FloatDivision:
+  EnforcedStyle: fdiv
+
+Style/FormatStringToken:
+  EnforcedStyle: unannotated
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/ImplicitRuntimeError:
+  Enabled: true
+
+Style/IpAddresses:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*.rb'
+
+Style/MethodCallWithArgsParentheses:
+  Enabled: false
+  AllowParenthesesInMultilineCall: true
+  AllowParenthesesInChaining: true
+  AllowParenthesesInCamelCaseMethod: true
+
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+
+Style/MixinGrouping:
+  EnforcedStyle: grouped
+
+Style/MultilineMethodSignature:
+  Enabled: true
+
+Style/OptionHash:
+  Enabled: true
 
 Style/RescueStandardError:
   EnforcedStyle: implicit
 
-Style/MixinUsage:
-  Exclude:
-    - 'bin/*'
+Style/Send:
+  Enabled: true
 
-RSpec/NestedGroups:
-  Max: 5
+Style/StringMethods:
+  Enabled: true
+
+Bundler/OrderedGems:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'spec/**/*_examples.rb'
 
 RSpec/ExampleLength:
   Enabled: false
@@ -53,7 +180,5 @@ RSpec/LetSetup:
 RSpec/MessageChain:
   Enabled: false
 
-Rails/SkipsModelValidations:
-  Exclude:
-    - 'spec/**/*_spec.rb'
-    - 'spec/**/*_examples.rb'
+RSpec/NestedGroups:
+  Max: 5
