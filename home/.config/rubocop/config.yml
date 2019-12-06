@@ -17,6 +17,9 @@ Layout/AlignArguments:
 Layout/CaseIndentation:
   EnforcedStyle: end
 
+Layout/ClassStructure:
+  Enabled: true
+
 Layout/DefEndAlignment:
   AutoCorrect: true
 
