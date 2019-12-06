@@ -174,11 +174,17 @@ Rails/SkipsModelValidations:
 RSpec/ExampleLength:
   Enabled: false
 
+RSpec/ExpectInHook:
+  Enabled: false
+
 RSpec/LetSetup:
   Enabled: false
 
 RSpec/MessageChain:
   Enabled: false
+
+RSpec/MessageSpies:
+  EnforcedStyle: receive
 
 RSpec/NestedGroups:
   Max: 5
