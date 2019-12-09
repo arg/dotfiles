@@ -29,7 +29,7 @@ apt-get upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
 apt-get install -q -y zsh neovim mc htop universal-ctags ripgrep wget curl git mosh tmux \
-  nodejs yarn docker-ce
+  nodejs yarn docker-ce unzip
 #apt-get install -q -y nginx python-certbot-nginx
 
 echo -e "\U0001f538 Installing additional tools..."
