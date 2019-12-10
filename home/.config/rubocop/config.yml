@@ -10,8 +10,7 @@ AllCops:
     - 'bin/*'
     - 'vendor/*'
 
-# TODO: rename with Layout/ArgumentAllignment:
-Layout/AlignArguments:
+Layout/ArgumentAllignment:
   EnforcedStyle: with_fixed_indentation
 
 Layout/CaseIndentation:
@@ -84,12 +83,10 @@ Layout/EndOfLine:
 Layout/ExtraSpacing:
   AllowForAlignment: false
 
-# TODO: rename with Layout/FirstArrayElementIndentation:
-Layout/IndentFirstArrayElement:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-# TODO: rename with Layout/FirstHashElementIndentation:
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/HeredocArgumentClosingParenthesis:
@@ -108,8 +105,7 @@ Layout/MultilineMethodCallIndentation:
 Layout/MultilineMethodDefinitionBraceLayout:
   EnforcedStyle: same_line
 
-# TODO: rename with Layout/ParameterAlignment:
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Lint/AssignmentInCondition:
@@ -138,15 +134,13 @@ Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*.rb'
 
-# TODO: rename with Naming/BlockParameterName:
-Naming/UncommunicativeBlockParamName:
+Naming/BlockParameterName:
   AllowNamesEndingInNumbers: false
 
 Naming/MemoizedInstanceVariableName:
   EnforcedStyleForLeadingUnderscores: required
 
-# TODO: rename with Naming/MethodParameterName:
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   AllowNamesEndingInNumbers: false
 
 Naming/VariableNumber:
