@@ -10,7 +10,7 @@ AllCops:
     - 'bin/*'
     - 'vendor/*'
 
-Layout/ArgumentAllignment:
+Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 
 Layout/CaseIndentation:
