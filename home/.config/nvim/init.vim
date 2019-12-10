@@ -15,13 +15,12 @@ Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
-Plug 'tpope/vim-surround'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
 Plug 'ludovicchabant/vim-gutentags'
 Plug '907th/vim-auto-save'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'w0rp/ale'
@@ -30,6 +29,8 @@ Plug 'natebosch/vim-lsc'
 Plug 'jiangmiao/auto-pairs'
 Plug 'rhysd/git-messenger.vim'
 Plug 'janko/vim-test'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'tmsvg/pear-tree'
 call plug#end()
 " }}}
 
@@ -100,6 +101,11 @@ let NERDSpaceDelims = 1
 let g:NERDCreateDefaultMappings = 0
 " }}}
 
+" SplitJoin {{{
+let g:splitjoin_split_mapping = ''
+let g:splitjoin_join_mapping = ''
+" }}}
+
 " Ale {{{
 let g:ale_linters = {
 \  'ruby': ['rubocop'],
@@ -164,6 +170,9 @@ let g:gutentags_cache_dir = "~/.config/nvim/ctags"
 " }}}
 
 " Keymaps {{{
+" leader key
+let mapleader=","
+
 " in insert or command mode, move cursor by using Ctrl
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>
@@ -179,6 +188,12 @@ nnoremap <silent> <C-t> :enew<CR>
 
 " toggle NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+
+" do split
+nnoremap <silent> <Leader>s :SplitjoinSplit<cr>
+
+" do join
+nnoremap <silent> <Leader>j :SplitjoinJoin<cr>
 
 " toggle GitMessenger
 nmap <silent> <F8> <Plug>(git-messenger)
