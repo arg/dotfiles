@@ -237,6 +237,9 @@ RSpec/ExampleLength:
 RSpec/ExpectInHook:
   Enabled: false
 
+RSpec/ImplicitSubject:
+  EnforcedStyle: single_statement_only
+
 RSpec/LetSetup:
   Enabled: false
 
