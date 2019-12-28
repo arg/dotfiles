@@ -136,6 +136,10 @@ Metrics/MethodLength:
   Exclude:
     - 'db/migrate/*.rb'
 
+Metrics/ModuleLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
 Naming/BlockParameterName:
   AllowNamesEndingInNumbers: false
 
