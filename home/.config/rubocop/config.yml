@@ -92,6 +92,11 @@ Layout/FirstHashElementIndentation:
 Layout/HeredocArgumentClosingParenthesis:
   Enabled: true
 
+Layout/LineLength:
+  Max: 103 # my iPad's viewport width
+  Exclude:
+    - 'spec/**/*.rb'
+
 Layout/MultilineAssignmentLayout:
   Enabled: true
   EnforcedStyle: same_line
@@ -114,6 +119,9 @@ Lint/AssignmentInCondition:
 Lint/HeredocMethodCallPosition:
   Enabled: true
 
+Lint/NonDeterministicRequireOrder:
+  Enabled: false
+
 Lint/UnusedBlockArgument:
   IgnoreEmptyBlocks: false
 
@@ -127,10 +135,6 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
     - 'db/migrate/*.rb'
 
-Metrics/LineLength:
-  Max: 103
-  Exclude:
-    - 'spec/**/*.rb'
 
 Metrics/MethodLength:
   Exclude:
