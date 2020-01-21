@@ -128,6 +128,10 @@ Lint/UnusedBlockArgument:
 Lint/UnusedMethodArgument:
   IgnoreEmptyMethods: false
 
+Metrics/AbcSize:
+  Exclude:
+    - 'db/migrate/*.rb'
+
 Metrics/BlockLength:
   ExcludedMethods:
     - 'namespace'
