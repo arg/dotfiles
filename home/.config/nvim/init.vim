@@ -142,6 +142,7 @@ let g:lsc_trace_level = 'off'
 " }}}
 
 " VimTest {{{
+let test#ruby#rspec#executable = 'docker-compose exec app bundle exec rspec'
 let test#ruby#rspec#options = {
   \ 'nearest': '--backtrace',
   \ 'file':    '--format documentation',
