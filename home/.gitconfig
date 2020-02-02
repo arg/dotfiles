@@ -11,6 +11,9 @@
   autocrlf = input
   excludesfile = ~/.gitignore
 
+[fetch]
+  prune = true
+
 [push]
   default = simple
 
@@ -27,26 +30,11 @@
 [help]
   autocorrect = 40
 
-[url "git@github.com:"]
-  insteadOf = "gh:"
-  pushInsteadOf = "gh:"
-  pushInsteadOf = "git://github.com/"
-
-[url "git@gist.github.com:"]
-  insteadOf = "gist:"
-  pushInsteadOf = "gist:"
-  pushInsteadOf = "git://gist.github.com/"
-
 [commit]
   gpgsign = true
-
-[filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  required = true
-  process = git-lfs filter-process
 
 [alias]
   commend = commit --amend --no-edit
   please = push --force-with-lease
   first = rev-list --max-parents=0 HEAD
+  sweep = "!git branch -v | grep '\\[gone\\]' | awk '{print $1}' | xargs -n 1 git branch -D"
