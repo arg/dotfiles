@@ -237,6 +237,9 @@ Rails/SafeNavigation:
 Rails/SaveBang:
   Enabled: true
   AllowImplicitReturn: false
+  Exclude:
+    - 'spec/**/*_spec.rb'
+    - 'spec/**/*_examples.rb'
 
 Rails/SkipsModelValidations:
   Exclude:
