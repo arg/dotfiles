@@ -138,6 +138,7 @@ fi
 # global aliases
 alias ll="ls -l"
 alias grep="grep --color=auto"
+alias mc="mc -x"
 
 stty -ixon # disable ctrl-s - ctrl-q shit
 
