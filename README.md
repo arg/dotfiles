@@ -6,7 +6,7 @@
 
 * Ubuntu 20.04
   ```bash
-  curl -sLS https://raw.github.com/arg/dotfiles/master/new_ubuntu | bash -
+  bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/new_ubuntu)
   ```
 * MacOS 10.14
   ```bash
@@ -15,7 +15,7 @@
 
 ### Dotfiles installation
 ```bash
-curl -sLS https://raw.github.com/arg/dotfiles/master/install | bash -
+bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/install)
 ```
 
 ## Zsh
