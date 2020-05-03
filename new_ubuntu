@@ -10,7 +10,7 @@ read -p "What Mosh port you want to use? " -e mosh_port
 read -p "What login your regular user should have? " -e user_login
 
 echo -e "\U0001f538 Adding package repositories..."
-add-apt-repository universe
+# add-apt-repository universe
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 add-apt-repository "deb https://deb.nodesource.com/node_12.x focal main" -y
 apt-get update
