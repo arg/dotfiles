@@ -19,10 +19,10 @@ echo -e "\U0001f538 Upgrading system packages..."
 apt-get upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
-apt-get install -q -y zsh neovim mc htop ripgrep wget curl git mosh tmux certbot \
+apt-get install -q -y zsh neovim mc htop ripgrep wget curl git mosh tmux certbot cmake pkg-config \
   nodejs docker.io docker-compose unzip python3-pip python3-setuptools python3-venv python3-wheel \
-  autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev \
-  libncurses5-dev libffi-dev libgdbm-dev
+  autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev \
+  libffi-dev libgdbm-dev
 
 echo -e "\U0001f538 Installing additional tools..."
 curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v0.10.0/op_linux_amd64_v0.10.0.zip"
