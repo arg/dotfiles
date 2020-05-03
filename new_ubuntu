@@ -73,7 +73,8 @@ sudo -H -u $user_login sh -c 'chmod 0600 $HOME/.ssh/authorized_keys'
 
 echo -e "\U0001f538 Installing additional tools for user..."
 sudo -H -u $user_login sh -c 'pip3 install --user pynvim'
-sudo -H -u $user_login sh -c 'curl -sSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash'
+sudo -H -u $user_login sh -c 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv'
+sudo -H -u $user_login sh -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
 
 echo ""
 echo -e "\U0001f539 Everything done. Press <Return> to reboot the machine with new settings."
