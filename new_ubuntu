@@ -4,9 +4,6 @@ set -eu
 
 echo -e "\U0001f538 Setting up a new remote Ubuntu 20.04 workstation..."
 
-echo -e "\U0001f538 Please change your root password first"
-passwd
-
 echo -e "\U0001f538 Now let's answer few questions."
 read -p "What SSH port you want to use? " -e ssh_port
 read -p "What Mosh port you want to use? " -e mosh_port
