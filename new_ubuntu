@@ -2,7 +2,7 @@
 
 set -eu
 
-echo -e "\U0001f538 Setting up a new remote Ubuntu 19.04 workstation..."
+echo -e "\U0001f538 Setting up a new remote Ubuntu 20.04 workstation..."
 
 echo -e "\U0001f538 Please change your root password first"
 passwd
@@ -13,33 +13,24 @@ read -p "What Mosh port you want to use? " -e mosh_port
 read -p "What login your regular user should have? " -e user_login
 
 echo -e "\U0001f538 Adding package repositories..."
-curl -sLS https://deb.nodesource.com/setup_12.x | bash -
-curl -sLS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-curl -sLS https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-add-apt-repository ppa:neovim-ppa/stable -y
-add-apt-repository ppa:keithw/mosh-dev -y
-add-apt-repository ppa:nginx/mainline -y
-add-apt-repository ppa:certbot/certbot -y
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+add-apt-repository universe
+curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+add-apt-repository "deb https://deb.nodesource.com/node_12.x focal main" -y
 apt-get update
 
 echo -e "\U0001f538 Upgrading system packages..."
 apt-get upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
-apt-get install -q -y zsh neovim mc htop universal-ctags ripgrep wget curl git mosh tmux \
-  nodejs yarn docker-ce unzip python3-pip python3-setuptools python3-venv python3-wheel \
+apt-get install -q -y zsh neovim mc htop ripgrep wget curl git mosh tmux certbot \
+  nodejs docker.io docker-compose unzip python3-pip python3-setuptools python3-venv python3-wheel \
   autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev \
   libncurses5-dev libffi-dev libgdbm-dev
 
 echo -e "\U0001f538 Installing additional tools..."
-curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v0.5.7/op_linux_amd64_v0.5.7.zip"
+curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v0.10.0/op_linux_amd64_v0.10.0.zip"
 unzip 1password.zip op -d /usr/local/bin
 rm 1password.zip
-curl -sLS -o /usr/local/bin/docker-compose \
-  "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)"
-chmod +x /usr/local/bin/docker-compose
 
 echo -e "\U0001f538 Configuring SSH access..."
 # commenting existing options
@@ -47,6 +38,10 @@ sed -i "s/^Port/#&/" /etc/ssh/sshd_config
 sed -i "s/^PermitRootLogin/#&/" /etc/ssh/sshd_config
 sed -i "s/^IgnoreUserKnownHosts/#&/" /etc/ssh/sshd_config
 sed -i "s/^PasswordAuthentication/#&/" /etc/ssh/sshd_config
+sed -i "s/^PermitTunnel/#&/" /etc/ssh/sshd_config
+sed -i "s/^AllowAgentForwarding/#&/" /etc/ssh/sshd_config
+sed -i "s/^AllowTcpForwarding/#&/" /etc/ssh/sshd_config
+sed -i "s/^X11Forwarding/#&/" /etc/ssh/sshd_config
 # adding new options
 tee -a /etc/ssh/sshd_config << END
 # added by arg
@@ -54,16 +49,23 @@ Port $ssh_port
 PermitRootLogin no
 IgnoreUserKnownHosts yes
 PasswordAuthentication no
-AllowUsers $user_login
+PermitTunnel no
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+AllowGroups sshusers
 END
 
 echo -e "\U0001f538 Setting firewall rules..."
 ufw allow $ssh_port/tcp
 ufw allow $mosh_port/udp
 
+echo -e "\U0001f538 Creating SSH group..."
+addgroup sshusers
+
 echo -e "\U0001f538 Creating user..."
 adduser $user_login
-usermod -a -G sudo,docker -s /usr/bin/zsh $user_login
+usermod -a -G sudo,docker,sshusers -s /usr/bin/zsh $user_login
 sudo -H -u $user_login sh -c 'mkdir $HOME/.ssh'
 sudo -H -u $user_login sh -c 'chmod 0700 $HOME/.ssh'
 echo -e "\U0001f538 Now paste your public SSH key end press <Return>"

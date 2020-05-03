@@ -18,19 +18,16 @@ Plug 'tpope/vim-rails'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline'
-Plug 'ludovicchabant/vim-gutentags'
 Plug '907th/vim-auto-save'
 Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'w0rp/ale'
-Plug 'shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'natebosch/vim-lsc'
 Plug 'jiangmiao/auto-pairs'
 Plug 'rhysd/git-messenger.vim'
 Plug 'janko/vim-test'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tmsvg/pear-tree'
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-tsserver coc-html coc-vetur coc-solargraph'}
 call plug#end()
 " }}}
 
@@ -117,28 +114,10 @@ let g:ale_sign_column_always = 1
 let g:ale_linters_explicit = 1
 " }}}
 
-" Deoplete {{{
-let g:deoplete#enable_at_startup = 1
-" }}}
-
 " AutoSave {{{
 let g:auto_save = 1
 let g:auto_save_silent = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged"]
-" }}}
-
-" Vim-LSC {{{
-let g:lsc_server_commands = {
-\  'ruby': {
-\    'command': 'solargraph stdio',
-\    'log_level': -1,
-\    'suppress_stderr': v:true,
-\  },
-\}
-let g:lsc_enable_autocomplete = v:true
-let g:lsc_enable_diagnostics = v:false
-let g:lsc_reference_highlights = v:false
-let g:lsc_trace_level = 'off'
 " }}}
 
 " VimTest {{{
@@ -164,10 +143,6 @@ let g:airline_skip_empty_sections = 1
 " UndoTree {{{
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_HelpLine = 0
-" }}}
-
-" GutenTags {{{
-let g:gutentags_cache_dir = "~/.config/nvim/ctags"
 " }}}
 
 " Keymaps {{{

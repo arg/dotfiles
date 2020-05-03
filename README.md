@@ -4,7 +4,7 @@
 
 ### New machine setup
 
-* Ubuntu 19.04
+* Ubuntu 20.04
   ```bash
   curl -sLS https://raw.github.com/arg/dotfiles/master/new_ubuntu | bash -
   ```
