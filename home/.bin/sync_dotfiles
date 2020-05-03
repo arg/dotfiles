@@ -30,10 +30,6 @@ if [[ $fetch_secrets == 1 ]]; then
   temp_file=`mktemp`
   op get document "Personal GPG Keys" > $temp_file
   export GPG_TTY=$(tty)
-  if ! pidof gpg-agent > /dev/null; then
-    echo -e "\U0001f538 Starting GPG daemon..."
-    gpg-agent --daemon
-  fi
   tar -Ozxf $temp_file ownertrust.asc | gpg --import-ownertrust
   tar -Ozxf $temp_file private.asc | gpg --import
   tar -Ozxf $temp_file public.asc | gpg --import
