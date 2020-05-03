@@ -30,7 +30,7 @@ tmux a -t main
 ### Generate SSL certificate via certbot
 
 ```bash
-sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /path/to/credentials/file -d example.com,*.example.com --preferred-challenges dns-01
+sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /path/to/credentials/file --preferred-challenges dns-01
 ```
 
 ### Generate DH parameters
