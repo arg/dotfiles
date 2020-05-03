@@ -33,6 +33,12 @@ tmux a -t main
 sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /path/to/credentials/file -d example.com,*.example.com --preferred-challenges dns-01
 ```
 
+### Generate DH parameters
+
+```bash
+openssl dhparam -out /etc/nginx/dhparams.pem 2048
+```
+
 ## Key bindings
 
 ### Zsh
