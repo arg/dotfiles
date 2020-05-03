@@ -14,13 +14,28 @@
   ```
 
 ### Dotfiles installation
+
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/install)
 ```
 
-## Zsh
+## Recipes
 
-### Key bindings
+### Attach to tmux session
+
+```bash
+tmux a -t main
+```
+
+### Generate SSL certificate via certbot
+
+```bash
+sudo certbot certonly --dns-cloudflare --dns-cloudflare-credentials /path/to/credentials/file -d example.com,*.example.com --preferred-challenges dns-01
+```
+
+## Key bindings
+
+### Zsh
 
 | Key | Action                  |
 |:---:|-------------------------|
@@ -30,9 +45,7 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/install)
 |<kbd>⌘←</kbd>| beginning of line |
 |<kbd>⌘→</kbd>| end of line |
 
-## iTerm2
-
-### Key bindings
+### iTerm2
 
 | Key | Action                  |
 |:---:|-------------------------|
@@ -41,13 +54,7 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/install)
 |<kbd>⌥←</kbd>| previous tab |
 |<kbd>⌥→</kbd>| next tab |
 
-## Vim
-
-### Settings
-
-* Buffers are saved automatically after exiting from Insert mode or making changes in Normal mode.
-
-### Key bindings
+### Vim
 
 | Key | Mode | Action             |
 |:---:|:----:|--------------------|
@@ -77,15 +84,7 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/install)
 |<kbd>⌃C</kbd>| V | copy to clipboard |
 |<kbd>⌃V</kbd>| I | paste from clipboard |
 
-## Tmux
-
-Always attach/create session via:
-
-```bash
-tmux a -t main
-```
-
-### Key bindings
+### Tmux
 
 | Key | Action                  |
 |:---:|-------------------------|
@@ -106,17 +105,9 @@ tmux a -t main
 |<kbd>P-M</kbd>| disable mouse |
 |<kbd>⌥↑</kbd>| scrollback (exit with `q`) |
 
-#### About prefix
+Note: prefix (P) is set to <kbd>`</kbd> (back quote) key.
 
-Prefix (P) is set to <kbd>`</kbd> (back quote) key.
-
-## Visual Studio Code
-
-### Configuration
-
-Configuration is stored in a separate gist.
-
-### Key bindings
+### Visual Studio Code
 
 | Key | Action |
 |:---:|-------------------------|
@@ -150,4 +141,3 @@ Configuration is stored in a separate gist.
 * <kbd>⌥</kbd> - Option (Alt)
 * <kbd>⌃</kbd> - Control
 * <kbd>⇧</kbd> - Shift
-
