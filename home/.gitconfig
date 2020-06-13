@@ -7,7 +7,7 @@
   ui = true
 
 [core]
-  editor = mcedit
+  editor = nvim
   autocrlf = input
   excludesfile = ~/.gitignore
 
