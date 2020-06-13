@@ -62,7 +62,6 @@ zstyle ':completion:*:history-words' stop yes
 zstyle ':completion:*:history-words' remove-all-dups yes
 zstyle ':completion:*:history-words' list false
 zstyle ':completion:*:history-words' menu yes
-
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*:*' formats '%F{green}@%K{green}%F{black}%c%u \ue725 %b%f'
@@ -134,6 +133,15 @@ if typeset -f set_terminal_tab_title > /dev/null; then
   set_terminal_tab_title
   add-zsh-hook chpwd set_terminal_tab_title
 fi
+
+function e() {
+    if [ "$1" != "" ]
+    then
+        $EDITOR $1
+    else
+        $EDITOR .
+    fi
+}
 
 # global aliases
 alias ll="ls -l"
