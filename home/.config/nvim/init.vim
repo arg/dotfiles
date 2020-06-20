@@ -27,8 +27,7 @@ Plug 'rhysd/git-messenger.vim'
 Plug 'janko/vim-test'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tmsvg/pear-tree'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-tsserver coc-html coc-vetur coc-solargraph'}
-" Plug 'w0rp/ale'
+Plug 'w0rp/ale'
 call plug#end()
 " }}}
 
@@ -38,6 +37,7 @@ call plug#end()
 
 set cmdheight=1 " use a status bar that is 1 row high
 set colorcolumn=+0 " show visual indicator
+set completeopt=menu,menuone,preview,noselect,noinsert " completion options
 set cursorline " highlight the line currently under cursor
 set expandtab " use spaces, not tabs
 set fcs=eob:\ " hide ~
@@ -106,10 +106,9 @@ let g:splitjoin_join_mapping = ''
 " }}}
 
 " Ale {{{
-let g:ale_command_wrapper = 'docker-compose exec -T app bundle exec'
 let g:ale_completion_enabled = 1
 let g:ale_linters = {
-\  'ruby': ['rubocop'],
+\  'ruby': ['rubocop', 'solargraph'],
 \}
 let g:ale_fixers = {
 \  '*': ['remove_trailing_lines', 'trim_whitespace'],
@@ -117,7 +116,6 @@ let g:ale_fixers = {
 \}
 let g:ale_sign_column_always = 1
 let g:ale_linters_explicit = 1
-let g:ale_ruby_rubocop_options = "--config /app/.rubocop.yml --force-exclusion"
 " }}}
 
 " AutoSave {{{
