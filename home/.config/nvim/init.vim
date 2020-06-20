@@ -28,6 +28,7 @@ Plug 'janko/vim-test'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tmsvg/pear-tree'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-tsserver coc-html coc-vetur coc-solargraph'}
+" Plug 'w0rp/ale'
 call plug#end()
 " }}}
 
@@ -52,7 +53,8 @@ set noeb vb t_vb= " disable audio and visual bells
 set noshowmode " do not show current mode
 set noswapfile " don't use swapfile
 set nowrap " don't wrap lines
-set number " show line numbers
+set nu rnu " show mixed line numbers
+set number relativenumber " show mixed line numbers
 set shiftwidth=2 " normal mode indentation commands use 2 spaces
 set showmatch " highlight matching [{()}]
 set signcolumn=yes
@@ -104,14 +106,18 @@ let g:splitjoin_join_mapping = ''
 " }}}
 
 " Ale {{{
+let g:ale_command_wrapper = 'docker-compose exec -T app bundle exec'
+let g:ale_completion_enabled = 1
 let g:ale_linters = {
 \  'ruby': ['rubocop'],
 \}
 let g:ale_fixers = {
+\  '*': ['remove_trailing_lines', 'trim_whitespace'],
 \  'ruby': ['rubocop']
 \}
 let g:ale_sign_column_always = 1
 let g:ale_linters_explicit = 1
+let g:ale_ruby_rubocop_options = "--config /app/.rubocop.yml --force-exclusion"
 " }}}
 
 " AutoSave {{{
