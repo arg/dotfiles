@@ -10,14 +10,15 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 
 " Plugins {{{
 call plug#begin('~/.config/nvim/plugged')
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
 Plug 'mbbill/undotree'
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
+Plug 'mengelbrecht/lightline-bufferline'
 Plug '907th/vim-auto-save'
 Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
@@ -57,6 +58,7 @@ set nu rnu " show mixed line numbers
 set number relativenumber " show mixed line numbers
 set shiftwidth=2 " normal mode indentation commands use 2 spaces
 set showmatch " highlight matching [{()}]
+set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
@@ -133,15 +135,31 @@ let test#ruby#rspec#options = {
 \}
 " }}}
 
-" Airline {{{
-let g:airline_theme='gruvbox'
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline_section_y = ''
-let g:airline_section_z = '%4l:%3c'
-let g:airline_skip_empty_sections = 1
+" Lightline {{{
+let g:lightline = {
+\  'colorscheme': 'gruvbox',
+\  'active': {
+\    'left': [['mode'], ['relativepath']],
+\    'right': [['lineinfo'], ['percent'], ['gitbranch', 'filetype']]
+\  },
+\  'tabline': {
+\    'left': [['buffers']],
+\    'right': [[]]
+\  },
+\  'component_expand': {
+\    'buffers': 'lightline#bufferline#buffers'
+\  },
+\  'component_type': {
+\    'buffers': 'tabsel'
+\  },
+\  'component_function': {
+\    'gitbranch': 'fugitive#head'
+\  },
+\}
+let g:lightline#bufferline#unnamed = '[No Name]'
+let g:lightline#bufferline#filename_modifier = ':t'
+" let g:lightline.separator = { 'left': '', 'right': '' }
+" let g:lightline.subseparator = {'left': '', 'right': '' }
 " }}}
 
 " UndoTree {{{
@@ -191,10 +209,9 @@ nnoremap <silent> tf :TestFile<CR>
 nnoremap <silent> ts :TestSuite<CR>
 
 " move to the previous buffer
-nnoremap <silent> <C-h> :bprevious<CR>
+nnoremap <silent> <S-Tab> :bprevious<CR>
 
 " move to the next buffer
-nnoremap <silent> <C-l> :bnext<CR>
 nnoremap <silent> <Tab> :bnext<CR>
 
 " close the current buffer and move to the previous one
@@ -218,9 +235,6 @@ vmap <silent> <C-_> <Plug>NERDCommenterToggle
 
 " rename
 " nnoremap <silent> <F2>
-
-" go to definition
-nnoremap <F3> <C-]>
 
 " fix code with Ale
 nnoremap <silent> <F5> :ALEFix<CR>
