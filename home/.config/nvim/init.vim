@@ -6,6 +6,10 @@ endif
 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
+
+" autocmd! FileType which_key
+" autocmd FileType which_key set laststatus=0 noshowmode noruler
+" \ | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 " }}}
 
 " Plugins {{{
@@ -23,12 +27,13 @@ Plug '907th/vim-auto-save'
 Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'jiangmiao/auto-pairs'
-Plug 'rhysd/git-messenger.vim'
 Plug 'janko/vim-test'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tmsvg/pear-tree'
 Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+Plug 'pechorin/any-jump.vim'
+Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " }}}
 
@@ -85,6 +90,12 @@ endtry
 let g:gruvbox_bold = '0'
 " }}}
 
+" WhichKey {{{
+let g:which_key_sep = ':'
+let g:which_key_use_floating_win = 0
+let g:which_key_map =  {}
+" }}}
+
 " NERDTree {{{
 let NERDTreeQuitOnOpen = 1
 let NERDTreeAutoDeleteBuffer = 1
@@ -118,6 +129,10 @@ let g:ale_fixers = {
 \}
 let g:ale_sign_column_always = 1
 let g:ale_linters_explicit = 1
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+let g:ale_sign_error = 'E'
+let g:ale_sign_warning = 'W'
 " }}}
 
 " AutoSave {{{
@@ -139,18 +154,32 @@ let test#ruby#rspec#options = {
 let g:lightline = {
 \  'colorscheme': 'gruvbox',
 \  'active': {
-\    'left': [['mode'], ['relativepath']],
-\    'right': [['lineinfo'], ['percent'], ['gitbranch', 'filetype']]
+\    'left': [['mode'], ['filetype'], ['relativepath']],
+\    'right': [
+\      [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+\      ['lineinfo'],
+\      ['gitbranch']
+\    ]
 \  },
 \  'tabline': {
 \    'left': [['buffers']],
 \    'right': [[]]
 \  },
 \  'component_expand': {
-\    'buffers': 'lightline#bufferline#buffers'
+\    'buffers': 'lightline#bufferline#buffers',
+\    'linter_checking': 'lightline#ale#checking',
+\    'linter_infos': 'lightline#ale#infos',
+\    'linter_warnings': 'lightline#ale#warnings',
+\    'linter_errors': 'lightline#ale#errors',
+\    'linter_ok': 'lightline#ale#ok',
 \  },
 \  'component_type': {
-\    'buffers': 'tabsel'
+\    'buffers': 'tabsel',
+\    'linter_checking': 'right',
+\    'linter_infos': 'right',
+\    'linter_warnings': 'warning',
+\    'linter_errors': 'error',
+\    'linter_ok': 'right',
 \  },
 \  'component_function': {
 \    'gitbranch': 'fugitive#head'
@@ -158,6 +187,11 @@ let g:lightline = {
 \}
 let g:lightline#bufferline#unnamed = '[No Name]'
 let g:lightline#bufferline#filename_modifier = ':t'
+let g:lightline#ale#indicator_checking = '..'
+let g:lightline#ale#indicator_infos = 'I: '
+let g:lightline#ale#indicator_warnings = 'W: '
+let g:lightline#ale#indicator_errors = 'E: '
+let g:lightline#ale#indicator_ok = 'OK'
 " let g:lightline.separator = { 'left': '', 'right': '' }
 " let g:lightline.subseparator = {'left': '', 'right': '' }
 " }}}
@@ -170,6 +204,8 @@ let g:undotree_HelpLine = 0
 " Keymaps {{{
 " leader key
 let mapleader=","
+
+nnoremap <silent> <leader> :WhichKey ','<CR>
 
 " in insert or command mode, move cursor by using Ctrl
 inoremap <C-h> <Left>
@@ -192,9 +228,6 @@ nnoremap <silent> <Leader>s :SplitjoinSplit<cr>
 
 " do join
 nnoremap <silent> <Leader>j :SplitjoinJoin<cr>
-
-" toggle GitMessenger
-nmap <silent> <F8> <Plug>(git-messenger)
 
 " complete by TAB key
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -240,25 +273,7 @@ vmap <silent> <C-_> <Plug>NERDCommenterToggle
 nnoremap <silent> <F5> :ALEFix<CR>
 
 " open buffers list
-"nnoremap <silent> <C-b> :Buffers<CR> " there is a bug - cant select the bottommost buffer
-
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-nnoremap <silent> <C-b> :call fzf#run({
-\ 'source': reverse(<sid>buflist()),
-\ 'sink': function('<sid>bufopen'),
-\ 'options': '+m',
-\ 'down': len(<sid>buflist()) + 2
-\ })<CR>
+nnoremap <silent> <C-b> :Buffers<CR>
 
 nnoremap <silent> <C-u> :UndotreeToggle<CR>
 
