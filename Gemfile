@@ -2,9 +2,10 @@
 
 source 'https://rubygems.org'
 
-gem 'rubocop', '~> 0.82.0'
-gem 'rubocop-rails', '~> 2.5'
-gem 'rubocop-rspec', '~> 1.40'
-gem 'rubocop-performance', '~> 1.5'
-gem 'brakeman', '~> 4.8'
-gem 'solargraph', '~> 0.39'
+gem 'rubocop', '~> 0.86.0'
+gem 'rubocop-rails'
+gem 'rubocop-rspec'
+gem 'rubocop-performance'
+gem 'rubocop-thread_safety'
+gem 'brakeman'
+gem 'solargraph'
