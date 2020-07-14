@@ -23,7 +23,7 @@ mouse_move_pages_viewer=true
 mouse_close_dialog=false
 fast_refresh=false
 drop_menus=true
-wrap_mode=false
+wrap_mode=true
 old_esc_mode=true
 old_esc_mode_timeout=0
 cd_symlinks=true
@@ -89,17 +89,17 @@ editor_state_full_filename=false
 safe_overwrite=false
 
 [Layout]
-message_visible=0
-keybar_visible=0
-xterm_title=0
+message_visible=false
+keybar_visible=false
+xterm_title=false
 output_lines=0
-command_prompt=0
-menubar_visible=0
-free_space=1
-horizontal_split=0
-vertical_equal=1
+command_prompt=false
+menubar_visible=false
+free_space=true
+horizontal_split=false
+vertical_equal=true
 left_panel_size=54
-horizontal_equal=1
+horizontal_equal=true
 top_panel_size=1
 
 [Misc]
