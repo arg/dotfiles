@@ -10,12 +10,11 @@ read -p "What Mosh port you want to use? " -e mosh_port
 read -p "What login your regular user should have? " -e user_login
 
 echo -e "\U0001f538 Adding package repositories..."
-# add-apt-repository universe
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 add-apt-repository "deb https://deb.nodesource.com/node_12.x focal main" -y
-apt-get update
 
 echo -e "\U0001f538 Upgrading system packages..."
+apt-get update
 apt-get upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
@@ -29,7 +28,31 @@ curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v0.10.0/o
 unzip 1password.zip op -d /usr/local/bin
 rm 1password.zip
 
-echo -e "\U0001f538 Configuring SSH access..."
+echo -e "\U0001f538 Setting firewall rules..."
+ufw default deny incoming
+ufw allow $ssh_port/tcp
+ufw allow $mosh_port/udp
+
+echo -e "\U0001f538 Creating group for SSH login..."
+addgroup sshusers
+
+echo -e "\U0001f538 Creating user..."
+adduser --disabled-password $user_login
+usermod -a -G sudo,docker,sshusers -s /usr/bin/zsh $user_login
+sudo -H -u $user_login sh -c 'mkdir $HOME/.ssh'
+sudo -H -u $user_login sh -c 'chmod 0700 $HOME/.ssh'
+echo -e "\U0001f538 Now paste your public SSH key end press <Return>"
+read public_key
+sudo -H -u $user_login sh -c 'touch $HOME/.ssh/authorized_keys'
+echo $public_key > /home/$user_login/.ssh/authorized_keys
+sudo -H -u $user_login sh -c 'chmod 0600 $HOME/.ssh/authorized_keys'
+
+echo -e "\U0001f538 Installing additional tools for user..."
+sudo -H -u $user_login sh -c 'pip3 install --user pynvim'
+sudo -H -u $user_login sh -c 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv'
+sudo -H -u $user_login sh -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
+
+echo -e "\U0001f538 Updating configuration files..."
 # commenting existing options
 sed -i "s/^Port/#&/" /etc/ssh/sshd_config
 sed -i "s/^PermitRootLogin/#&/" /etc/ssh/sshd_config
@@ -52,29 +75,9 @@ AllowTcpForwarding no
 X11Forwarding no
 AllowGroups sshusers
 END
-
-echo -e "\U0001f538 Setting firewall rules..."
-ufw allow $ssh_port/tcp
-ufw allow $mosh_port/udp
-
-echo -e "\U0001f538 Creating SSH group..."
-addgroup sshusers
-
-echo -e "\U0001f538 Creating user..."
-adduser $user_login
-usermod -a -G sudo,docker,sshusers -s /usr/bin/zsh $user_login
-sudo -H -u $user_login sh -c 'mkdir $HOME/.ssh'
-sudo -H -u $user_login sh -c 'chmod 0700 $HOME/.ssh'
-echo -e "\U0001f538 Now paste your public SSH key end press <Return>"
-read public_key
-sudo -H -u $user_login sh -c 'touch $HOME/.ssh/authorized_keys'
-echo $public_key > /home/$user_login/.ssh/authorized_keys
-sudo -H -u $user_login sh -c 'chmod 0600 $HOME/.ssh/authorized_keys'
-
-echo -e "\U0001f538 Installing additional tools for user..."
-sudo -H -u $user_login sh -c 'pip3 install --user pynvim'
-sudo -H -u $user_login sh -c 'git clone https://github.com/rbenv/rbenv.git ~/.rbenv'
-sudo -H -u $user_login sh -c 'git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build'
+tee -a /etc/sudoers << END
+$user_login ALL=(ALL) NOPASSWD:ALL
+END
 
 echo ""
 echo -e "\U0001f539 Everything done. Press <Return> to reboot the machine with new settings."
