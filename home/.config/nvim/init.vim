@@ -24,7 +24,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug '907th/vim-auto-save'
-Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
@@ -67,6 +67,7 @@ set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
+set spell
 set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
