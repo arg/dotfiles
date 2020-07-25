@@ -67,7 +67,7 @@ set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
-set spell
+" set spell
 set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
@@ -75,7 +75,7 @@ set textwidth=103
 set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
-set virtualedit=onemore " allow the cursor to go beyond last character in line
+" set virtualedit=onemore " allow the cursor to go beyond last character in line
 " }}}
 
 " Netrw {{{
