@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rubocop', '~> 0.86.0'
+gem 'rubocop', '~> 0.88.0'
 gem 'rubocop-rails'
 gem 'rubocop-rspec'
 gem 'rubocop-performance'
