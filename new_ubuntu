@@ -14,12 +14,12 @@ curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 add-apt-repository "deb https://deb.nodesource.com/node_12.x focal main" -y
 
 echo -e "\U0001f538 Upgrading system packages..."
-apt-get update
-apt-get upgrade -y
+apt update
+apt upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
-apt-get install -q -y zsh neovim mc htop ripgrep wget nginx git mosh tmux certbot cmake pkg-config \
-  nodejs docker.io docker-compose unzip python3-pip python3-setuptools python3-venv python3-wheel \
+apt install -q -y zsh neovim mc ripgrep wget nginx git mosh tmux certbot cmake pkg-config \
+  nodejs docker.io docker-compose python3-pip python3-setuptools python3-venv python3-wheel \
   autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev \
   libffi-dev libgdbm-dev python3-certbot-dns-cloudflare fzf ruby
 
