@@ -142,7 +142,7 @@ torben_fj_mode=false
 quick_search_mode=0
 select_flags=4
 
-simple_swap=false
+simple_swap=true
 
 panel_scroll_center=false
 
