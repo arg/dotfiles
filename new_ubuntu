@@ -24,7 +24,7 @@ apt-get install -q -y zsh neovim mc htop ripgrep wget nginx git mosh tmux certbo
   libffi-dev libgdbm-dev python3-certbot-dns-cloudflare fzf ruby
 
 echo -e "\U0001f538 Installing additional tools..."
-curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v0.10.0/op_linux_amd64_v0.10.0.zip"
+curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v1.8.0/op_linux_amd64_v1.8.0.zip"
 unzip 1password.zip op -d /usr/local/bin
 rm 1password.zip
 
