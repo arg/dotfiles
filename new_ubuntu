@@ -61,24 +61,18 @@ sed -i "s/^AllowAgentForwarding/#&/" /etc/ssh/sshd_config
 sed -i "s/^AllowTcpForwarding/#&/" /etc/ssh/sshd_config
 sed -i "s/^X11Forwarding/#&/" /etc/ssh/sshd_config
 # adding new options
-tee -a /etc/ssh/sshd_config << END
+echo "Port $ssh_port" > /etc/ssh/sshd_config.d/user.conf
+echo "PermitRootLogin no" >> /etc/ssh/sshd_config.d/user.conf
+echo "IgnoreUserKnownHosts yes" >> /etc/ssh/sshd_config.d/user.conf
+echo "PasswordAuthentication no" >> /etc/ssh/sshd_config.d/user.conf
+echo "PermitTunnel no" >> /etc/ssh/sshd_config.d/user.conf
+echo "AllowAgentForwarding no" >> /etc/ssh/sshd_config.d/user.conf
+echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config.d/user.conf
+echo "X11Forwarding no" >> /etc/ssh/sshd_config.d/user.conf
+echo "AllowGroups sshusers" >> /etc/ssh/sshd_config.d/user.conf
 
-# added by arg
-Port $ssh_port
-PermitRootLogin no
-IgnoreUserKnownHosts yes
-PasswordAuthentication no
-PermitTunnel no
-AllowAgentForwarding no
-AllowTcpForwarding no
-X11Forwarding no
-AllowGroups sshusers
-END
-tee -a /etc/sudoers << END
-
-# added by arg
-$user_login ALL=(ALL) NOPASSWD:ALL
-END
+echo "$user_login ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/1-user.conf
+chmod 0440 /etc/sudoers.d/1-user.conf
 
 echo ""
 echo -e "\U0001f539 Everything done. Press <Return> to reboot the machine with new settings."
