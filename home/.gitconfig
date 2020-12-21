@@ -38,3 +38,5 @@
   please = push --force-with-lease
   first = rev-list --max-parents=0 HEAD
   sweep = "!git branch -v | grep '\\[gone\\]' | awk '{print $1}' | xargs -n 1 git branch -D"
+  new = checkout -b
+  sync = pull --rebase origin master
