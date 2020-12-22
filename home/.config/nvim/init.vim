@@ -31,9 +31,10 @@ Plug 'janko/vim-test'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tmsvg/pear-tree'
 Plug 'w0rp/ale'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'deoplete-plugins/deoplete-tag'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'maximbaz/lightline-ale'
-Plug 'pechorin/any-jump.vim'
-Plug 'liuchengxu/vim-which-key'
 call plug#end()
 " }}}
 
@@ -91,10 +92,13 @@ endtry
 let g:gruvbox_bold = '0'
 " }}}
 
-" WhichKey {{{
-let g:which_key_sep = ':'
-let g:which_key_use_floating_win = 0
-let g:which_key_map =  {}
+" Deoplete {{{
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('sources', {
+\ '_': ['buffer'],
+\ 'ruby': ['buffer', 'tag']
+\})
+let g:deoplete#tag#cache_limit_size = 5000000
 " }}}
 
 " NERDTree {{{
@@ -119,21 +123,25 @@ let g:splitjoin_split_mapping = ''
 let g:splitjoin_join_mapping = ''
 " }}}
 
+" GutenTags {{{
+ let g:gutentags_cache_dir = "~/.cache/ctags"
+ let g:gutentags_file_list_command = 'find app/**/*.rb'
+" }}}
+
 " Ale {{{
-let g:ale_completion_enabled = 1
 let g:ale_linters = {
-\  'ruby': ['rubocop', 'solargraph'],
+\  'ruby': ['rubocop']
 \}
 let g:ale_fixers = {
-\  '*': ['remove_trailing_lines', 'trim_whitespace'],
 \  'ruby': ['rubocop']
 \}
 let g:ale_sign_column_always = 1
 let g:ale_linters_explicit = 1
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_insert_leave = 1
 let g:ale_sign_error = 'E'
 let g:ale_sign_warning = 'W'
+let g:ale_ruby_rubocop_options = "--config /app/.rubocop.yml"
 " }}}
 
 " AutoSave {{{
@@ -206,8 +214,6 @@ let g:undotree_HelpLine = 0
 " leader key
 let mapleader=","
 
-nnoremap <silent> <leader> :WhichKey ','<CR>
-
 " in insert or command mode, move cursor by using Ctrl
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>
@@ -218,17 +224,14 @@ cnoremap <C-j> <Down>
 cnoremap <C-k> <Up>
 cnoremap <C-l> <Right>
 
-" open a new empty buffer
-nnoremap <silent> <C-t> :enew<CR>
-
 " toggle NERDTree
 nnoremap <silent> <C-n> :NERDTreeToggle<CR>
 
 " do split
-nnoremap <silent> <Leader>s :SplitjoinSplit<cr>
+nnoremap <silent> ss :SplitjoinSplit<cr>
 
 " do join
-nnoremap <silent> <Leader>j :SplitjoinJoin<cr>
+nnoremap <silent> sj :SplitjoinJoin<cr>
 
 " complete by TAB key
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -260,6 +263,9 @@ nnoremap <silent> <C-f> :BLines<CR>
 " search in all files
 nnoremap <silent> <C-g> :Rg<CR>
 
+" search in tags
+nnoremap <silent> <C-t> :Tags<CR>
+
 " duplicate a line
 nnoremap <silent> <C-d> yyp<CR>
 
@@ -267,14 +273,8 @@ nnoremap <silent> <C-d> yyp<CR>
 nmap <silent> <C-_> <Plug>NERDCommenterToggle
 vmap <silent> <C-_> <Plug>NERDCommenterToggle
 
-" rename
-" nnoremap <silent> <F2>
-
 " fix code with Ale
-nnoremap <silent> <F5> :ALEFix<CR>
-
-" open buffers list
-nnoremap <silent> <C-b> :Buffers<CR>
+nnoremap <silent> <C-l> :ALEFix<CR>
 
 nnoremap <silent> <C-u> :UndotreeToggle<CR>
 

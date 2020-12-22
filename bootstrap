@@ -9,7 +9,7 @@ apt update
 apt upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
-apt install -q -y docker.io docker-compose mc git neovim zsh tmux mosh ripgrep wget fzf
+apt install -q -y docker.io docker-compose mc git neovim zsh tmux mosh ripgrep wget fzf universal-ctags
 
 echo -e "\U0001f538 Installing additional tools..."
 curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v1.8.0/op_linux_amd64_v1.8.0.zip"
