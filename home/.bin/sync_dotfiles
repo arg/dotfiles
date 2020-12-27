@@ -44,6 +44,7 @@ if [[ $fetch_secrets == 1 ]]; then
   shred --remove=wipesync $temp_file
   op signout
   op forget my
+  echo ""
 fi
 
 if [[ $silent == 0 ]]; then
