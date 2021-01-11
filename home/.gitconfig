@@ -40,3 +40,8 @@
   sweep = "!git branch -v | grep '\\[gone\\]' | awk '{print $1}' | xargs -n 1 git branch -D"
   new = checkout -b
   sync = pull --rebase origin master
+  cu = "!git add -u && git commit"
+  cp = cherry-pick -x
+  ca = "!git add -A && git commit"
+  continue = "!if [ -f .git/CHERRY_PICK_HEAD ]; then git cherry-pick --continue; elif [ -f .git/REBASE_HEAD ]; then git rebase --continue; fi"
+  abort = "!if [ -f .git/CHERRY_PICK_HEAD ]; then git cherry-pick --abort; elif [ -f .git/REBASE_HEAD ]; then git rebase --abort; fi"

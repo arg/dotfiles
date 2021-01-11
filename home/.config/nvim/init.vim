@@ -255,7 +255,7 @@ nnoremap <silent> <Tab> :bnext<CR>
 noremap <silent> <C-w> :bp <BAR> bd #<CR>
 
 " open files list
-nnoremap <silent> <C-o> :Files<CR>
+nnoremap <silent> <C-o> :GFiles<CR>
 
 " search in current file
 nnoremap <silent> <C-f> :BLines<CR>
