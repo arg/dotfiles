@@ -147,6 +147,7 @@ function e() {
 alias ll="ls -l"
 alias grep="grep --color=auto"
 alias mc="mc -x"
+alias pgrep="pgrep -a"
 
 stty -ixon # disable ctrl-s - ctrl-q shit
 
