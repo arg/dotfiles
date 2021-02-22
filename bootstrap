@@ -4,12 +4,15 @@ set -eu
 
 echo -e "\U0001f538 Setting up a new Ubuntu 20.04 workstation..."
 
+echo -e "\U0001f538 Adding package repositories..."
+apt-add-repository ppa:fish-shell/release-3 -y
+
 echo -e "\U0001f538 Upgrading system packages..."
 apt update
 apt upgrade -y
 
 echo -e "\U0001f538 Installing new packages..."
-apt install -q -y docker.io docker-compose mc git neovim zsh tmux mosh ripgrep wget fzf universal-ctags
+apt install -q -y docker.io docker-compose mc git neovim tmux mosh ripgrep wget fzf universal-ctags fish
 
 echo -e "\U0001f538 Installing additional tools..."
 curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v1.8.0/op_linux_amd64_v1.8.0.zip"
@@ -26,7 +29,7 @@ addgroup sshusers
 
 echo -e "\U0001f538 Creating user..."
 adduser --disabled-password arg
-usermod -a -G sudo,docker,sshusers -s /usr/bin/zsh arg
+usermod -a -G sudo,docker,sshusers -s /usr/bin/fish arg
 sudo -H -u arg sh -c 'mkdir $HOME/.ssh'
 sudo -H -u arg sh -c 'chmod 0700 $HOME/.ssh'
 echo -e "\U0001f538 Now paste your public SSH key end press <Return>"
