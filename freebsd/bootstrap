@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+set -eu
+
+echo "************************************************"
+echo "* Setting up a new FreeBSD 12.2 workstation... *"
+echo "************************************************"
+
+echo "********************************"
+echo "* Upgrading system packages... *"
+echo "********************************"
+
+pkg update -q
+pkg upgrade -q -y
+
+echo "******************************"
+echo "* Installing new packages... *"
+echo "******************************"
+
+pkg install -q -y 1password-client alacritty curl dbus doas firefox fish fzf git gmake hal htop i3 \
+  i3lock mc mosh neovim nerd-fonts nvidia-driver p7zip paratype polybar ripgrep rofi scrot thunar \
+  thunderbird tmux universal-ctags vifm wget xorg
+
+echo "**********************************"
+echo "* Installing additional tools... *"
+echo "**********************************"
+
+curl -sLS -o 1password.zip "https://cache.agilebits.com/dist/1P/op/pkg/v1.8.0/op_freebsd_amd64_v1.8.0.zip"
+7z e -y -o/usr/local/bin 1password.zip op 1>/dev/null
+rm 1password.zip
+
+echo "**********************"
+echo "* Setting up user... *"
+echo "**********************"
+
+pw usermod arg -G wheel,video -s /usr/local/bin/fish
+
+echo "***********************************"
+echo "* Updating configuration files... *"
+echo "***********************************"
+
+sed -i "s/^PermitRootLogin/#&/" /etc/ssh/sshd_config
+sed -i "s/^IgnoreUserKnownHosts/#&/" /etc/ssh/sshd_config
+sed -i "s/^PasswordAuthentication/#&/" /etc/ssh/sshd_config
+sed -i "s/^PermitTunnel/#&/" /etc/ssh/sshd_config
+sed -i "s/^AllowAgentForwarding/#&/" /etc/ssh/sshd_config
+sed -i "s/^AllowTcpForwarding/#&/" /etc/ssh/sshd_config
+sed -i "s/^X11Forwarding/#&/" /etc/ssh/sshd_config
+
+echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+echo "IgnoreUserKnownHosts yes" >> /etc/ssh/sshd_config
+echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+echo "PermitTunnel no" >> /etc/ssh/sshd_config
+echo "AllowAgentForwarding no" >> /etc/ssh/sshd_config
+echo "AllowTcpForwarding no" >> /etc/ssh/sshd_config
+echo "X11Forwarding no" >> /etc/ssh/sshd_config
+echo "AllowUsers arg" >> /etc/ssh/sshd_config
+
+echo "permit nopass keepenv :wheel" >> /usr/local/etc/doas.conf
+
+mkdir -p /etc/X11
+curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
+
+sysrc dbus_enable=YES
+sysrc ntpd_enable=YES
+sysrc ntpdate_enable=YES
+sysrc kld_list+="nvidia-modeset"
+
+echo "**********************************************************************************"
+echo "* Everything done. Press <Return> to reboot the machine with new settings.       *"
+echo "* After reboot, install dotfiles by 'arg' user (see Readme for the instruction). *"
+echo "**********************************************************************************"
+read
+
+reboot

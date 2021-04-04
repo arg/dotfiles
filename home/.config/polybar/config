@@ -1,0 +1,76 @@
+; vi: ft=dosini
+
+[colors]
+background = #282828
+background-2 = #3c3836
+background-3 = #504945
+foreground = #ebdbb2
+red = #cc241d
+green = #98971a
+yellow = #d79921
+blue = #458588
+purple = #b16286
+teal = #689d6a
+orange = #d65d0e
+gray = #a89984
+
+[bar/top]
+monitor = "DP-4"
+width = 100%
+height = 56
+fixed-center = true
+background = ${colors.background}
+foreground = ${colors.foreground}
+dpi = 192
+font-0 = "Hack Nerd Font:size=11;3"
+cursor-click = pointer
+modules-left = i3
+modules-center = title
+modules-right = xkeyboard date
+
+[module/i3]
+type = internal/i3
+pin-workspaces = true
+index-sort = true
+enable-click = true
+enable-scroll = false
+label-focused = "%name%"
+label-focused-background = ${colors.green}
+label-focused-foreground = ${colors.foreground}
+label-focused-padding = 1
+label-unfocused = "%name%"
+label-unfocused-background = ${colors.background-2}
+label-unfocused-foreground = ${colors.foreground}
+label-unfocused-padding = 1
+label-visible = "%name%"
+label-visible-background = ${colors.background-3}
+label-visible-foreground = ${colors.foreground}
+label-visible-padding = 1
+label-urgent = "%name%"
+label-urgent-background = ${colors.red}
+label-urgent-foreground = ${colors.foreground}
+label-urgent-padding = 1
+
+[module/title]
+type = internal/xwindow
+label-empty = "Empty"
+label-maxlen = 100
+format-background = ${colors.background-2}
+format-padding = 1
+
+[module/date]
+type = internal/date
+interval = 10.0
+date = "%A, %d %B %Y"
+time = "%H:%M"
+format-background = ${colors.background-2}
+format-padding = 1
+label = "%date%, %time%"
+
+[module/xkeyboard]
+type = internal/xkeyboard
+label-layout = "%icon%"
+label-layout-padding = 1
+label-layout-background = ${colors.background-2}
+layout-icon-0 = "us;USA"
+layout-icon-1 = "ua;UKR"

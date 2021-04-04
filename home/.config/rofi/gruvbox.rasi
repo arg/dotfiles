@@ -1,0 +1,137 @@
+/* vi: ft=css
+ */
+
+configuration {
+  terminal: "alacritty";
+  dpi: 192;
+  font: "Hack Nerd Font 11";
+  display-window: "Windows";
+  display-run: "Commands";
+  display-ssh: "SSH";
+  show-icons: true;
+  sidebar-mode: true;
+}
+
+* {
+  scrollbar: true;
+  gruvbox-dark-bg0: #282828;
+  gruvbox-dark-bg0-soft: #32302f;
+  gruvbox-dark-bg3: #665c54;
+  gruvbox-dark-fg0: #fbf1c7;
+  gruvbox-dark-fg1: #ebdbb2;
+  gruvbox-dark-red-dark: #cc241d;
+  gruvbox-dark-red-light: #fb4934;
+  gruvbox-dark-yellow-dark: #d79921;
+  gruvbox-dark-yellow-light: #fabd2f;
+  gruvbox-dark-gray: #a89984;
+
+  background: @gruvbox-dark-bg0;
+  background-color: @background;
+  foreground: @gruvbox-dark-fg1;
+  border-color: @gruvbox-dark-gray;
+  separatorcolor: @border-color;
+  scrollbar-handle: @border-color;
+  normal-background: @background;
+  normal-foreground: @foreground;
+  selected-normal-background: @gruvbox-dark-bg3;
+  selected-normal-foreground: @gruvbox-dark-fg0;
+  active-background: @gruvbox-dark-yellow-dark;
+  active-foreground: @background;
+  selected-active-background: @gruvbox-dark-yellow-light;
+  selected-active-foreground: @active-foreground;
+  urgent-background: @gruvbox-dark-red-dark;
+  urgent-foreground: @background;
+  selected-urgent-background: @gruvbox-dark-red-light;
+  selected-urgent-foreground: @urgent-foreground;
+}
+
+window {
+  border: 1px;
+  width: 50%;
+  orientation: horizontal;
+  children: [mainbox];
+}
+
+mainbox {
+  children: [entry,listview,mode-switcher];
+  padding: 0px;
+}
+
+listview {
+  spacing: 5px;
+  dynamic: false;
+  cycle: false;
+  padding: 0 5px 5px 5px;
+}
+
+element {
+  padding: 5px;
+}
+
+entry {
+  expand: false;
+  text-color: @normal-foreground;
+  padding: 20px;
+}
+
+button {
+  text-color: @normal-foreground;
+  padding: 10px 0;
+  border: 1px;
+}
+
+button.selected {
+  background-color: @selected-normal-background;
+  text-color: @selected-normal-foreground;
+}
+
+scrollbar {
+  handle-color: @scrollbar-handle;
+  handle-width: 8px;
+  padding: 0;
+}
+
+element normal.normal {
+  background-color: @normal-background;
+  text-color: @normal-foreground;
+}
+
+element normal.urgent {
+  background-color: @urgent-background;
+  text-color: @urgent-foreground;
+}
+
+element normal.active {
+  background-color: @active-background;
+  text-color: @active-foreground;
+}
+
+element selected.normal {
+  background-color: @selected-normal-background;
+  text-color: @selected-normal-foreground;
+}
+
+element selected.urgent {
+  background-color: @selected-urgent-background;
+  text-color: @selected-urgent-foreground;
+}
+
+element selected.active {
+  background-color: @selected-active-background;
+  text-color: @selected-active-foreground;
+}
+
+element alternate.normal {
+  background-color: @normal-background;
+  text-color: @normal-foreground;
+}
+
+element alternate.urgent {
+  background-color: @urgent-background;
+  text-color: @urgent-foreground;
+}
+
+element alternate.active {
+  background-color: @active-background;
+  text-color: @active-foreground;
+}
