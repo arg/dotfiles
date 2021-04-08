@@ -15,7 +15,7 @@ $(HOME)/%: home/%
 .PHONY: secrets
 .ONESHELL: secrets
 secrets:
-	@read -p "What is your 1Password email? " -e op_email
+	@read -p "What is your 1Password email? " op_email
 	@eval $$(op signin https://my.1password.com $$op_email)
 	@temp_file=`mktemp`
 	@op get document "Personal GPG Keys" > $$temp_file
