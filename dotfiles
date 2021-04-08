@@ -1,14 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eu
 
 dotfiles_path="$HOME/.dotfiles"
 
-echo -e "\U0001f538 Installing dotfiles to $dotfiles_path..."
+echo "**************************"
+echo "* Installing dotfiles... *"
+echo "**************************"
 
 git clone https://github.com/arg/dotfiles.git $dotfiles_path
-git -C $dotfiles_path remote set-url origin git@github.com:arg/dotfiles.git
+cd $dotfiles_path
+git remote set-url origin git@github.com:arg/dotfiles.git
 
-$dotfiles_path/home/.bin/sync_dotfiles --noupdate --secrets --silent
+if [[ `uname` == "FreeBSD" ]]; then
+  gmake
+else
+  make
+fi
 
-echo -e "\U0001f539 Dotfiles have been successfully installed."
+echo "**************************************************************************"
+echo "* Dotfiles have been successfully installed. Press <Return> to continue. *"
+echo "**************************************************************************"
+read

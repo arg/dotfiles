@@ -6,20 +6,14 @@ endif
 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
-
-" autocmd! FileType which_key
-" autocmd FileType which_key set laststatus=0 noshowmode noruler
-" \ | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 " }}}
 
 " Plugins {{{
 call plug#begin('~/.config/nvim/plugged')
 Plug 'gruvbox-community/gruvbox'
 Plug 'sheerun/vim-polyglot'
-Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rails'
-Plug 'mbbill/undotree'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
@@ -28,11 +22,8 @@ Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tmsvg/pear-tree'
-Plug 'w0rp/ale'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'deoplete-plugins/deoplete-tag'
+Plug 'dense-analysis/ale'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'maximbaz/lightline-ale'
 call plug#end()
@@ -82,6 +73,7 @@ set updatetime=1000
 " Netrw {{{
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
+let g:netrw_browse_split = 0
 " }}}
 
 " Color scheme {{{
@@ -90,23 +82,6 @@ try
 catch
 endtry
 let g:gruvbox_bold = '0'
-" }}}
-
-" Deoplete {{{
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#option('sources', {
-\ '_': ['buffer'],
-\ 'ruby': ['buffer', 'tag']
-\})
-let g:deoplete#tag#cache_limit_size = 5000000
-" }}}
-
-" NERDTree {{{
-let NERDTreeQuitOnOpen = 1
-let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeMinimalUI = 1
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
 " }}}
 
 " GitGutter {{{
@@ -124,8 +99,11 @@ let g:splitjoin_join_mapping = ''
 " }}}
 
 " GutenTags {{{
- let g:gutentags_cache_dir = "~/.cache/ctags"
- let g:gutentags_file_list_command = 'find app/**/*.rb'
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['Gemfile']
+let g:gutentags_cache_dir = "~/.cache/ctags"
+let g:gutentags_file_list_command = 'find app/**/*.rb'
+let g:gutentags_ctags_extra_args = ['--tag-relative=yes', '--fields=+ailmnS']
 " }}}
 
 " Ale {{{
@@ -205,33 +183,15 @@ let g:lightline#ale#indicator_ok = 'OK'
 " let g:lightline.subseparator = {'left': '', 'right': '' }
 " }}}
 
-" UndoTree {{{
-let g:undotree_SetFocusWhenToggle = 1
-let g:undotree_HelpLine = 0
-" }}}
-
 " Keymaps {{{
 " leader key
 let mapleader=","
 
-" in insert or command mode, move cursor by using Ctrl
-inoremap <C-h> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-cnoremap <C-h> <Left>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
-cnoremap <C-l> <Right>
+" toggle Netrw
+nnoremap <silent> <C-n> :Explore<CR>
 
-" toggle NERDTree
-nnoremap <silent> <C-n> :NERDTreeToggle<CR>
-
-" do split
-nnoremap <silent> ss :SplitjoinSplit<cr>
-
-" do join
-nnoremap <silent> sj :SplitjoinJoin<cr>
+" clean search highlight
+noremap  <silent>// :nohlsearch<CR>
 
 " complete by TAB key
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -251,8 +211,8 @@ nnoremap <silent> <S-Tab> :bprevious<CR>
 " move to the next buffer
 nnoremap <silent> <Tab> :bnext<CR>
 
-" close the current buffer and move to the previous one
-noremap <silent> <C-w> :bp <BAR> bd #<CR>
+" close the current buffer
+noremap <silent> <C-w> :bd<CR>
 
 " open files list
 nnoremap <silent> <C-o> :GFiles<CR>
@@ -276,18 +236,8 @@ vmap <silent> <C-_> <Plug>NERDCommenterToggle
 " fix code with Ale
 nnoremap <silent> <C-l> :ALEFix<CR>
 
-nnoremap <silent> <C-u> :UndotreeToggle<CR>
-
+" toggle fold
 nnoremap <silent> <Space> za
-
-" cut to clipboard
-vnoremap <silent> <C-x> "+d
-
-" copy to clipboard
-vnoremap <silent> <C-c> "+y
-
-" paste from clipboard
-inoremap <silent> <C-v> <ESC>"+pa
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0

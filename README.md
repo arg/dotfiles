@@ -1,14 +1,26 @@
 # /home/arg/.dotfiles
 
-## Setup
+## Installation
 
 ### New environment bootstrap
 
+Should be run as `root` after installing the new environment.
+
+#### Ubuntu 20.04
+
 ```bash
-bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/bootstrap)
+bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/ubuntu/bootstrap)
 ```
 
-### Dotfiles setup
+#### FreeBSD 12.2
+
+```bash
+bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/freebsd/bootstrap)
+```
+
+### Dotfiles installation
+
+Should be run as a regular user after reboot.
 
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
@@ -16,15 +28,24 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
 
 ## Key bindings
 
-### Zsh
+### Fish
 
-| Key            | Action                  |
-|:--------------:|-------------------------|
-| <kbd>Tab</kbd> | completion              |
-| <kbd>⌃C</kbd>  | clear command line      |
-| <kbd>⌃R</kbd>  | search in history       |
-| <kbd>⌘←</kbd>  | beginning of line       |
-| <kbd>⌘→</kbd>  | end of line             |
+| Key            | Action                   |
+|:--------------:|--------------------------|
+| <kbd>Tab</kbd> | completion               |
+| <kbd>⌃C</kbd>  | clear command line       |
+| <kbd>→</kbd>   | accept suggested command |
+
+### Alacritty
+
+| Key              | Action               |
+|:----------------:|----------------------|
+| <kbd>⌃V</kbd>    | paste from clipboard |
+| <kbd>⇧⇞</kbd>    | scroll up            |
+| <kbd>⇧⇟</kbd>    | scroll down          |
+| <kbd>⇧Home</kbd> | scroll to top        |
+| <kbd>⇧End</kbd>  | scroll to bottom     |
+
 
 ### iTerm2
 
@@ -41,50 +62,38 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
 |:-----------------:|:----:|------------------------|
 | <kbd>i</kbd>      | N    | enter insert mode      |
 | <kbd>Escape</kbd> | IVC  | exit to normal mode    |
-| <kbd>⌃H</kbd>     | IV   | cursor left            |
-| <kbd>⌃J</kbd>     | IV   | cursor down            |
-| <kbd>⌃K</kbd>     | IV   | cursor up              |
-| <kbd>⌃L</kbd>     | IV   | cursor right           |
 | <kbd>⌃T</kbd>     | N    | new buffer             |
-| <kbd>⌃N</kbd>     | N    | toggle NERDTree        |
-| <kbd>⌃H</kbd>     | N    | previous buffer        |
-| <kbd>⌃L</kbd>     | N    | next buffer            |
+| <kbd>⌃N</kbd>     | N    | open Netrw             |
 | <kbd>Tab</kbd>    | N    | next buffer            |
+| <kbd>⇧Tab</kbd>   | N    | previous buffer        |
 | <kbd>⌃W</kbd>     | N    | close buffer           |
 | <kbd>⌃O</kbd>     | N    | open file              |
 | <kbd>⌃F</kbd>     | N    | search in current file |
 | <kbd>⌃G</kbd>     | N    | search in all files    |
+| <kbd>⌃T</kbd>     | N    | search in tags         |
 | <kbd>⌃D</kbd>     | N    | duplicate a line       |
 | <kbd>⌃/</kbd>     | NV   | toggle line comment    |
-| <kbd>F3</kbd>     | N    | go to definition       |
-| <kbd>F5</kbd>     | N    | format code            |
-| <kbd>⌃B</kbd>     | N    | list of buffers        |
-| <kbd>⌃U</kbd>     | N    | toggle UndoTree        |
+| <kbd>⌃L</kbd>     | N    | fix code with Ale      |
 | <kbd>Space</kbd>  | N    | toggle folding         |
-| <kbd>⌃X</kbd>     | V    | cut to clipboard       |
-| <kbd>⌃C</kbd>     | V    | copy to clipboard      |
-| <kbd>⌃V</kbd>     | I    | paste from clipboard   |
+| <kbd>/-/</kbd>    | N    | clear selection        |
+| <kbd>t-n</kbd>    | N    | run nearest test       |
+| <kbd>t-f</kbd>    | N    | test current file      |
+| <kbd>t-s</kbd>    | N    | run full test suite    |
 
 ### Tmux
 
-| Key            | Action                     |
-|:--------------:|----------------------------|
-| <kbd>P-r</kbd> | reload config              |
-| <kbd>P-n</kbd> | new window                 |
-| <kbd>P-w</kbd> | close window               |
-| <kbd>P-s</kbd> | search for window          |
-| <kbd>P-]</kbd> | next window                |
-| <kbd>P-[</kbd> | previous window            |
-| <kbd>P-h</kbd> | split window horizontally  |
-| <kbd>P-v</kbd> | split window vertically    |
-| <kbd>P-,</kbd> | rename window              |
-| <kbd>P-:</kbd> | enter command              |
-| <kbd>P-1</kbd> | open the 1st window        |
-| <kbd>P-d</kbd> | detach tmux                |
-| <kbd>P-t</kbd> | show clock                 |
-| <kbd>P-m</kbd> | enable mouse               |
-| <kbd>P-M</kbd> | disable mouse              |
-| <kbd>⌥↑</kbd>  | scrollback (exit with `q`) |
+| Key            | Action                             |
+|:--------------:|------------------------------------|
+| <kbd>P-r</kbd> | reload config                      |
+| <kbd>P-c</kbd> | new window                         |
+| <kbd>P-w</kbd> | close window                       |
+| <kbd>P-,</kbd> | rename window                      |
+| <kbd>P-1</kbd> | open the 1st window                |
+| <kbd>P-d</kbd> | detach tmux                        |
+| <kbd>P-t</kbd> | show clock                         |
+| <kbd>⌥↑</kbd>  | scroll up (exit with <kbd>q</kbd>) |
+| <kbd>⌃⇧←</kbd> | swap windows to the left           |
+| <kbd>⌃⇧→</kbd> | swap windows to the right          |
 
 Note: prefix (P) is set to <kbd>`</kbd> (back quote) key.
 
