@@ -10,6 +10,7 @@
   editor = nvim
   autocrlf = input
   excludesfile = ~/.gitignore
+  attributesfile = ~/.gitattributes
 
 [fetch]
   prune = true
@@ -45,3 +46,6 @@
   ca = "!git add -A && git commit"
   continue = "!if [ -f .git/CHERRY_PICK_HEAD ]; then git cherry-pick --continue; elif [ -f .git/REBASE_HEAD ]; then git rebase --continue; fi"
   abort = "!if [ -f .git/CHERRY_PICK_HEAD ]; then git cherry-pick --abort; elif [ -f .git/REBASE_HEAD ]; then git rebase --abort; fi"
+
+[diff "rspec"]
+  xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"

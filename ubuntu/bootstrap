@@ -23,8 +23,8 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-apt install -q -y docker.io docker-compose fish fzf git mc mosh neovim ripgrep tmux universal-ctags \
-  wget
+apt install -q -y docker.io docker-compose fish fzf git mc mosh neovim p7zip-full ripgrep tmux \
+  universal-ctags wget
 
 echo "**********************************"
 echo "* Installing additional tools... *"
