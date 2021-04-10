@@ -1,0 +1,7 @@
+*.css diff=css
+*.json diff=json
+*.md diff=markdown
+*.rake diff=ruby
+*.rb diff=ruby
+*.ru diff=ruby
+*_spec.rb diff=rspec
