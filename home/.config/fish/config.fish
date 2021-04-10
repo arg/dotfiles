@@ -34,6 +34,7 @@ function fish_prompt -d "Draws left prompt (current directory + git status)"
 end
 
 function fish_right_prompt -d "Draws right prompt (hostname)"
+  test -n "$TMUX"; and return # tmux also draws hostname, no need to duplicate
   echo -ns "[" (set_color yellow) (hostname) (set_color normal) "]"
 end
 
