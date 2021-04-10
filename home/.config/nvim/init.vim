@@ -33,6 +33,8 @@ call plug#end()
 " NeoVim defaults are not listed
 " https://neovim.io/doc/user/vim_diff.html#vim-differences
 
+set bufhidden=wipe " wipe empty buffer at start
+set clipboard+=unnamedplus " use system clipboard
 set cmdheight=1 " use a status bar that is 1 row high
 set colorcolumn=+0 " show visual indicator
 set completeopt=menu,menuone,preview,noselect,noinsert " completion options
