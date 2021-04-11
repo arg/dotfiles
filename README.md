@@ -26,6 +26,22 @@ Should be run as a regular user after reboot.
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
 ```
 
+## Updating dotfiles
+
+To update configs:
+
+```bash
+~/.dotfiles$ make update
+```
+
+To update secets:
+
+```bash
+~/.dotfiles$ make secrets
+```
+
+:warning: Use `gmake` instead of `make` on BSD systems.
+
 ## Key bindings
 
 ### Fish

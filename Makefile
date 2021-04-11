@@ -3,14 +3,20 @@ DOTFILES_TARGETS  := $(patsubst home/%, $(HOME)/%, $(DOTFILES_SOURCES))
 DOTFILES_DIR := $(shell pwd)
 
 .PHONY: all
-all: install secrets
+all: install
 
-install: $(DOTFILES_TARGETS)
+.PHONY: install
+install: configs secrets
+
+.PHONY: update
+update: git_update configs
+
+configs: $(DOTFILES_TARGETS)
 
 .PHONY: $(DOTFILES_SOURCES)
 $(HOME)/%: home/%
 	@mkdir -p "$(@D)"
-	@ln -s "$(DOTFILES_DIR)/$^" "$@"
+	@test -e "$@" || ln -s "$(DOTFILES_DIR)/$^" "$@"
 
 .PHONY: secrets
 .ONESHELL: secrets
@@ -30,3 +36,7 @@ secrets:
 	@chmod 0700 $(HOME)/.ssh
 	@chmod 0600 $(HOME)/.ssh/*
 	@op signout --account my --forget
+
+.PHONY: git_update
+git_update:
+	@git pull --rebase
