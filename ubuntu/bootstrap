@@ -10,6 +10,8 @@ echo "**********************************"
 echo "* Adding package repositories... *"
 echo "**********************************"
 
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+apt-add-repository https://cli.github.com/packages
 apt-add-repository ppa:fish-shell/release-3 -y
 
 echo "********************************"
@@ -23,7 +25,7 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-apt install -q -y docker.io docker-compose fish fzf git mc mosh neovim p7zip-full ripgrep tmux \
+apt install -q -y docker.io docker-compose fish fzf gh git mc mosh neovim p7zip-full ripgrep tmux \
   universal-ctags wget
 
 echo "**********************************"
