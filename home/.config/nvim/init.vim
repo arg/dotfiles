@@ -6,6 +6,7 @@ endif
 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
+autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
 " }}}
 
 " Plugins {{{
@@ -26,6 +27,7 @@ Plug 'tmsvg/pear-tree'
 Plug 'dense-analysis/ale'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'maximbaz/lightline-ale'
+Plug 'ojroques/vim-oscyank'
 call plug#end()
 " }}}
 
