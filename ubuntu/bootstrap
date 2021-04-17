@@ -74,10 +74,8 @@ echo "AllowUsers arg" >> /etc/ssh/sshd_config.d/user.conf
 
 echo "arg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-echo "**********************************************************************************"
-echo "* Everything done. Press <Return> to reboot the machine with new settings.       *"
-echo "* After reboot, install dotfiles by 'arg' user (see Readme for the instruction). *"
-echo "**********************************************************************************"
+echo "********************************************************************************"
+echo "* Everything done, press <Return> to exit.                                     *"
+echo "* Now you may install dotfiles by 'arg' user (see Readme for the instruction). *"
+echo "********************************************************************************"
 read
-
-reboot
