@@ -24,9 +24,9 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -q -y 1password-client alacritty curl dbus doas firefox fish fzf git gmake htop i3 \
-  i3lock mc mosh neovim nerd-fonts nvidia-driver p7zip paratype polybar portmaster ripgrep rofi \
-  scrot thunderbird tmux universal-ctags vifm wget xorg
+pkg install -q -y 1password-client alacritty curl dbus doas firefox fish fzf git gmake gnupg \
+  htop i3 i3lock mc mosh neovim nerd-fonts nvidia-driver p7zip paratype polybar portmaster \
+  ripgrep rofi scrot thunderbird tmux universal-ctags vifm wget xorg
 
 echo "**********************"
 echo "* Setting up user... *"
