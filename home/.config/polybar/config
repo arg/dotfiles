@@ -74,3 +74,4 @@ label-layout-padding = 1
 label-layout-background = ${colors.background-2}
 layout-icon-0 = "us;USA"
 layout-icon-1 = "ua;UKR"
+label-indicator-on-capslock = "%{B#cc241d} CAPS ON %{B-} "
