@@ -61,11 +61,8 @@ function backup -a filename -d "Makes a backup of the given file"
 end
 
 function e -a path -d "Opens editor in the current directory or with given path"
-  if test -z "$path"
-    $EDITOR .
-  else
-    $EDITOR $path
-  end
+  test -z "$path"; and set path "."
+  $EDITOR $path
 end
 
 function extract -a filename -d "Extracts files from the given archive"
@@ -85,6 +82,11 @@ function extract -a filename -d "Extracts files from the given archive"
     case '*'
       echo "Unknown archive type"
   end
+end
+
+function dockerize -a command -a container -d "Runs command in Docker container"
+  test -z "$container"; and set container "app"
+  docker-compose exec $container $command
 end
 
 test -f "$HOME/.local.fish"; and source "$HOME/.local.fish"
