@@ -18,6 +18,14 @@ set fish_color_command bryellow
 set fish_color_error normal
 set fish_color_param normal
 
+abbr -a dce docker-compose exec
+abbr -a dcu docker-compose up
+abbr -a dcs docker-compose stop
+abbr -a gco git checkout
+abbr -a ga git add
+abbr -a gc git commit
+abbr -a gp git push
+
 alias ll="ls -l"
 alias grep="grep --color=auto"
 alias egrep="egrep --color=auto"
@@ -65,6 +73,11 @@ function e -a path -d "Opens editor in the current directory or with given path"
   $EDITOR $path
 end
 
+function dockerize -a command -a container -d "Runs command in Docker container"
+  test -z "$container"; and set container "app"
+  docker-compose exec $container $command
+end
+
 function extract -a filename -d "Extracts files from the given archive"
   switch $filename
     case "*.tar"
@@ -82,11 +95,6 @@ function extract -a filename -d "Extracts files from the given archive"
     case '*'
       echo "Unknown archive type"
   end
-end
-
-function dockerize -a command -a container -d "Runs command in Docker container"
-  test -z "$container"; and set container "app"
-  docker-compose exec $container $command
 end
 
 test -f "$HOME/.local.fish"; and source "$HOME/.local.fish"
