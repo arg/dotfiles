@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [[ $# -ne 2 ]]; then
+  echo "Use cprice <currency> <currency>"
+  echo "Example: cprice btc usd"
+  exit 2
+fi
+format='def round2: .*100.0 + 0.5|floor/100.0; "\(.ticker.price | tonumber | round2): \(.ticker.change | tonumber | round2)"'
+raw=$(curl -s "https://api.cryptonator.com/api/ticker/$1-$2")
+echo $raw | jq -r "$format"
