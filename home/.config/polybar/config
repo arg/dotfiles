@@ -64,6 +64,7 @@ exec = $HOME/.bin/cprice btc usd
 interval=600
 format-background = ${colors.background-2}
 format-padding = 1
+label-maxlen = 18
 
 [module/eth]
 type = custom/script
@@ -72,6 +73,7 @@ interval=600
 format-background = ${colors.background-2}
 format-padding = 1
 format-margin = 1
+label-maxlen = 18
 
 [module/xkeyboard]
 type = internal/xkeyboard
