@@ -49,6 +49,7 @@ echo "**********************"
 echo "* Setting up user... *"
 echo "**********************"
 
+id -u arg &>/dev/null || adduser --disabled-password arg
 usermod -a -G sudo,docker -s /usr/bin/fish arg
 
 echo "***********************************"
