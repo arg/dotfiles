@@ -1,1 +1,1 @@
-gem: --no-document --env-shebang
+gem: --no-document --env-shebang --user-install --bindir ~/.bin

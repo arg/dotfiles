@@ -12,9 +12,9 @@ autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join
 " Plugins {{{
 call plug#begin('~/.config/nvim/plugged')
 Plug 'gruvbox-community/gruvbox'
-Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'neovim/nvim-lspconfig'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rails'
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
@@ -24,9 +24,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
 Plug 'tmsvg/pear-tree'
-Plug 'dense-analysis/ale'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'maximbaz/lightline-ale'
+"Plug 'dense-analysis/ale'
+"Plug 'ludovicchabant/vim-gutentags'
+"Plug 'maximbaz/lightline-ale'
 Plug 'ojroques/vim-oscyank'
 call plug#end()
 " }}}
@@ -72,6 +72,33 @@ set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
 " set virtualedit=onemore " allow the cursor to go beyond last character in line
+" }}}
+
+" TreeSitter {{{
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+    disable = {},
+  },
+  ensure_installed = {
+    "ruby",
+    "dockerfile",
+    "fish",
+    "json",
+    "yaml",
+    "html",
+    "javascript",
+    "scss"
+  },
+}
+EOF
+" }}}
+
+" LSP {{{
+lua <<EOF
+require'lspconfig'.solargraph.setup{}
+EOF
 " }}}
 
 " Netrw {{{
@@ -123,7 +150,6 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 1
 let g:ale_sign_error = 'E'
 let g:ale_sign_warning = 'W'
-let g:ale_ruby_rubocop_options = "--config /app/.rubocop.yml"
 " }}}
 
 " AutoSave {{{
