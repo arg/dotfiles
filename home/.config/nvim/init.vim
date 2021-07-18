@@ -7,6 +7,7 @@ endif
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
 autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
+autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 " }}}
 
 " Plugins {{{
@@ -24,9 +25,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
 Plug 'tmsvg/pear-tree'
-"Plug 'dense-analysis/ale'
-"Plug 'ludovicchabant/vim-gutentags'
-"Plug 'maximbaz/lightline-ale'
 Plug 'ojroques/vim-oscyank'
 call plug#end()
 " }}}
@@ -74,12 +72,11 @@ set updatetime=1000
 " set virtualedit=onemore " allow the cursor to go beyond last character in line
 " }}}
 
-" TreeSitter {{{
+" Tree-sitter {{{
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   highlight = {
-    enable = true,
-    disable = {},
+    enable = true
   },
   ensure_installed = {
     "ruby",
@@ -97,7 +94,18 @@ EOF
 
 " LSP {{{
 lua <<EOF
-require'lspconfig'.solargraph.setup{}
+require'lspconfig'.solargraph.setup {
+  flags = {
+    debounce_text_changes = 500
+  }
+}
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    signs = true,
+    update_in_insert = false
+  }
+)
 EOF
 " }}}
 
@@ -127,29 +135,6 @@ let g:NERDCreateDefaultMappings = 0
 " SplitJoin {{{
 let g:splitjoin_split_mapping = ''
 let g:splitjoin_join_mapping = ''
-" }}}
-
-" GutenTags {{{
-let g:gutentags_add_default_project_roots = 0
-let g:gutentags_project_root = ['Gemfile']
-let g:gutentags_cache_dir = "~/.cache/ctags"
-let g:gutentags_file_list_command = 'find app/**/*.rb'
-let g:gutentags_ctags_extra_args = ['--tag-relative=yes', '--fields=+ailmnS']
-" }}}
-
-" Ale {{{
-let g:ale_linters = {
-\  'ruby': ['rubocop']
-\}
-let g:ale_fixers = {
-\  'ruby': ['rubocop']
-\}
-let g:ale_sign_column_always = 1
-let g:ale_linters_explicit = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_sign_error = 'E'
-let g:ale_sign_warning = 'W'
 " }}}
 
 " AutoSave {{{
@@ -209,7 +194,6 @@ let g:lightline#ale#indicator_infos = 'I: '
 let g:lightline#ale#indicator_warnings = 'W: '
 let g:lightline#ale#indicator_errors = 'E: '
 let g:lightline#ale#indicator_ok = 'OK'
-" let g:lightline.separator = { 'left': '', 'right': '' }
 " let g:lightline.subseparator = {'left': '', 'right': '' }
 " }}}
 
@@ -263,8 +247,11 @@ nnoremap <silent> <C-d> yyp<CR>
 nmap <silent> <C-_> <Plug>NERDCommenterToggle
 vmap <silent> <C-_> <Plug>NERDCommenterToggle
 
-" fix code with Ale
-nnoremap <silent> <C-l> :ALEFix<CR>
+" format code
+nnoremap <silent> <C-l> <cmd>lua vim.lsp.buf.formatting()<CR>
+
+" go to definition
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
 
 " toggle fold
 nnoremap <silent> <Space> za
