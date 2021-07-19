@@ -16,8 +16,8 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug '907th/vim-auto-save'
@@ -27,6 +27,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
 Plug 'tmsvg/pear-tree'
 Plug 'ojroques/vim-oscyank'
+Plug 'hrsh7th/nvim-compe'
 call plug#end()
 " }}}
 
@@ -111,6 +112,10 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 EOF
 " }}}
 
+" GitSigns {{{
+lua require('gitsigns').setup()
+" }}}
+
 " Netrw {{{
 let g:netrw_banner = 0
 let g:netrw_liststyle = 3
@@ -132,6 +137,13 @@ let g:gitgutter_map_keys = 0
 " NERDCommenter {{{
 let NERDSpaceDelims = 1
 let g:NERDCreateDefaultMappings = 0
+" }}}
+
+" Compe {{{
+let g:compe = {}
+let g:compe.autocomplete = v:false
+let g:compe.source = {}
+let g:compe.source.nvim_lsp = v:true
 " }}}
 
 " SplitJoin {{{
@@ -220,6 +232,8 @@ nnoremap <silent> <C-n> :Explore<CR>
 " clean search highlight
 noremap  <silent>// :nohlsearch<CR>
 
+inoremap <silent><expr> <C-Space> compe#complete()
+
 " complete by TAB key
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 
@@ -252,9 +266,6 @@ nnoremap <silent> <C-g> :Rg<CR>
 
 " search in tags
 nnoremap <silent> <C-t> :Tags<CR>
-
-" duplicate a line
-nnoremap <silent> <C-d> yyp<CR>
 
 " toggle line commenting
 nmap <silent> <C-_> <Plug>NERDCommenterToggle
