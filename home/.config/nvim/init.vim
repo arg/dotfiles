@@ -8,6 +8,7 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
 autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
 autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
+autocmd User LspDiagnosticsChanged call lightline#update()
 " }}}
 
 " Plugins {{{
@@ -99,6 +100,7 @@ require'lspconfig'.solargraph.setup {
     debounce_text_changes = 500
   }
 }
+
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false,
@@ -153,12 +155,32 @@ let test#ruby#rspec#options = {
 " }}}
 
 " Lightline {{{
+function! LightlineLSPMajor() abort
+  let l:errors = luaeval('vim.lsp.diagnostic.get_count(0, "Error")')
+  return l:errors == 0 ? '' : printf('E:%d', l:errors)
+endfunction
+
+function! LightlineLSPMinor() abort
+  let l:warnings = luaeval('vim.lsp.diagnostic.get_count(0, "Warning")')
+  let l:info = luaeval('vim.lsp.diagnostic.get_count(0, "Information")')
+  let l:total = l:warnings + l:info
+  return l:total == 0 ? '' : printf('W:%d', l:total)
+endfunction
+
+function! LightlineLSPOK() abort
+  let l:errors = luaeval('vim.lsp.diagnostic.get_count(0, "Error")')
+  let l:warnings = luaeval('vim.lsp.diagnostic.get_count(0, "Warning")')
+  let l:info = luaeval('vim.lsp.diagnostic.get_count(0, "Information")')
+  let l:total = l:errors + l:warnings + l:info
+  return l:total == 0 ? 'OK' : ''
+endfunction
+
 let g:lightline = {
 \  'colorscheme': 'gruvbox',
 \  'active': {
 \    'left': [['mode'], ['filetype'], ['relativepath']],
 \    'right': [
-\      [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_infos', 'linter_ok' ],
+\      ['lsp_major', 'lsp_minor', 'lsp_ok'],
 \      ['lineinfo'],
 \      ['gitbranch']
 \    ]
@@ -169,32 +191,23 @@ let g:lightline = {
 \  },
 \  'component_expand': {
 \    'buffers': 'lightline#bufferline#buffers',
-\    'linter_checking': 'lightline#ale#checking',
-\    'linter_infos': 'lightline#ale#infos',
-\    'linter_warnings': 'lightline#ale#warnings',
-\    'linter_errors': 'lightline#ale#errors',
-\    'linter_ok': 'lightline#ale#ok',
+\    'lsp_major': 'LightlineLSPMajor',
+\    'lsp_minor': 'LightlineLSPMinor',
+\    'lsp_ok': 'LightlineLSPOK',
 \  },
 \  'component_type': {
 \    'buffers': 'tabsel',
-\    'linter_checking': 'right',
-\    'linter_infos': 'right',
-\    'linter_warnings': 'warning',
-\    'linter_errors': 'error',
-\    'linter_ok': 'right',
+\    'lsp_major': 'error',
+\    'lsp_minor': 'warning',
+\    'lsp_ok': 'right',
 \  },
 \  'component_function': {
-\    'gitbranch': 'fugitive#head'
+\    'gitbranch': 'fugitive#head',
 \  },
 \}
+
 let g:lightline#bufferline#unnamed = '[No Name]'
 let g:lightline#bufferline#filename_modifier = ':t'
-let g:lightline#ale#indicator_checking = '..'
-let g:lightline#ale#indicator_infos = 'I: '
-let g:lightline#ale#indicator_warnings = 'W: '
-let g:lightline#ale#indicator_errors = 'E: '
-let g:lightline#ale#indicator_ok = 'OK'
-" let g:lightline.subseparator = {'left': '', 'right': '' }
 " }}}
 
 " Keymaps {{{
