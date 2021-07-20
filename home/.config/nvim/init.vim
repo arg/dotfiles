@@ -9,6 +9,10 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
 autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 autocmd User LspDiagnosticsChanged call lightline#update()
+augroup highlight_yank
+  autocmd!
+  autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
+augroup END
 " }}}
 
 " Plugins {{{
