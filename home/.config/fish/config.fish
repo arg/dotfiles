@@ -17,6 +17,11 @@ set fish_color_autosuggestion white
 set fish_color_command bryellow
 set fish_color_error normal
 set fish_color_param normal
+set fish_cursor_default block
+set fish_cursor_insert line
+set fish_cursor_replace_one underscore
+set fish_cursor_visual block
+set fish_key_bindings fish_vi_key_bindings
 
 abbr -a dce docker-compose exec
 abbr -a dcu docker-compose up
@@ -42,6 +47,29 @@ function fish_prompt -d "Draws left prompt (current directory + git status)"
   echo -ns (set_color green) (prompt_pwd) (__git_status) (set_color normal)  "\$ "
 end
 
+function fish_mode_prompt
+  echo '['
+  switch $fish_bind_mode
+    case default
+      set_color green
+      echo 'N'
+    case insert
+      set_color blue
+      echo 'I'
+    case replace_one
+      set_color blue
+      echo 'R'
+    case visual
+      set_color yellow
+      echo 'V'
+    case '*'
+      set_color red
+      echo '?'
+  end
+  set_color normal
+  echo '] '
+end
+
 function fish_right_prompt -d "Draws right prompt (hostname)"
   test -n "$TMUX"; and return # tmux also draws hostname, no need to duplicate
   echo -ns "[" (set_color yellow) (hostname) (set_color normal) "]"
@@ -65,7 +93,7 @@ function __git_status
 end
 
 function backup -a filename -d "Makes a backup of the given file"
-    cp $filename $filename.bak
+  cp $filename $filename.bak
 end
 
 function e -a path -d "Opens editor in the current directory or with given path"
