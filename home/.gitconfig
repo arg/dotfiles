@@ -15,6 +15,9 @@
 [fetch]
   prune = true
 
+[pull]
+  rebase = true
+
 [push]
   default = simple
 
@@ -49,3 +52,4 @@
 
 [diff "rspec"]
   xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
+
