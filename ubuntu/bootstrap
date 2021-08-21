@@ -72,6 +72,16 @@ echo "AllowUsers arg" >> /etc/ssh/sshd_config.d/user.conf
 
 echo "arg ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+echo "{\"hosts\": [\"tcp://0.0.0.0:2375\", \"unix:///var/run/docker.sock\"]}" > /etc/docker/daemon.json
+mkdir -p /etc/systemd/system/docker.service.d
+tee /etc/systemd/system/docker.service.d/override.conf > /dev/null <<EOT
+[Service]
+ExecStart=
+ExecStart=/usr/bin/dockerd
+EOT
+systemctl daemon-reload
+systemctl restart docker
+
 timedatectl set-timezone Europe/Madrid
 
 echo "********************************************************************************"
