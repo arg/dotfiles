@@ -1,0 +1,8 @@
+data.location = ~/documents/tasks
+weekstart = monday
+search.case.sensitive = no
+#print.empty.columns = yes
+dateformat = Y-M-D
+dateformat.edit = Y-M-D H:N:S
+dateformat.info = Y-M-D H:N:S
+include /usr/local/share/taskwarrior/rc/no-color.theme

@@ -4,7 +4,7 @@
 
 ### New environment bootstrap
 
-Should be run as `root` after installing the new environment.
+Run as `root` on a new environment:
 
 #### Ubuntu 20.04
 
@@ -20,7 +20,7 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/freebsd/bootstrap)
 
 ### Dotfiles installation
 
-Should be run as a regular user after reboot.
+Run as your regular user after rebooting:
 
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
@@ -28,13 +28,19 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
 
 ## Updating dotfiles
 
-To update configs:
+Pull latest changes from GitHub and update config files:
 
 ```bash
 ~/.dotfiles$ make update
 ```
 
-To update secets:
+Update config files without pulling from GitHub:
+
+```bash
+~/.dotfiles$ make configs
+```
+
+Update secrets:
 
 ```bash
 ~/.dotfiles$ make secrets
@@ -114,8 +120,6 @@ To update secets:
 Note: prefix (P) is set to <kbd>`</kbd> (back quote) key.
 
 ## Notes
-
-### Explanation of key bindings
 
 * <kbd>Key1-Key2</kbd> - press and release <kbd>Key1</kbd>, then press <kbd>Key2</kbd>
 * <kbd>Key1Key2</kbd> - press <kbd>Key1</kbd> and then <kbd>Key2</kbd> while holding <kbd>Key1</kbd>
