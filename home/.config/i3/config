@@ -15,6 +15,7 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you want to exit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+Return exec alacritty
 bindsym $mod+d exec rofi -show run
+bindsym $mod+0 exec i3lock -i ~/documents/lock.png
 bindsym Print exec scrot -z -q 100
 
 bindsym $mod+h focus left
