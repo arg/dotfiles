@@ -44,31 +44,37 @@ alias df="df -h"
 alias free="free -m"
 alias tm="tmux a -t main"
 
-function fish_prompt -d "Draws left prompt (current directory + git status)"
-  echo -ns (set_color green) (prompt_pwd) (__git_status) (set_color normal)  "\$ "
+function fish_user_key_bindings
+  for mode in insert default visual
+    bind -M $mode \cf accept-autosuggestion
+  end
+end
+
+function fish_prompt -d "Draws left prompt (mode, current directory, colored git status sign)"
+  echo -ns (set_color green) (prompt_pwd) (__git_status_color) "\$" (set_color normal) " "
 end
 
 function fish_mode_prompt
-  echo '['
+  echo "["
   switch $fish_bind_mode
     case default
       set_color green
-      echo 'N'
+      echo "N"
     case insert
       set_color blue
-      echo 'I'
+      echo "I"
     case replace_one
       set_color blue
-      echo 'R'
+      echo "R"
     case visual
       set_color yellow
-      echo 'V'
-    case '*'
+      echo "V"
+    case "*"
       set_color red
-      echo '?'
+      echo "?"
   end
   set_color normal
-  echo '] '
+  echo "] "
 end
 
 function fish_right_prompt -d "Draws right prompt (hostname)"
@@ -76,21 +82,20 @@ function fish_right_prompt -d "Draws right prompt (hostname)"
   echo -ns "[" (set_color yellow) (hostname) (set_color normal) "]"
 end
 
-function __git_status
-  set -l git_branch (git branch --show-current 2> /dev/null)
-  test $status -eq 128; and return
-  set -l git_status (git status --porcelain=v1 --untracked-files=no | string split0)
-
-  echo -ns (set_color normal) "("
-  if echo $git_status | grep -q "^[ MAD][MAD]"
+function __git_status_color
+  set -l git_status (git status --porcelain=v1 --untracked-files=no 2> /dev/null)
+  if test $status -eq 128
+    echo -n (set_color normal)
+    return
+  end
+  # set -l git_status (echo $git_status_raw | string split0)
+  if echo $git_status | grep -q "^[[:space:][:upper:]][[:upper:]][[:space:]]"
     echo -n (set_color red)
-  else if echo $git_status | grep -q "^[MAD]"
+  else if echo $git_status | grep -q "^[[:upper:]][[:space:]]"
     echo -n (set_color yellow)
   else
     echo -n (set_color green)
   end
-
-  echo -ns $git_branch (set_color normal) ")"
 end
 
 function backup -a filename -d "Makes a backup of the given file"
@@ -107,7 +112,7 @@ function dockerize -a command -a container -d "Runs command in Docker container"
   docker-compose exec $container $command
 end
 
-function extract -a filename -d "Extracts files from the given archive"
+function extract -a filename -d "Extracts files from the archive"
   switch $filename
     case "*.tar"
       tar -xvf $filename
