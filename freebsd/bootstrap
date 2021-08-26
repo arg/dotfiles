@@ -3,7 +3,7 @@
 set -eu
 
 echo "************************************************"
-echo "* Setting up a new FreeBSD 12.2 workstation... *"
+echo "* Setting up a new FreeBSD 13.0 workstation... *"
 echo "************************************************"
 
 # echo "***********************************"
@@ -25,8 +25,8 @@ echo "* Installing new packages... *"
 echo "******************************"
 
 pkg install -q -y 1password-client alacritty curl dbus doas feh firefox fish fzf git gmake \
-  gnupg htop i3 i3lock jq mc mosh neovim nerd-fonts nvidia-driver p7zip paratype polybar \
-  portmaster ripgrep rofi scrot thunderbird tmux universal-ctags vifm wget xorg
+  gnupg htop i3 i3lock jq mc mosh neovim nerd-fonts nvidia-driver ocp p7zip paratype polybar \
+  ripgrep rofi scrot thunderbird tmux vifm wget xdm xorg
 
 echo "**********************"
 echo "* Setting up user... *"

@@ -12,7 +12,7 @@ Run as `root` on a new environment:
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/ubuntu/bootstrap)
 ```
 
-#### FreeBSD 12.2
+#### FreeBSD 13.0
 
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/freebsd/bootstrap)
