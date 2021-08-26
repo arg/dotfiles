@@ -13,6 +13,7 @@ augroup highlight_yank
   autocmd!
   autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
 augroup END
+autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
 " }}}
 
 " Plugins {{{

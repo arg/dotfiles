@@ -111,7 +111,7 @@ Update secrets:
 | <kbd>P-w</kbd> | close window                       |
 | <kbd>P-,</kbd> | rename window                      |
 | <kbd>P-1</kbd> | open the 1st window                |
-| <kbd>P-d</kbd> | detach tmux                        |
+| <kbd>P-d</kbd> | detach Tmux                        |
 | <kbd>P-t</kbd> | show clock                         |
 | <kbd>⌥↑</kbd>  | scroll up (exit with <kbd>q</kbd>) |
 | <kbd>⌃⇧←</kbd> | swap windows to the left           |
