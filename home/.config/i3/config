@@ -10,13 +10,14 @@ floating_minimum_size 75 x 50
 floating_maximum_size 2000 x 1000
 floating_modifier $mod
 
-bindsym $mod+Shift+q kill
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+q "kill"
+bindsym $mod+Shift+r "restart"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you want to exit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Return exec alacritty
-bindsym $mod+d exec rofi -show run
-bindsym $mod+0 exec i3lock -e -i ~/documents/lock.png
-bindsym Print exec scrot -z -q 100
+bindsym $mod+Shift+p exec --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
+bindsym $mod+Return exec "alacritty"
+bindsym $mod+d exec "rofi -show run"
+bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/documents/lock.png"
+bindsym Print exec "scrot -z -q 100"
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
