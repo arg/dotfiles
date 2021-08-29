@@ -17,16 +17,16 @@ echo "********************************"
 echo "* Upgrading system packages... *"
 echo "********************************"
 
-pkg update -q
-pkg upgrade -q -y
+pkg update
+pkg upgrade -y
 
 echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -q -y 1password-client alacritty curl dbus doas feh firefox fish fzf git gmake \
-  gnupg htop i3 i3lock jq mc mosh neovim nerd-fonts nvidia-driver ocp p7zip paratype polybar \
-  ripgrep rofi scrot thunderbird tmux vifm wget xdm xorg
+pkg install -y 1password-client alacritty curl dbus doas feh firefox fish fzf git gmake \
+  gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver p7zip paratype \
+  polybar ripgrep rofi rsync scrot taskwarrior thunderbird tmux vifm wget xdm xorg
 
 echo "**********************"
 echo "* Setting up user... *"
@@ -37,14 +37,6 @@ pw usermod arg -G wheel,video -s /usr/local/bin/fish
 echo "***********************************"
 echo "* Updating configuration files... *"
 echo "***********************************"
-
-sed -i "s/^PermitRootLogin/#&/" /etc/ssh/sshd_config
-sed -i "s/^IgnoreUserKnownHosts/#&/" /etc/ssh/sshd_config
-sed -i "s/^PasswordAuthentication/#&/" /etc/ssh/sshd_config
-sed -i "s/^PermitTunnel/#&/" /etc/ssh/sshd_config
-sed -i "s/^AllowAgentForwarding/#&/" /etc/ssh/sshd_config
-sed -i "s/^AllowTcpForwarding/#&/" /etc/ssh/sshd_config
-sed -i "s/^X11Forwarding/#&/" /etc/ssh/sshd_config
 
 echo "PermitRootLogin no" >> /etc/ssh/sshd_config
 echo "IgnoreUserKnownHosts yes" >> /etc/ssh/sshd_config
@@ -60,9 +52,9 @@ echo "permit nopass keepenv :wheel" >> /usr/local/etc/doas.conf
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
-sysrc dbus_enable=YES
 sysrc ntpd_enable=YES
 sysrc ntpdate_enable=YES
+sysrc ntpdate_hosts="es.pool.ntp.org"
 sysrc kld_list+="nvidia-modeset"
 
 echo "**********************************************************************************"
