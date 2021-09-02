@@ -103,6 +103,23 @@ function __git_status_color
   end
 end
 
+function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .envrc"
+  if set -q -g dirvariables
+    for variable_to_unset in $dirvariables
+      set -e -g $variable_to_unset
+    end
+    set -e -g dirvariables
+  end
+  set -l envrc "$PWD/.envrc"
+  if test -f $envrc
+    while read -la line
+      set -l dirvariable (string split -m 1 '=' $line)
+      set -g -a dirvariables $dirvariable[1]
+      set -g $dirvariable[1] $dirvariable[2]
+    end < $envrc
+  end
+end
+
 function backup -a filename -d "Makes a backup of the given file"
   cp $filename $filename.bak
 end
@@ -135,5 +152,7 @@ function extract -a filename -d "Extracts files from the archive"
       echo "Unknown archive type"
   end
 end
+
+__set_dirvariables
 
 test -f "$HOME/.local.fish"; and source "$HOME/.local.fish"
