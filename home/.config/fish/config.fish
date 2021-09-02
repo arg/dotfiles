@@ -10,7 +10,8 @@ set -gx FZF_DEFAULT_COMMAND "rg --files --follow --hidden"
 set -gx FZF_DEFAULT_OPTS "--color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934"
 set -gx MANPAGER "nvim +Man!"
 
-set -p fish_user_paths "$HOME/.bin"
+fish_add_path "~/.local/bin"
+
 set fish_greeting ""
 set fish_prompt_pwd_dir_length 30
 set fish_color_autosuggestion white
@@ -90,6 +91,10 @@ function __git_status_color
   end
   # set -l git_status (echo $git_status_raw | string split0)
   if echo $git_status | grep -q "^[[:space:][:upper:]][[:upper:]][[:space:]]"
+    # currently there is a bug: if a staged file is modified
+    # grep will return zero status code (which is fine), but
+    # for some reason this block won't get invoked, so "$" sign
+    # will be rendered in yellow color, instead of red
     echo -n (set_color red)
   else if echo $git_status | grep -q "^[[:upper:]][[:space:]]"
     echo -n (set_color yellow)
