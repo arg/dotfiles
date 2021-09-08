@@ -6,7 +6,9 @@ endif
 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
-autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
+" autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankReg +' | endif
+autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+" autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
 autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 autocmd User LspDiagnosticsChanged call lightline#update()
 augroup highlight_yank
@@ -14,6 +16,7 @@ augroup highlight_yank
   autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
 augroup END
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
+autocmd FileType ruby iabbrev <buffer> pry binding.pry
 " }}}
 
 " Plugins {{{
@@ -31,7 +34,6 @@ Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
-Plug 'tmsvg/pear-tree'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/nvim-compe'
 call plug#end()
