@@ -6,9 +6,7 @@ endif
 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
-" autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | execute 'OSCYankReg +' | endif
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
-" autocmd TextYankPost * silent! if v:event.operator ==# 'y' | call YankOSC52(join(v:event["regcontents"],"\n")) | endif
 autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 autocmd User LspDiagnosticsChanged call lightline#update()
 augroup highlight_yank
