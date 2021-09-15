@@ -69,7 +69,6 @@ set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
-" set spell
 set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
@@ -77,7 +76,6 @@ set textwidth=103
 set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
-" set virtualedit=onemore " allow the cursor to go beyond last character in line
 " }}}
 
 " Tree-sitter {{{
@@ -116,6 +114,13 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 EOF
+" }}}
+
+" FZF {{{
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   "rg -g '!{Gemfile.lock,yarn.lock,config/credentials,db/schema.rb,public,log,tmp,.git,node_modules}' --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview({'options': '--exact'}), <bang>0)
 " }}}
 
 " GitSigns {{{
