@@ -1,0 +1,14 @@
+/* vi: ft=css
+ */
+
+configuration {
+  terminal: "alacritty";
+  dpi: 192;
+  font: "Hack Nerd Font 11";
+  display-window: "Windows";
+  display-run: "Commands";
+  display-ssh: "SSH";
+  sidebar-mode: true;
+}
+
+@theme "/home/arg/.config/rofi/gruvbox.rasi"
