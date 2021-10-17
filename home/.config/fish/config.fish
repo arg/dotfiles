@@ -48,7 +48,7 @@ alias tm="tmux a -t main"
 
 function fish_user_key_bindings
   for mode in insert default visual
-    bind -M $mode \cf accept-autosuggestion
+    bind -M $mode -k nul accept-autosuggestion
   end
 end
 

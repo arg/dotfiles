@@ -28,13 +28,13 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
 
 ## Updating dotfiles
 
-Pull latest changes from GitHub and update config files:
+Pull latest changes from GitHub and update configuration files:
 
 ```bash
 ~/.dotfiles$ make update
 ```
 
-Update config files without pulling from GitHub:
+Update configuration files without pulling from GitHub:
 
 ```bash
 ~/.dotfiles$ make configs
@@ -56,7 +56,8 @@ Update secrets:
 |:--------------:|--------------------------|
 | <kbd>Tab</kbd> | completion               |
 | <kbd>⌃C</kbd>  | clear command line       |
-| <kbd>→</kbd>   | accept suggested command |
+| <kbd>⌃D</kbd>  | close shell              |
+| <kbd>⌃⎵</kbd>  | accept suggested command |
 
 ### Alacritty
 
@@ -106,7 +107,7 @@ Update secrets:
 
 | Key            | Action                             |
 |:--------------:|------------------------------------|
-| <kbd>P-r</kbd> | reload config                      |
+| <kbd>P-r</kbd> | reload configuration               |
 | <kbd>P-c</kbd> | new window                         |
 | <kbd>P-w</kbd> | close window                       |
 | <kbd>P-,</kbd> | rename window                      |

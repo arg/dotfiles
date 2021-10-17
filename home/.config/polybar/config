@@ -30,27 +30,28 @@ modules-center = title
 modules-right = xkeyboard date
 
 [module/i3]
+strip-wsnumbers = true
 type = internal/i3
 pin-workspaces = true
 index-sort = true
 enable-click = true
 enable-scroll = false
 label-focused = "%name%"
-label-focused-background = ${colors.green}
-label-focused-foreground = ${colors.foreground}
-label-focused-padding = 1
+label-focused-background = ${colors.background-2}
+label-focused-foreground = ${colors.green}
+label-focused-padding = 2
 label-unfocused = "%name%"
 label-unfocused-background = ${colors.background-2}
 label-unfocused-foreground = ${colors.foreground}
-label-unfocused-padding = 1
+label-unfocused-padding = 2
 label-visible = "%name%"
 label-visible-background = ${colors.background-3}
 label-visible-foreground = ${colors.foreground}
-label-visible-padding = 1
+label-visible-padding = 2
 label-urgent = "%name%"
 label-urgent-background = ${colors.red}
 label-urgent-foreground = ${colors.foreground}
-label-urgent-padding = 1
+label-urgent-padding = 2
 
 [module/title]
 type = internal/xwindow
