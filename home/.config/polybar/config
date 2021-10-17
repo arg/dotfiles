@@ -45,12 +45,12 @@ label-unfocused-background = ${colors.background-2}
 label-unfocused-foreground = ${colors.foreground}
 label-unfocused-padding = 2
 label-visible = "%name%"
-label-visible-background = ${colors.background-3}
+label-visible-background = ${colors.background-2}
 label-visible-foreground = ${colors.foreground}
 label-visible-padding = 2
 label-urgent = "%name%"
-label-urgent-background = ${colors.red}
-label-urgent-foreground = ${colors.foreground}
+label-urgent-background = ${colors.background-2}
+label-urgent-foreground = ${colors.red}
 label-urgent-padding = 2
 
 [module/title]
