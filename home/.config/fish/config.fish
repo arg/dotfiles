@@ -24,10 +24,10 @@ set fish_cursor_replace_one underscore
 set fish_cursor_visual block
 set fish_key_bindings fish_vi_key_bindings
 
-abbr -a dce docker-compose exec
-abbr -a dcu docker-compose up
-abbr -a dcs docker-compose stop
+abbr -a dc docker compose
 abbr -a gco git checkout
+abbr -a gs git status
+abbr -a gd git diff
 abbr -a ga git add
 abbr -a gc git commit
 abbr -a gp git push
