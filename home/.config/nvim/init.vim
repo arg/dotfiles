@@ -9,10 +9,6 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 autocmd User LspDiagnosticsChanged call lightline#update()
-augroup highlight_yank
-  autocmd!
-  autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank("IncSearch", 1000)
-augroup END
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
 autocmd FileType ruby iabbrev <buffer> pry binding.pry
 " }}}
@@ -34,6 +30,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'janko/vim-test'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/nvim-compe'
+Plug 'rust-lang/rust.vim'
 call plug#end()
 " }}}
 
@@ -92,7 +89,9 @@ require'nvim-treesitter.configs'.setup {
     "yaml",
     "html",
     "javascript",
-    "scss"
+    "scss",
+    "rust",
+    "toml"
   },
 }
 EOF
@@ -100,11 +99,16 @@ EOF
 
 " LSP {{{
 lua <<EOF
-require'lspconfig'.solargraph.setup {
-  flags = {
-    debounce_text_changes = 500
+local nvim_lsp = require('lspconfig')
+local servers = { 'solargraph', 'rls' }
+
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    flags = {
+      debounce_text_changes = 500
+    }
   }
-}
+end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
