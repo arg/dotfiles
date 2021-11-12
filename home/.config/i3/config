@@ -18,7 +18,7 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you want to exit i3?' -B 
 bindsym $mod+Shift+p exec --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
 bindsym $mod+Return exec "alacritty"
 bindsym $mod+d exec "dmenu_run -b -nb '#282828' -nf '#ebdbb2' -sb '#98971a' -sf '#ebdbb2' -fn 'Hack Nerd Font-11'"
-bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/polaris/home/documents/lock.png"
+bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/documents/lock.png"
 bindsym Print exec "scrot -z -q 100"
 
 bindsym $mod+h focus left
