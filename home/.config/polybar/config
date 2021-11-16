@@ -21,8 +21,8 @@ height = 56
 fixed-center = true
 background = ${colors.background}
 foreground = ${colors.foreground}
-dpi = 192
-font-0 = "Hack Nerd Font:size=11;3"
+dpi = 163
+font-0 = "Hack Nerd Font:size=13;3"
 cursor-click = pointer
 modules-left = i3
 modules-center = title

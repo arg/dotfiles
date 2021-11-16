@@ -3,8 +3,8 @@
 
 configuration {
   terminal: "alacritty";
-  dpi: 192;
-  font: "Hack Nerd Font 11";
+  dpi: 163;
+  font: "Hack Nerd Font 13";
   display-window: "Windows";
   display-run: "Commands";
   display-ssh: "SSH";
