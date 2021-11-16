@@ -24,7 +24,7 @@ echo "* Installing new packages... *"
 echo "******************************"
 
 apt install -q -y build-essential docker.io docker-compose fish fzf git make mc mosh p7zip-full \
-  ripgrep ruby ruby-dev tmux wget
+  ripgrep ruby ruby-dev tmux vifm wget
 
 echo "**********************************"
 echo "* Installing additional tools... *"
