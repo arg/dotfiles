@@ -49,13 +49,20 @@ echo "AllowUsers arg" >> /etc/ssh/sshd_config
 
 echo "permit nopass keepenv :wheel" >> /usr/local/etc/doas.conf
 
+echo "kern.sched.preempt_thresh=224" >> /etc/sysctl.conf
+echo "kern.vt.enable_bell=0" >> /etc/sysctl.conf
+echo "hw.syscons.bell=0" >> /etc/sysctl.conf
+
+echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
+
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
-sysrc xdm_enable=YES
-sysrc ntpdate_enable=YES
-sysrc ntpdate_hosts="es.pool.ntp.org"
 sysrc kld_list+="nvidia-modeset"
+sysrc powerd_enable="YES"
+sysrc ntpdate_enable="YES"
+sysrc ntpdate_hosts="es.pool.ntp.org"
+sysrc xdm_enable="YES"
 
 echo "**********************************************************************************"
 echo "* Everything done. Press <Return> to reboot the machine with new settings.       *"
