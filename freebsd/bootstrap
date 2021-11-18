@@ -75,7 +75,7 @@ sysrc firewall_logdeny="NO"
 sysrc firewall_myservices="22/tcp"
 sysrc firewall_allowservices="any"
 
-sysrc -f /boot/loader.conf autoboot_delay="2"
+sysrc -f /boot/loader.conf autoboot_delay="3"
 sysrc -f /boot/loader.conf coretemp_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_name="/boot/firmware/intel-ucode.bin"
