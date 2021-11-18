@@ -91,6 +91,8 @@ echo "MASQUERADE `hostname`@arg.network" >> /etc/dma/dma.conf
 
 echo "root: arg@arg.zone" >> /etc/mail/aliases
 
+echo "@daily root freebsd-update cron" >> /etc/crontab
+
 # The following commands are required for running bhyve
 # pkg install -y bhyve-firmware vm-bhyve
 # zfs create zroot/var/vm
