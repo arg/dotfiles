@@ -24,9 +24,10 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client alacritty curl dbus doas feh firefox fish fzf git gmake \
-  gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver p7zip paratype \
-  pcmanfm polybar ripgrep rofi rsync scrot taskwarrior thunderbird tmux vifm wget xdm xorg
+pkg install -y 1password-client alacritty curl dbus devcpu-data doas feh firefox fish fzf git \
+  gmake gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver p7zip paratype \
+  pcmanfm polybar ripgrep rofi rsync scrot taskwarrior thunderbird tmux vifm wget xdg-utils xdm \
+  xorg
 
 echo "**********************"
 echo "* Setting up user... *"
@@ -49,6 +50,7 @@ echo "AllowUsers arg" >> /etc/ssh/sshd_config
 
 echo "permit nopass keepenv :wheel" >> /usr/local/etc/doas.conf
 
+echo "kern.coredump=0" >> /etc/sysctl.conf
 echo "kern.sched.preempt_thresh=224" >> /etc/sysctl.conf
 echo "kern.vt.enable_bell=0" >> /etc/sysctl.conf
 echo "hw.syscons.bell=0" >> /etc/sysctl.conf
@@ -58,11 +60,46 @@ echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
+cp /usr/share/examples/dma/mailer.conf /etc/mail/
+
 sysrc kld_list+="nvidia-modeset"
 sysrc powerd_enable="YES"
 sysrc ntpdate_enable="YES"
 sysrc ntpdate_hosts="es.pool.ntp.org"
 sysrc xdm_enable="YES"
+sysrc dbus_enable="YES"
+sysrc firewall_enable="YES"
+sysrc firewall_type="workstation"
+sysrc firewall_quiet="YES"
+sysrc firewall_logdeny="NO"
+sysrc firewall_myservices="22/tcp"
+sysrc firewall_allowservices="any"
+
+sysrc -f /boot/loader.conf autoboot_delay="2"
+sysrc -f /boot/loader.conf coretemp_load="YES"
+sysrc -f /boot/loader.conf cpu_microcode_load="YES"
+sysrc -f /boot/loader.conf cpu_microcode_name="/boot/firmware/intel-ucode.bin"
+
+sysrc -f /etc/periodic.conf daily_clean_hoststat_enable="NO"
+sysrc -f /etc/periodic.conf daily_status_mail_rejects_enable="NO"
+sysrc -f /etc/periodic.conf daily_status_include_submit_mailq="NO"
+sysrc -f /etc/periodic.conf daily_submit_queuerun="NO"
+
+echo "SMARTHOST mail.arg.network" >> /etc/dma/dma.conf
+echo "PORT 8025" >> /etc/dma/dma.conf
+echo "MASQUERADE `hostname`@arg.network" >> /etc/dma/dma.conf
+
+echo "root: arg@arg.zone" >> /etc/mail/aliases
+
+# The following commands are required for running bhyve
+# pkg install -y bhyve-firmware vm-bhyve
+# zfs create zroot/var/vm
+# sysrc -f /boot/loader.conf vmm_load="YES"
+# sysrc vm_enable="YES"
+# sysrc vm_dir="zfs:zroot/var/vm"
+# vm init
+# vm switch create public
+# vm switch add public em0
 
 echo "**********************************************************************************"
 echo "* Everything done. Press <Return> to reboot the machine with new settings.       *"
