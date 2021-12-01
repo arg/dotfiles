@@ -26,8 +26,8 @@ echo "******************************"
 
 pkg install -y 1password-client alacritty curl dbus devcpu-data doas feh firefox fish fzf git \
   gmake gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver p7zip paratype \
-  pcmanfm polybar ripgrep rofi rsync scrot taskwarrior thunderbird tmux vifm wget xdg-utils xdm \
-  xorg
+  pcmanfm polybar ripgrep rofi rsync scrot spotify-tui spotifyd syncthing taskwarrior \
+  thunderbird tmux vifm wget xdg-utils xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
@@ -60,19 +60,27 @@ echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
-cp /usr/share/examples/dma/mailer.conf /etc/mail/
-
 sysrc kld_list+="nvidia-modeset"
+sysrc clear_tmp_enable="YES"
+sysrc syslogd_flags="-ss"
+sysrc sendmail_enable="NONE"
+sysrc dumpdev="NO"
+sysrc keymap="us.kbd"
+sysrc zfs_enable="YES"
 sysrc powerd_enable="YES"
+sysrc sshd_enable="YES"
 sysrc ntpdate_enable="YES"
 sysrc ntpdate_hosts="es.pool.ntp.org"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
+sysrc syncthing_enable="YES"
+sysrc syncthing_user="arg"
+sysrc syncthing_group="arg"
 sysrc firewall_enable="YES"
 sysrc firewall_type="workstation"
 sysrc firewall_quiet="YES"
 sysrc firewall_logdeny="NO"
-sysrc firewall_myservices="22/tcp"
+sysrc firewall_myservices="22/tcp 22000/tcp 3000/tcp 1234/tcp"
 sysrc firewall_allowservices="any"
 
 sysrc -f /boot/loader.conf autoboot_delay="3"
@@ -87,9 +95,16 @@ sysrc -f /etc/periodic.conf daily_submit_queuerun="NO"
 
 echo "SMARTHOST mail.arg.network" >> /etc/dma/dma.conf
 echo "PORT 8025" >> /etc/dma/dma.conf
-echo "MASQUERADE `hostname`@arg.network" >> /etc/dma/dma.conf
+echo "MAILNAME `hostname`@arg.network" >> /etc/dma/dma.conf
 
 echo "root: arg@arg.zone" >> /etc/mail/aliases
+
+echo "alias root arg@arg.zone" >> /etc/mail.rc
+echo "alias arg arg@arg.zone" >> /etc/mail.rc
+
+cp /usr/share/examples/dma/mailer.conf /etc/mail/
+echo "newaliases /usr/libexec/dma" >> /etc/mail/mailer.conf
+echo "rmail /usr/libexec/dma" >> /etc/mail/mailer.conf
 
 echo "@daily root freebsd-update cron" >> /etc/crontab
 

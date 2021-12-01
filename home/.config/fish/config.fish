@@ -9,7 +9,10 @@ set -gx COLORTERM "truecolor"
 set -gx FZF_DEFAULT_COMMAND "rg --files --follow"
 set -gx FZF_DEFAULT_OPTS "--color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934"
 set -gx MANPAGER "nvim +Man!"
+set -gx RUBYOPT "-W0"
+set -gx BUNDLE_PATH "/home/arg/.gem"
 
+fish_add_path -mP ~/.gem/ruby/2.7/bin
 fish_add_path -mP ~/.local/bin
 
 set fish_greeting ""
@@ -85,7 +88,7 @@ function fish_right_prompt -d "Draws right prompt (hostname)"
 end
 
 function __git_status_color
-  set -l git_status (git status --porcelain=v1 --untracked-files=no 2> /dev/null)
+  set -l git_status (git --no-optional-locks status --porcelain=v1 --untracked-files=no 2> /dev/null)
   if test $status -eq 128
     echo -n (set_color normal)
     return

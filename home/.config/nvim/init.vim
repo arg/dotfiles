@@ -173,7 +173,7 @@ let g:auto_save_events = ["InsertLeave", "TextChanged"]
 " }}}
 
 " VimTest {{{
-let test#ruby#rspec#executable = 'docker-compose exec app bundle exec rspec'
+let test#ruby#rspec#executable = 'rspec'
 let test#ruby#rspec#options = {
   \ 'nearest': '--backtrace',
   \ 'file':    '--format documentation',
