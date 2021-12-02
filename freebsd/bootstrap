@@ -118,8 +118,8 @@ echo "@daily root freebsd-update cron" >> /etc/crontab
 # vm switch create public
 # vm switch add public em0
 
-echo "**********************************************************************************"
-echo "* Everything done. Press <Return> to reboot the machine with new settings.       *"
-echo "* After reboot, install dotfiles by 'arg' user (see Readme for the instruction). *"
-echo "**********************************************************************************"
+echo "****************************************************************************"
+echo "* Everything done. Press <Return> to reboot the machine with new settings  *"
+echo "* Now install dotfiles by 'arg' user (see Readme for the instruction).     *"
+echo "****************************************************************************"
 read
