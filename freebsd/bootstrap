@@ -123,5 +123,3 @@ echo "* Everything done. Press <Return> to reboot the machine with new settings.
 echo "* After reboot, install dotfiles by 'arg' user (see Readme for the instruction). *"
 echo "**********************************************************************************"
 read
-
-reboot
