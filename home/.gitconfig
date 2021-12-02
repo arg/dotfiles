@@ -37,6 +37,9 @@
 [commit]
   gpgsign = true
 
+[tag]
+	gpgsign = true
+
 [alias]
   commend = commit --amend --no-edit
   please = push --force-with-lease

@@ -1,46 +1,22 @@
-" vim: filetype=vifm :
+" vim: filetype=vim
 colorscheme gruvbox
 set vicmd=nvim
 set syscalls
-
-" Trash Directory
-" The default is to move files that are deleted with dd or :d to
-" the trash directory.  If you change this you will not be able to move
-" files by deleting them and then using p to put the file in the new location.
-" I recommend not changing this until you are familiar with vifm.
-" This probably shouldn't be an option.
-
-set trash
-
+set notrash
 set history=100
 set nofollowlinks
 set sortnumbers
 set undolevels=100
 set novimhelp
-
-" If you would like to run an executable file when you
-" press return on the file name set this.
-
 set norunexec
 set timefmt=%Y-%m-%d\ %H:%M
 set wildmenu
 set wildstyle=popup
-
-" Display suggestions in normal, visual and view modes for keys, marks and
-" registers (at most 5 files).  In other view, when available.
-
 set suggestoptions=normal,visual,view,otherpane,keys,marks,registers
-
-" Ignore case in search patterns unless it contains at least one uppercase
-" letter
-
 set ignorecase
 set smartcase
 set nohlsearch
 set incsearch
-
-" Try to leave some space from cursor to upper/lower border in lists
-
 set scrolloff=4
 
 " Don't do too many requests to slow file systems
@@ -49,9 +25,7 @@ if !has('win')
     set slowfs=curlftpfs
 endif
 
-" Set custom status line look
-
-set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
+set statusline=" %t %= | %u:%g | %A | %8E | %d "
 
 " ------------------------------------------------------------------------------
 
