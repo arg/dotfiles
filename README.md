@@ -61,13 +61,13 @@ Update secrets:
 
 ### Alacritty
 
-| Key              | Action               |
-|:----------------:|----------------------|
-| <kbd>⌃V</kbd>    | paste from clipboard |
-| <kbd>⇧⇞</kbd>    | scroll up            |
-| <kbd>⇧⇟</kbd>    | scroll down          |
-| <kbd>⇧Home</kbd> | scroll to top        |
-| <kbd>⇧End</kbd>  | scroll to bottom     |
+| Key           | Action               |
+|:-------------:|----------------------|
+| <kbd>⌃P</kbd> | paste from clipboard |
+| <kbd>⌥K</kbd> | scroll up            |
+| <kbd>⌥J</kbd> | scroll down          |
+| <kbd>⌥H</kbd> | scroll to top        |
+| <kbd>⌥L</kbd> | scroll to bottom     |
 
 
 ### iTerm2
@@ -83,8 +83,6 @@ Update secrets:
 
 | Key               | Mode | Action                 |
 |:-----------------:|:----:|------------------------|
-| <kbd>i</kbd>      | N    | enter insert mode      |
-| <kbd>Escape</kbd> | IVC  | exit to normal mode    |
 | <kbd>⌃T</kbd>     | N    | new buffer             |
 | <kbd>⌃N</kbd>     | N    | open Netrw             |
 | <kbd>Tab</kbd>    | N    | next buffer            |
@@ -94,9 +92,9 @@ Update secrets:
 | <kbd>⌃F</kbd>     | N    | search in current file |
 | <kbd>⌃G</kbd>     | N    | search in all files    |
 | <kbd>⌃T</kbd>     | N    | search in tags         |
-| <kbd>⌃D</kbd>     | N    | duplicate a line       |
 | <kbd>⌃/</kbd>     | NV   | toggle line comment    |
-| <kbd>⌃L</kbd>     | N    | fix code with Ale      |
+| <kbd>⌃L</kbd>     | N    | fix code               |
+| <kbd>⌃]</kbd>     | N    | go to definition       |
 | <kbd>Space</kbd>  | N    | toggle folding         |
 | <kbd>/-/</kbd>    | N    | clear selection        |
 | <kbd>t-n</kbd>    | N    | run nearest test       |
@@ -111,7 +109,6 @@ Update secrets:
 | <kbd>P-c</kbd> | new window                         |
 | <kbd>P-w</kbd> | close window                       |
 | <kbd>P-,</kbd> | rename window                      |
-| <kbd>P-1</kbd> | open the 1st window                |
 | <kbd>P-d</kbd> | detach Tmux                        |
 | <kbd>P-t</kbd> | show clock                         |
 | <kbd>⌥↑</kbd>  | scroll up (exit with <kbd>q</kbd>) |
