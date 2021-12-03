@@ -31,6 +31,8 @@ Plug 'janko/vim-test'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/nvim-compe'
 Plug 'rust-lang/rust.vim'
+Plug 'gfanto/fzf-lsp.nvim'
+Plug 'liuchengxu/vista.vim'
 call plug#end()
 " }}}
 
@@ -73,6 +75,11 @@ set textwidth=103
 set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
+" }}}
+
+" Vista {{{
+let g:vista_default_executive = 'nvim_lsp'
+let g:vista_disable_statusline = 0
 " }}}
 
 " Tree-sitter {{{
@@ -280,7 +287,7 @@ nnoremap <silent> <C-f> :BLines<CR>
 nnoremap <silent> <C-g> :Rg<CR>
 
 " search in tags
-nnoremap <silent> <C-t> :Tags<CR>
+nnoremap <silent> <C-t> :WorkspaceSymbols<CR>
 
 " toggle line commenting
 nmap <silent> <C-_> <Plug>NERDCommenterToggle
