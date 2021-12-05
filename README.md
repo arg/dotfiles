@@ -94,6 +94,8 @@ Update secrets:
 | <kbd>⌃T</kbd>     | N    | search in tags         |
 | <kbd>⌃/</kbd>     | NV   | toggle line comment    |
 | <kbd>⌃L</kbd>     | N    | fix code               |
+| <kbd>⌃Q</kbd>     | N    | open terminal          |
+| <kbd>⌃Q</kbd>     | T    | unfocus terminal       |
 | <kbd>⌃]</kbd>     | N    | go to definition       |
 | <kbd>Space</kbd>  | N    | toggle folding         |
 | <kbd>/-/</kbd>    | N    | clear selection        |

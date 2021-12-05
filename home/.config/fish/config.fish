@@ -48,6 +48,7 @@ alias rm="rm -i"
 alias df="df -h"
 alias free="free -m"
 alias tm="tmux a -t main"
+alias brakeman="brakeman -A -6 --summary -q --no-pager"
 
 function fish_user_key_bindings
   for mode in insert default visual

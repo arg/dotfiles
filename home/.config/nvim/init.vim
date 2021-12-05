@@ -297,10 +297,16 @@ vmap <silent> <C-_> <Plug>NERDCommenterToggle
 nnoremap <silent> <C-l> <cmd>lua vim.lsp.buf.formatting()<CR>
 
 " go to definition
-nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 
 " toggle fold
 nnoremap <silent> <Space> za
+
+" open terminal
+nnoremap <silent> <C-q> :terminal<CR>
+
+" exit from terminal
+tnoremap <silent> <C-q> <C-\><C-n>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
