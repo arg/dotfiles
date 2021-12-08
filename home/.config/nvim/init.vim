@@ -16,23 +16,23 @@ autocmd FileType ruby iabbrev <buffer> pry binding.pry
 " Plugins {{{
 call plug#begin('~/.config/nvim/plugged')
 Plug 'gruvbox-community/gruvbox'
+Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-haml'
 Plug 'itchyny/lightline.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 Plug '907th/vim-auto-save'
-Plug 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'janko/vim-test'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'terrortylor/nvim-comment'
+Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
-Plug 'hrsh7th/nvim-compe'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'rust-lang/rust.vim'
-Plug 'gfanto/fzf-lsp.nvim'
-Plug 'liuchengxu/vista.vim'
+Plug 'preservim/nerdtree' " TODO: replace with https://github.com/kyazdani42/nvim-tree.lua
 call plug#end()
 " }}}
 
@@ -77,14 +77,18 @@ set undofile
 set updatetime=1000
 " }}}
 
-" Vista {{{
-let g:vista_default_executive = 'nvim_lsp'
-let g:vista_disable_statusline = 0
+" NERDTree {{{
+let NERDTreeAutoDeleteBuffer = 1
+let NERDTreeMinimalUI = 1
+let NERDTreeNaturalSort = 1
+let NERDTreeWinSize = 50
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
 " }}}
 
 " Tree-sitter {{{
 lua <<EOF
-require'nvim-treesitter.configs'.setup {
+require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true
   },
@@ -104,34 +108,20 @@ require'nvim-treesitter.configs'.setup {
 EOF
 " }}}
 
-" LSP {{{
+" Telescope {{{
 lua <<EOF
-local nvim_lsp = require('lspconfig')
-local servers = { 'solargraph', 'rls' }
-
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    flags = {
-      debounce_text_changes = 500
+local telescope = require('telescope')
+telescope.setup {
+  extensions = {
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = true,
+      override_file_sorter = true,
+      case_mode = "smart_case"
     }
   }
-end
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    signs = true,
-    update_in_insert = false
-  }
-)
+}
 EOF
-" }}}
-
-" FZF {{{
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   "rg -g '!{Gemfile.lock,yarn.lock,config/credentials,db/schema.rb,public,log,tmp,.git,node_modules}' --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview({'options': '--exact'}), <bang>0)
 " }}}
 
 " GitSigns {{{
@@ -156,16 +146,60 @@ let g:gruvbox_bold = '0'
 let g:gitgutter_map_keys = 0
 " }}}
 
-" NERDCommenter {{{
-let NERDSpaceDelims = 1
-let g:NERDCreateDefaultMappings = 0
+" nvim-comment {{{
+lua <<EOF
+require('nvim_comment').setup {
+  marker_padding = true,
+  create_mappings = false
+}
+EOF
 " }}}
 
-" Compe {{{
-let g:compe = {}
-let g:compe.autocomplete = v:false
-let g:compe.source = {}
-let g:compe.source.nvim_lsp = v:true
+" nvim-cmp {{{
+lua <<EOF
+local cmp = require('cmp')
+cmp.setup {
+  completion = {
+    autocomplete = false
+  },
+  sources = {
+    { name = 'nvim_lsp' }
+  },
+  mapping = {
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<Tab>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+    ['<CR>'] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+  }
+}
+EOF
+" }}}
+
+" LSP {{{
+lua <<EOF
+local nvim_lsp = require('lspconfig')
+local servers = { 'solargraph', 'rls' }
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    capabilities = capabilities,
+    flags = {
+      debounce_text_changes = 500
+    }
+  }
+end
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    signs = true,
+    update_in_insert = false
+  }
+)
+EOF
 " }}}
 
 " SplitJoin {{{
@@ -180,7 +214,7 @@ let g:auto_save_events = ["InsertLeave", "TextChanged"]
 " }}}
 
 " VimTest {{{
-let test#ruby#rspec#executable = 'rspec'
+let test#ruby#rspec#file_pattern = '_spec\.rb'
 let test#ruby#rspec#options = {
   \ 'nearest': '--backtrace',
   \ 'file':    '--format documentation',
@@ -245,67 +279,30 @@ let g:lightline#bufferline#filename_modifier = ':t'
 " }}}
 
 " Keymaps {{{
-" leader key
 let mapleader=","
-
-" toggle Netrw
 nnoremap <silent> <C-n> :Explore<CR>
-
-" clean search highlight
 noremap  <silent>// :nohlsearch<CR>
-
 inoremap <silent><expr> <C-Space> compe#complete()
-
-" complete by TAB key
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-
-" run nearest test
 nnoremap <silent> tn :TestNearest<CR>
-
-" test file
 nnoremap <silent> tf :TestFile<CR>
-
-" test suite
 nnoremap <silent> ts :TestSuite<CR>
-
-" move to the previous buffer
 nnoremap <silent> <S-Tab> :bprevious<CR>
-
-" move to the next buffer
 nnoremap <silent> <Tab> :bnext<CR>
-
-" close the current buffer
 noremap <silent> <C-w> :bd<CR>
-
-" open files list
-nnoremap <silent> <C-o> :GFiles<CR>
-
-" search in current file
-nnoremap <silent> <C-f> :BLines<CR>
-
-" search in all files
-nnoremap <silent> <C-g> :Rg<CR>
-
-" search in tags
-nnoremap <silent> <C-t> :WorkspaceSymbols<CR>
-
-" toggle line commenting
-nmap <silent> <C-_> <Plug>NERDCommenterToggle
-vmap <silent> <C-_> <Plug>NERDCommenterToggle
-
-" format code
+nnoremap <silent> <C-k> :wincmd k<CR>
+nnoremap <silent> <C-j> :wincmd j<CR>
+nnoremap <silent> <C-h> :wincmd h<CR>
+nnoremap <silent> <C-l> :wincmd l<CR>
+nnoremap <silent> <C-o> :Telescope find_files<CR>
+nnoremap <silent> <C-g> :Telescope live_grep<CR>
+nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
+nmap <silent> <C-_> :CommentToggle<CR>
+vmap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-l> <cmd>lua vim.lsp.buf.formatting()<CR>
-
-" go to definition
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
-
-" toggle fold
 nnoremap <silent> <Space> za
-
-" open terminal
 nnoremap <silent> <C-q> :terminal<CR>
-
-" exit from terminal
 tnoremap <silent> <C-q> <C-\><C-n>
 " }}}
 
