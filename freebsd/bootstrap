@@ -24,10 +24,11 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client alacritty chromium curl dbus devcpu-data doas feh firefox fish \
-  fzf git gmake gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver p7zip \
-  paratype pcmanfm polybar ripgrep rofi rsync scrot spotify-tui spotifyd syncthing taskwarrior \
-  thunderbird tmux vifm wget xdg-utils xdm xorg zathura zathura-pdf-mupdf
+pkg install -y 1password-client alacritty curl dbus devcpu-data dmenu doas feh firefox fish \
+  fzf git gmake gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver \
+  nvidia-settings nvidia-xconfig p7zip paratype pcmanfm polybar ripgrep rsync scrot spotify-tui \
+  spotifyd syncthing taskwarrior telegram-desktop thunderbird tmux vifm wget xdg-utils xdm xorg \
+  zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
@@ -69,13 +70,14 @@ sysrc keymap="us.kbd"
 sysrc zfs_enable="YES"
 sysrc powerd_enable="YES"
 sysrc sshd_enable="YES"
-sysrc ntpdate_enable="YES"
-sysrc ntpdate_hosts="es.pool.ntp.org"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
 sysrc syncthing_enable="YES"
 sysrc syncthing_user="arg"
 sysrc syncthing_group="arg"
+sysrc spotifyd_enable="YES"
+sysrc spotifyd_config="/usr/home/arg/.config/spotifyd/spotifyd.conf"
+sysrc spotifyd_user="arg"
 sysrc firewall_enable="YES"
 sysrc firewall_type="workstation"
 sysrc firewall_quiet="YES"
@@ -95,7 +97,7 @@ sysrc -f /etc/periodic.conf daily_submit_queuerun="NO"
 
 echo "SMARTHOST mail.arg.network" >> /etc/dma/dma.conf
 echo "PORT 8025" >> /etc/dma/dma.conf
-echo "MAILNAME `hostname`@arg.network" >> /etc/dma/dma.conf
+echo "MAILNAME `hostname`.arg.network" >> /etc/dma/dma.conf
 
 echo "root: arg@arg.zone" >> /etc/mail/aliases
 
