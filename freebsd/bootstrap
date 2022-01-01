@@ -26,9 +26,9 @@ echo "******************************"
 
 pkg install -y 1password-client alacritty curl dbus devcpu-data dmenu doas feh firefox fish \
   fzf git gmake gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver \
-  nvidia-settings nvidia-xconfig p7zip paratype pcmanfm polybar ripgrep rsync scrot spotify-tui \
-  spotifyd syncthing taskwarrior telegram-desktop thunderbird tmux vifm wget xdg-utils xdm xorg \
-  zathura zathura-pdf-mupdf
+  nvidia-settings nvidia-xconfig p7zip paratype pcmanfm polybar remmina-lite ripgrep rsync scrot \
+  spotify-tui spotifyd syncthing taskwarrior telegram-desktop thunderbird tmux vifm vlc wget \
+  xdg-utils xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
