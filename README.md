@@ -20,7 +20,7 @@ bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/freebsd/bootstrap)
 
 ### Dotfiles installation
 
-Run as your regular user after rebooting:
+Run as your regular user:
 
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/dotfiles)
@@ -52,12 +52,12 @@ Update secrets:
 
 ### Fish
 
-| Key            | Action                   |
-|:--------------:|--------------------------|
-| <kbd>Tab</kbd> | completion               |
-| <kbd>⌃C</kbd>  | clear command line       |
-| <kbd>⌃D</kbd>  | close shell              |
-| <kbd>⌃⎵</kbd>  | accept suggested command |
+| Key           | Action                   |
+|:-------------:|--------------------------|
+| <kbd>↹</kbd>  | completion               |
+| <kbd>⌃C</kbd> | clear command line       |
+| <kbd>⌃D</kbd> | close shell              |
+| <kbd>⌃⎵</kbd> | accept suggested command |
 
 ### Alacritty
 
@@ -72,36 +72,36 @@ Update secrets:
 
 ### iTerm2
 
-| Key           | Action                  |
-|:-------------:|-------------------------|
-| <kbd>⌘T</kbd> | new tab                 |
-| <kbd>⌘W</kbd> | close tab               |
-| <kbd>⌥←</kbd> | previous tab            |
-| <kbd>⌥→</kbd> | next tab                |
+| Key           | Action       |
+|:-------------:|--------------|
+| <kbd>⌘T</kbd> | new tab      |
+| <kbd>⌘W</kbd> | close tab    |
+| <kbd>⌥←</kbd> | previous tab |
+| <kbd>⌥→</kbd> | next tab     |
 
 ### Vim
 
-| Key               | Mode | Action                 |
-|:-----------------:|:----:|------------------------|
-| <kbd>⌃T</kbd>     | N    | new buffer             |
-| <kbd>⌃N</kbd>     | N    | open Netrw             |
-| <kbd>Tab</kbd>    | N    | next buffer            |
-| <kbd>⇧Tab</kbd>   | N    | previous buffer        |
-| <kbd>⌃W</kbd>     | N    | close buffer           |
-| <kbd>⌃O</kbd>     | N    | open file              |
-| <kbd>⌃F</kbd>     | N    | search in current file |
-| <kbd>⌃G</kbd>     | N    | search in all files    |
-| <kbd>⌃T</kbd>     | N    | search in tags         |
-| <kbd>⌃/</kbd>     | NV   | toggle line comment    |
-| <kbd>⌃L</kbd>     | N    | fix code               |
-| <kbd>⌃Q</kbd>     | N    | open terminal          |
-| <kbd>⌃Q</kbd>     | T    | unfocus terminal       |
-| <kbd>⌃]</kbd>     | N    | go to definition       |
-| <kbd>Space</kbd>  | N    | toggle folding         |
-| <kbd>/-/</kbd>    | N    | clear selection        |
-| <kbd>t-n</kbd>    | N    | run nearest test       |
-| <kbd>t-f</kbd>    | N    | test current file      |
-| <kbd>t-s</kbd>    | N    | run full test suite    |
+| Key            | Mode | Action                 |
+|:--------------:|:----:|------------------------|
+| <kbd>⌃T</kbd>  | N    | new buffer             |
+| <kbd>⌃N</kbd>  | N    | open Netrw             |
+| <kbd>↹</kbd>   | N    | next buffer            |
+| <kbd>⇧↹</kbd>  | N    | previous buffer        |
+| <kbd>⌃W</kbd>  | N    | close buffer           |
+| <kbd>⌃O</kbd>  | N    | open file              |
+| <kbd>⌃F</kbd>  | N    | search in current file |
+| <kbd>⌃G</kbd>  | N    | search in all files    |
+| <kbd>⌃T</kbd>  | N    | search in tags         |
+| <kbd>⌃/</kbd>  | NV   | toggle line comment    |
+| <kbd>⌃L</kbd>  | N    | fix code               |
+| <kbd>⌃Q</kbd>  | N    | open terminal          |
+| <kbd>⌃Q</kbd>  | T    | unfocus terminal       |
+| <kbd>⌃]</kbd>  | N    | go to definition       |
+| <kbd>⎵</kbd>   | N    | toggle folding         |
+| <kbd>/-/</kbd> | N    | clear selection        |
+| <kbd>t-n</kbd> | N    | run nearest test       |
+| <kbd>t-f</kbd> | N    | test current file      |
+| <kbd>t-s</kbd> | N    | run full test suite    |
 
 ### Tmux
 
