@@ -1,16 +1,14 @@
 " Autocmd {{{
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  silent exec "!\curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  silent exec '!\curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'cd' argv()[0] | endif
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | exe 'cd' argv()[0] | endif
+autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
-autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
-autocmd User LspDiagnosticsChanged call lightline#update()
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
-autocmd FileType ruby iabbrev <buffer> pry binding.pry
 " }}}
 
 " Plugins {{{
@@ -22,8 +20,7 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-haml'
-Plug 'itchyny/lightline.vim'
-Plug 'mengelbrecht/lightline-bufferline'
+Plug 'nvim-lualine/lualine.nvim'
 Plug '907th/vim-auto-save'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'terrortylor/nvim-comment'
@@ -93,16 +90,16 @@ require('nvim-treesitter.configs').setup {
     enable = true
   },
   ensure_installed = {
-    "ruby",
-    "dockerfile",
-    "fish",
-    "json",
-    "yaml",
-    "html",
-    "javascript",
-    "scss",
-    "rust",
-    "toml"
+    'ruby',
+    'dockerfile',
+    'fish',
+    'json',
+    'yaml',
+    'html',
+    'javascript',
+    'scss',
+    'rust',
+    'toml'
   },
 }
 EOF
@@ -117,7 +114,7 @@ telescope.setup {
       fuzzy = true,
       override_generic_sorter = true,
       override_file_sorter = true,
-      case_mode = "smart_case"
+      case_mode = 'smart_case'
     }
   }
 }
@@ -192,7 +189,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false,
     signs = true,
@@ -210,7 +207,7 @@ let g:splitjoin_join_mapping = ''
 " AutoSave {{{
 let g:auto_save = 1
 let g:auto_save_silent = 1
-let g:auto_save_events = ["InsertLeave", "TextChanged"]
+let g:auto_save_events = ['InsertLeave', 'TextChanged']
 " }}}
 
 " VimTest {{{
@@ -222,60 +219,78 @@ let test#ruby#rspec#options = {
 \}
 " }}}
 
-" Lightline {{{
-function! LightlineLSPMajor() abort
-  let l:errors = luaeval('vim.lsp.diagnostic.get_count(0, "Error")')
-  return l:errors == 0 ? '' : printf('E:%d', l:errors)
-endfunction
+" LuaLine {{{
+lua <<EOF
+local custom_gruvbox = require'lualine.themes.gruvbox'
 
-function! LightlineLSPMinor() abort
-  let l:warnings = luaeval('vim.lsp.diagnostic.get_count(0, "Warning")')
-  let l:info = luaeval('vim.lsp.diagnostic.get_count(0, "Information")')
-  let l:total = l:warnings + l:info
-  return l:total == 0 ? '' : printf('W:%d', l:total)
-endfunction
+custom_gruvbox.normal.a.bg = '#928374'
+custom_gruvbox.insert.a.bg = '#458588'
+custom_gruvbox.visual.a.bg = '#d79921'
+custom_gruvbox.replace.a.bg = '#cc241d'
 
-function! LightlineLSPOK() abort
-  let l:errors = luaeval('vim.lsp.diagnostic.get_count(0, "Error")')
-  let l:warnings = luaeval('vim.lsp.diagnostic.get_count(0, "Warning")')
-  let l:info = luaeval('vim.lsp.diagnostic.get_count(0, "Information")')
-  let l:total = l:errors + l:warnings + l:info
-  return l:total == 0 ? 'OK' : ''
-endfunction
+custom_gruvbox.normal.c.bg = '#3c3836'
+custom_gruvbox.normal.c.fg = '#928374'
+custom_gruvbox.insert.c.bg = '#3c3836'
+custom_gruvbox.insert.c.fg = '#928374'
+custom_gruvbox.visual.c.bg = '#3c3836'
+custom_gruvbox.visual.c.fg = '#928374'
+custom_gruvbox.replace.c.bg = '#3c3836'
+custom_gruvbox.replace.c.fg = '#928374'
+custom_gruvbox.command.c.bg = '#3c3836'
+custom_gruvbox.command.c.fg = '#928374'
 
-let g:lightline = {
-\  'colorscheme': 'gruvbox',
-\  'active': {
-\    'left': [['mode'], ['filetype'], ['relativepath']],
-\    'right': [
-\      ['lsp_major', 'lsp_minor', 'lsp_ok'],
-\      ['lineinfo'],
-\      ['gitbranch']
-\    ]
-\  },
-\  'tabline': {
-\    'left': [['buffers']],
-\    'right': [[]]
-\  },
-\  'component_expand': {
-\    'buffers': 'lightline#bufferline#buffers',
-\    'lsp_major': 'LightlineLSPMajor',
-\    'lsp_minor': 'LightlineLSPMinor',
-\    'lsp_ok': 'LightlineLSPOK',
-\  },
-\  'component_type': {
-\    'buffers': 'tabsel',
-\    'lsp_major': 'error',
-\    'lsp_minor': 'warning',
-\    'lsp_ok': 'right',
-\  },
-\  'component_function': {
-\    'gitbranch': 'fugitive#head',
-\  },
-\}
-
-let g:lightline#bufferline#unnamed = '[No Name]'
-let g:lightline#bufferline#filename_modifier = ':t'
+require('lualine').setup {
+  options = {
+    icons_enabled = false,
+    theme = custom_gruvbox,
+    component_separators = '',
+    section_separators = '',
+    disabled_filetypes = {},
+    always_divide_middle = true,
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'filetype'},
+    lualine_c = {
+      {
+        'filename',
+        path = 1
+      }
+    },
+    lualine_x = {'branch'},
+    lualine_y = {'location'},
+    lualine_z = {
+      {
+        'diagnostics',
+        sections = { 'error', 'warn', 'info' },
+        colored = false,
+        always_visible = true,
+        symbols = { error = '', warn = '/', info = '/' },
+        fmt = function(str)
+          return str:gsub('%s+', '')
+        end
+      }
+    }
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {
+    lualine_a = {
+      {
+        'buffers',
+        max_length = vim.o.columns - 4
+      }
+    }
+  },
+  extensions = {}
+}
+EOF
 " }}}
 
 " Keymaps {{{
