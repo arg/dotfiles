@@ -29,7 +29,7 @@ Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'rust-lang/rust.vim'
-Plug 'preservim/nerdtree' " TODO: replace with https://github.com/kyazdani42/nvim-tree.lua
+Plug 'kyazdani42/nvim-tree.lua'
 call plug#end()
 " }}}
 
@@ -65,7 +65,7 @@ set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
-set switchbuf-=split
+" set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
 set textwidth=103
@@ -74,21 +74,36 @@ set undofile
 set updatetime=1000
 " }}}
 
-" NERDTree {{{
-let NERDTreeAutoDeleteBuffer = 1
-let NERDTreeMinimalUI = 1
-let NERDTreeNaturalSort = 1
-let NERDTreeWinSize = 50
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
+" nvim-tree.lua {{{
+let g:nvim_tree_show_icons = { 'git': 0, 'folders': 0, 'files': 0, 'folder_arrows': 0 }
+let g:nvim_tree_disable_window_picker = 1
+lua <<EOF
+require'nvim-tree'.setup {
+  open_on_tab = true,
+  hijack_cursor = true,
+  update_to_buf_dir = { enable = false },
+  git = { enable = false },
+  filters = {
+    dotfiles = true,
+    custom = {'node_modules', 'log', 'tmp' }
+  },
+  view = {
+    width = 50,
+    hide_root_folder = true,
+    mappings = {
+      custom_only = false,
+      list = {}
+    },
+    signcolumn = 'yes'
+  }
+}
+EOF
 " }}}
 
 " Tree-sitter {{{
 lua <<EOF
 require('nvim-treesitter.configs').setup {
-  highlight = {
-    enable = true
-  },
+  highlight = { enable = true },
   ensure_installed = {
     'ruby',
     'dockerfile',
@@ -156,9 +171,7 @@ EOF
 lua <<EOF
 local cmp = require('cmp')
 cmp.setup {
-  completion = {
-    autocomplete = false
-  },
+  completion = { autocomplete = false },
   sources = {
     { name = 'nvim_lsp' }
   },
@@ -175,7 +188,7 @@ EOF
 " LSP {{{
 lua <<EOF
 local nvim_lsp = require('lspconfig')
-local servers = { 'solargraph', 'rls' }
+local servers = {'solargraph', 'rls'}
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
@@ -183,9 +196,7 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     capabilities = capabilities,
-    flags = {
-      debounce_text_changes = 500
-    }
+    flags = { debounce_text_changes = 500 }
   }
 end
 
@@ -247,6 +258,7 @@ require('lualine').setup {
     section_separators = '',
     disabled_filetypes = {},
     always_divide_middle = true,
+    disabled_filetypes = {'NvimTree'}
   },
   sections = {
     lualine_a = {'mode'},
@@ -262,7 +274,7 @@ require('lualine').setup {
     lualine_z = {
       {
         'diagnostics',
-        sections = { 'error', 'warn', 'info' },
+        sections = {'error', 'warn', 'info'},
         colored = false,
         always_visible = true,
         symbols = { error = '', warn = '/', info = '/' },
@@ -288,14 +300,14 @@ require('lualine').setup {
       }
     }
   },
-  extensions = {}
+  extensions = {'nvim-tree'}
 }
 EOF
 " }}}
 
 " Keymaps {{{
 let mapleader=","
-nnoremap <silent> <C-n> :Explore<CR>
+nnoremap <silent> <C-n> :NvimTreeToggle<CR>
 noremap  <silent>// :nohlsearch<CR>
 inoremap <silent><expr> <C-Space> compe#complete()
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
