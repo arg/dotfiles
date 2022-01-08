@@ -15,12 +15,14 @@ autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
 call plug#begin('~/.config/nvim/plugged')
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'neovim/nvim-lspconfig'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-haml'
 Plug 'nvim-lualine/lualine.nvim'
+Plug 'akinsho/bufferline.nvim'
+Plug 'mhinz/vim-sayonara'
 Plug '907th/vim-auto-save'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'terrortylor/nvim-comment'
@@ -68,6 +70,7 @@ set softtabstop=2
 " set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
+set termguicolors
 set textwidth=103
 set undodir=~/.config/nvim/undo
 set undofile
@@ -95,6 +98,42 @@ require'nvim-tree'.setup {
       list = {}
     },
     signcolumn = 'yes'
+  }
+}
+EOF
+" }}}
+
+" Bufferline {{{
+lua << EOF
+require('bufferline').setup {
+  options = {
+    numbers = 'none',
+    close_command = "bdelete! %d",
+    indicator_icon = '',
+    max_name_length = 20,
+    max_prefix_length = 15,
+    tab_size = 20,
+    diagnostics = false,
+    offsets = {
+      {
+        filetype = 'NvimTree',
+        text = 'File Explorer',
+        text_align = 'center'
+      }
+    },
+    show_buffer_icons = false,
+    show_buffer_close_icons = false,
+    show_close_icon = false,
+    show_tab_indicators = false,
+    separator_style = { '', '' },
+    enforce_regular_tabs = true,
+    always_show_bufferline = true,
+    sort_by = 'id'
+  },
+  highlights = {
+    buffer_selected = {
+      bg = '#ff0000'
+    }
   }
 }
 EOF
@@ -234,11 +273,6 @@ let test#ruby#rspec#options = {
 lua <<EOF
 local custom_gruvbox = require'lualine.themes.gruvbox'
 
-custom_gruvbox.normal.a.bg = '#928374'
-custom_gruvbox.insert.a.bg = '#458588'
-custom_gruvbox.visual.a.bg = '#d79921'
-custom_gruvbox.replace.a.bg = '#cc241d'
-
 custom_gruvbox.normal.c.bg = '#3c3836'
 custom_gruvbox.normal.c.fg = '#928374'
 custom_gruvbox.insert.c.bg = '#3c3836'
@@ -292,14 +326,14 @@ require('lualine').setup {
     lualine_y = {},
     lualine_z = {}
   },
-  tabline = {
-    lualine_a = {
-      {
-        'buffers',
-        max_length = vim.o.columns - 4
-      }
-    }
-  },
+  --tabline = {
+  --  lualine_a = {
+  --    {
+  --      'buffers',
+  --      max_length = vim.o.columns - 4
+  --    }
+  --  }
+  --},
   extensions = {'nvim-tree'}
 }
 EOF
@@ -314,9 +348,9 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 nnoremap <silent> tn :TestNearest<CR>
 nnoremap <silent> tf :TestFile<CR>
 nnoremap <silent> ts :TestSuite<CR>
-nnoremap <silent> <S-Tab> :bprevious<CR>
-nnoremap <silent> <Tab> :bnext<CR>
-noremap <silent> <C-w> :bd<CR>
+nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
+nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
+noremap <silent> <C-w> :Sayonara!<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-h> :wincmd h<CR>
