@@ -25,9 +25,9 @@ echo "* Installing new packages... *"
 echo "******************************"
 
 pkg install -y 1password-client alacritty curl dbus devcpu-data dmenu doas feh firefox fish \
-  fzf git gmake gnupg htop i3 i3lock jq keepassxc mc mosh neovim nerd-fonts nvidia-driver \
-  nvidia-settings nvidia-xconfig p7zip paratype pcmanfm polybar remmina-lite ripgrep rsync scrot \
-  spotify-tui spotifyd syncthing taskwarrior telegram-desktop thunderbird tmux vifm vlc wget \
+  fzf git gmake gnome-keyring gnupg htop i3 i3lock jq keepassxc libsecret mc mosh neovim \
+  nerd-fonts nextcloudclient nvidia-driver nvidia-settings nvidia-xconfig p7zip paratype pcmanfm \
+  polybar remmina-lite ripgrep rsync scrot telegram-desktop thunderbird tmux vifm vlc wget \
   xdg-utils xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
@@ -55,6 +55,9 @@ echo "kern.coredump=0" >> /etc/sysctl.conf
 echo "kern.sched.preempt_thresh=224" >> /etc/sysctl.conf
 echo "kern.vt.enable_bell=0" >> /etc/sysctl.conf
 echo "hw.syscons.bell=0" >> /etc/sysctl.conf
+
+echo "auth optional pam_gnome_keyring.so" >> /etc/pam.d/xdm
+echo "session optional pam_gnome_keyring.so auto_start" >> /etc/pam.d/xdm
 
 echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
 
