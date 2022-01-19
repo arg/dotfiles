@@ -1,0 +1,123 @@
+version: "3.7"
+
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
+      device: ":/volume1/video/movies"
+
+services:
+  mariadb:
+    image: "mariadb:10.6-focal"
+    restart: "no"
+    volumes:
+      - "/storage/mariadb:/var/lib/mysql"
+      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+      - "/etc/localtime:/etc/localtime:ro"
+    env_file:
+      - "network.env"
+    command: "--transaction-isolation=READ-COMMITTED --log-bin=mysqld-bin --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed"
+    healthcheck:
+      test: "mysqladmin --silent --user=root --password=$${MARIADB_ROOT_PASSWORD} ping"
+
+  redis:
+    # Redis requires "vm.overcommit_memory = 1" to be set in /etc/sysctl.conf
+    image: "redis:6-alpine"
+    restart: "no"
+    volumes:
+      - "/storage/redis:/data"
+      - "/etc/localtime:/etc/localtime:ro"
+    command: "redis-server --save 10 1"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+
+  npm:
+    image: "jc21/nginx-proxy-manager:2.9.14"
+    depends_on:
+      - "mariadb"
+    restart: "no"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/storage/npm/data:/data"
+      - "/storage/npm/letsencrypt:/etc/letsencrypt"
+      - "/etc/localtime:/etc/localtime:ro"
+    env_file:
+      - "network.env"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:81' || exit 1"
+
+  adminer:
+    image: "adminer:4-standalone"
+    depends_on:
+      - "mariadb"
+    restart: "no"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
+
+  portainer:
+    image: "portainer/portainer-ce:2.11.0-alpine"
+    restart: "no"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "/storage/portainer:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    healthcheck:
+      test: "wget -q --spider 'http://localhost:9000'"
+
+  nextcloud:
+    image: "linuxserver/nextcloud:23.0.0"
+    depends_on:
+      - "mariadb"
+      - "redis"
+    restart: "no"
+    volumes:
+      - "/storage/nextcloud/config:/config"
+      - "/storage/nextcloud/data:/data"
+    env_file:
+      - "network.env"
+      - "linuxserver.env"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
+
+  radarr:
+    image: "linuxserver/radarr:latest"
+    restart: "no"
+    volumes:
+      - "/storage/radarr:/config"
+      - "movies:/movies"
+      - "/storage/downloads:/downloads"
+    env_file:
+      - "linuxserver.env"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878' || exit 1"
+
+  qbittorrent:
+    image: "linuxserver/qbittorrent:latest"
+    restart: "no"
+    volumes:
+      - "/storage/qbittorrent:/config"
+      - "/storage/downloads:/downloads"
+    environment:
+      WEBUI_PORT: 8080
+    env_file:
+      - "linuxserver.env"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
+
+  jackett:
+    image: "linuxserver/jackett:latest"
+    restart: "no"
+    volumes:
+      - "/storage/jackett:/config"
+      - "/storage/downloads:/downloads"
+    environment:
+      AUTO_UPDATE: "true"
+    env_file:
+      - "linuxserver.env"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:9117' || exit 1"
