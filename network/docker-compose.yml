@@ -32,28 +32,45 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
 
-  npm:
-    image: "jc21/nginx-proxy-manager:2.9.14"
-    depends_on:
-      - "mariadb"
-    restart: "no"
+  traefik:
+    image: "traefik:v2.5"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
+      - "--entrypoints.websecure.http.tls.domains[0].main=arg.network"
+      - "--entrypoints.websecure.http.tls.domains[0].sans=*.arg.network"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.letsencrypt.acme.email=arg@arg.zone"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--serverstransport.insecureskipverify=true"
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - "/storage/npm/data:/data"
-      - "/storage/npm/letsencrypt:/etc/letsencrypt"
-      - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - "network.env"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:81' || exit 1"
+    volumes:
+      - "/storage/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/etc/localtime:/etc/localtime:ro"
 
   adminer:
     image: "adminer:4-standalone"
     depends_on:
       - "mariadb"
     restart: "no"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
+      - "traefik.http.routers.adminer.rule=Host(`adminer.arg.network`)"
+      - "traefik.http.routers.adminer.entrypoints=websecure"
+      - "traefik.http.routers.adminer.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
 
@@ -66,6 +83,12 @@ services:
       - "/storage/portainer:/data"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/localtime:/etc/localtime:ro"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.arg.network`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
     healthcheck:
       test: "wget -q --spider 'http://localhost:9000'"
 
@@ -81,6 +104,13 @@ services:
     env_file:
       - "network.env"
       - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.nextcloud.loadbalancer.server.scheme=https"
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=443"
+      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.arg.network`)"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
 
@@ -93,6 +123,12 @@ services:
       - "/storage/downloads:/downloads"
     env_file:
       - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.arg.network`)"
+      - "traefik.http.routers.radarr.entrypoints=websecure"
+      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878' || exit 1"
 
@@ -106,6 +142,12 @@ services:
       WEBUI_PORT: 8080
     env_file:
       - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.arg.network`)"
+      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
+      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
 
@@ -119,5 +161,11 @@ services:
       AUTO_UPDATE: "true"
     env_file:
       - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.jackett.loadbalancer.server.port=9117"
+      - "traefik.http.routers.jackett.rule=Host(`jackett.arg.network`)"
+      - "traefik.http.routers.jackett.entrypoints=websecure"
+      - "traefik.http.routers.jackett.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:9117' || exit 1"
