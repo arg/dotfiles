@@ -1,5 +1,3 @@
-version: "3.7"
-
 volumes:
   movies:
     driver_opts:
@@ -8,18 +6,16 @@ volumes:
       device: ":/volume1/video/movies"
 
 services:
-  mariadb:
-    image: "mariadb:10.6-focal"
+  db:
+    image: "postgres:14.1-alpine"
     restart: "no"
     volumes:
-      - "/home/arg/storage/mariadb:/var/lib/mysql"
-      - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+      - "/home/arg/storage/postgresql:/var/lib/postgresql/data"
       - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - "network.env"
-    command: "--transaction-isolation=READ-COMMITTED --log-bin=mysqld-bin --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed"
     healthcheck:
-      test: "mysqladmin --silent --user=root --password=$${MARIADB_ROOT_PASSWORD} ping"
+      test: "pg_isready --username=$${POSTGRES_USER} --dbname=$${POSTGRES_DB}"
 
   redis:
     # Redis requires "vm.overcommit_memory = 1" to be set in /etc/sysctl.conf
@@ -35,6 +31,7 @@ services:
   traefik:
     image: "traefik:v2.5"
     command:
+      - "--ping=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
@@ -59,11 +56,14 @@ services:
       - "/home/arg/storage/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/localtime:/etc/localtime:ro"
+    healthcheck:
+      test: "traefik healthcheck --ping"
 
   adminer:
     image: "adminer:4-standalone"
     depends_on:
-      - "mariadb"
+      db:
+        condition: service_healthy
     restart: "no"
     labels:
       - "traefik.enable=true"
@@ -95,8 +95,10 @@ services:
   nextcloud:
     image: "linuxserver/nextcloud:23.0.0"
     depends_on:
-      - "mariadb"
-      - "redis"
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: "no"
     volumes:
       - "/home/arg/storage/nextcloud/config:/config"
