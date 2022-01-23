@@ -12,7 +12,7 @@ services:
     image: "mariadb:10.6-focal"
     restart: "no"
     volumes:
-      - "/storage/mariadb:/var/lib/mysql"
+      - "/home/arg/storage/mariadb:/var/lib/mysql"
       - "./mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
       - "/etc/localtime:/etc/localtime:ro"
     env_file:
@@ -26,7 +26,7 @@ services:
     image: "redis:6-alpine"
     restart: "no"
     volumes:
-      - "/storage/redis:/data"
+      - "/home/arg/storage/redis:/data"
       - "/etc/localtime:/etc/localtime:ro"
     command: "redis-server --save 10 1"
     healthcheck:
@@ -56,7 +56,7 @@ services:
     env_file:
       - "network.env"
     volumes:
-      - "/storage/letsencrypt:/letsencrypt"
+      - "/home/arg/storage/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/localtime:/etc/localtime:ro"
 
@@ -80,7 +80,7 @@ services:
     security_opt:
       - "no-new-privileges:true"
     volumes:
-      - "/storage/portainer:/data"
+      - "/home/arg/storage/portainer:/data"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/localtime:/etc/localtime:ro"
     labels:
@@ -99,8 +99,8 @@ services:
       - "redis"
     restart: "no"
     volumes:
-      - "/storage/nextcloud/config:/config"
-      - "/storage/nextcloud/data:/data"
+      - "/home/arg/storage/nextcloud/config:/config"
+      - "/home/arg/storage/nextcloud/data:/data"
     env_file:
       - "network.env"
       - "linuxserver.env"
@@ -118,9 +118,9 @@ services:
     image: "linuxserver/radarr:latest"
     restart: "no"
     volumes:
-      - "/storage/radarr:/config"
+      - "/home/arg/storage/radarr:/config"
       - "movies:/movies"
-      - "/storage/downloads:/downloads"
+      - "/home/arg/storage/downloads:/downloads"
     env_file:
       - "linuxserver.env"
     labels:
@@ -136,8 +136,8 @@ services:
     image: "linuxserver/qbittorrent:latest"
     restart: "no"
     volumes:
-      - "/storage/qbittorrent:/config"
-      - "/storage/downloads:/downloads"
+      - "/home/arg/storage/qbittorrent:/config"
+      - "/home/arg/storage/downloads:/downloads"
     environment:
       WEBUI_PORT: 8080
     env_file:
@@ -155,8 +155,8 @@ services:
     image: "linuxserver/jackett:latest"
     restart: "no"
     volumes:
-      - "/storage/jackett:/config"
-      - "/storage/downloads:/downloads"
+      - "/home/arg/storage/jackett:/config"
+      - "/home/arg/storage/downloads:/downloads"
     environment:
       AUTO_UPDATE: "true"
     env_file:
