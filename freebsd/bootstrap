@@ -24,11 +24,11 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client alacritty barrier curl dbus devcpu-data dmenu doas feh firefox \
-  fish flacon fzf git gmake gnome-keyring gnupg htop i3 i3lock jq keepassxc libsecret mc mosh \
-  musikcube neovim nerd-fonts nextcloudclient nvidia-driver nvidia-settings nvidia-xconfig \
-  p7zip paratype pcmanfm polybar remmina-lite ripgrep rsync scrot telegram-desktop thunderbird \
-  tmux vifm vlc wget xdg-utils xdm xorg zathura zathura-pdf-mupdf
+pkg install -y 1password-client 7-zip alacritty barrier curl dbus devcpu-data dmenu doas feh \
+  firefox fish flacon fzf git gmake gnome-keyring gnupg htop i3 i3lock jq keepassxc libsecret mc \
+  mosh musikcube neovim nerd-fonts nextcloudclient nvidia-driver nvidia-settings nvidia-xconfig \
+  paratype pcmanfm polybar remmina-lite ripgrep rsync scrot telegram-desktop thunderbird tmux \
+  vifm vlc wget xdg-utils xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
