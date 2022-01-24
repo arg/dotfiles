@@ -99,7 +99,7 @@ sysrc -f /etc/periodic.conf daily_status_include_submit_mailq="NO"
 sysrc -f /etc/periodic.conf daily_submit_queuerun="NO"
 
 echo "SMARTHOST mail.arg.network" >> /etc/dma/dma.conf
-echo "PORT 8025" >> /etc/dma/dma.conf
+echo "PORT 25" >> /etc/dma/dma.conf
 echo "MAILNAME `hostname`.arg.network" >> /etc/dma/dma.conf
 
 echo "root: arg@arg.zone" >> /etc/mail/aliases

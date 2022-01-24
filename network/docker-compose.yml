@@ -5,6 +5,12 @@ volumes:
       o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
       device: ":/volume1/video/movies"
 
+  music:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
+      device: ":/volume1/music"
+
 services:
   db:
     image: "postgres:14.1-alpine"
@@ -171,3 +177,21 @@ services:
       - "traefik.http.routers.jackett.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:9117' || exit 1"
+
+  lidarr:
+    image: "linuxserver/lidarr:latest"
+    restart: "no"
+    volumes:
+      - "/home/arg/storage/lidarr:/config"
+      - "music:/music"
+      - "/home/arg/storage/downloads:/downloads"
+    env_file:
+      - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
+      - "traefik.http.routers.lidarr.rule=Host(`lidarr.arg.network`)"
+      - "traefik.http.routers.lidarr.entrypoints=websecure"
+      - "traefik.http.routers.lidarr.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8686' || exit 1"
