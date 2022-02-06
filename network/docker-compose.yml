@@ -5,11 +5,23 @@ volumes:
       o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
       device: ":/volume1/video/movies"
 
+  tv_shows:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
+      device: ":/volume1/video/tv_shows"
+
   music:
     driver_opts:
       type: "nfs"
       o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
       device: ":/volume1/music"
+
+  backups:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3"
+      device: ":/volume1/backups"
 
 services:
   db:
@@ -98,6 +110,27 @@ services:
     healthcheck:
       test: "wget -q --spider 'http://localhost:9000'"
 
+  nocodb:
+    image: "nocodb/nocodb:latest"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+    volumes:
+      - "/home/arg/storage/nocodb:/usr/app/data"
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      NC_PUBLIC_URL: "https://nocodb.arg.network"
+      NC_DISABLE_TELE: "true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.nocodb.loadbalancer.server.port=8080"
+      - "traefik.http.routers.nocodb.rule=Host(`nocodb.arg.network`)"
+      - "traefik.http.routers.nocodb.entrypoints=websecure"
+      - "traefik.http.routers.nocodb.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: "wget -q --spider 'http://localhost:8080'"
+
   nextcloud:
     image: "linuxserver/nextcloud:23.0.0"
     depends_on:
@@ -109,6 +142,7 @@ services:
     volumes:
       - "/home/arg/storage/nextcloud/config:/config"
       - "/home/arg/storage/nextcloud/data:/data"
+      - "backups:/backups"
     env_file:
       - "network.env"
       - "linuxserver.env"
@@ -121,24 +155,6 @@ services:
       - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
-
-  radarr:
-    image: "linuxserver/radarr:latest"
-    restart: "no"
-    volumes:
-      - "/home/arg/storage/radarr:/config"
-      - "movies:/movies"
-      - "/home/arg/storage/downloads:/downloads"
-    env_file:
-      - "linuxserver.env"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.arg.network`)"
-      - "traefik.http.routers.radarr.entrypoints=websecure"
-      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878' || exit 1"
 
   qbittorrent:
     image: "linuxserver/qbittorrent:latest"
@@ -177,6 +193,42 @@ services:
       - "traefik.http.routers.jackett.tls.certresolver=letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:9117' || exit 1"
+
+  radarr:
+    image: "linuxserver/radarr:latest"
+    restart: "no"
+    volumes:
+      - "/home/arg/storage/radarr:/config"
+      - "movies:/movies"
+      - "/home/arg/storage/downloads:/downloads"
+    env_file:
+      - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.arg.network`)"
+      - "traefik.http.routers.radarr.entrypoints=websecure"
+      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878' || exit 1"
+
+  sonarr:
+    image: "linuxserver/sonarr:latest"
+    restart: "no"
+    volumes:
+      - "/home/arg/storage/sonarr:/config"
+      - "tv_shows:/tv"
+      - "/home/arg/storage/downloads:/downloads"
+    env_file:
+      - "linuxserver.env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.arg.network`)"
+      - "traefik.http.routers.sonarr.entrypoints=websecure"
+      - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8989' || exit 1"
 
   lidarr:
     image: "linuxserver/lidarr:latest"
