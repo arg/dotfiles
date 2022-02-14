@@ -35,7 +35,7 @@ type = custom/menu
 expand-right = true
 ; extra space added after the glyph to fix incorrect positioning
 ; https://github.com/polybar/polybar/issues/991
-label-open = "  "
+label-open = "  "
 label-close = "  "
 label-separator = |
 format-spacing = 1

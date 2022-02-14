@@ -80,7 +80,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 for_window [urgent=latest] focus
-assign [class="^Firefox$"] $ws3
+assign [class="^firefox$"] $ws3
 assign [class="^Thunderbird$"] $ws4
 assign [class="^Steam$"] $ws8
 
