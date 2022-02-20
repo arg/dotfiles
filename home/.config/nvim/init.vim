@@ -33,6 +33,7 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
+Plug 'liuchengxu/vista.vim'
 call plug#end()
 " }}}
 
@@ -121,7 +122,14 @@ require('bufferline').setup {
     offsets = {
       {
         filetype = 'NvimTree',
-        text = 'File Explorer',
+        text = function()
+          return vim.fn.getcwd()
+        end,
+        text_align = 'left'
+      },
+      {
+        filetype = 'vista_kind',
+        text = 'File Symbols',
         text_align = 'center'
       }
     },
@@ -135,8 +143,14 @@ require('bufferline').setup {
     sort_by = 'id'
   },
   highlights = {
+    fill = {
+      guibg = '#282828'
+    },
+    background = {
+      guibg = '#282828'
+    },
     buffer_selected = {
-      bg = '#ff0000'
+      guibg = '#3c3836'
     }
   }
 }
@@ -296,9 +310,8 @@ require('lualine').setup {
     theme = custom_gruvbox,
     component_separators = '',
     section_separators = '',
-    disabled_filetypes = {},
     always_divide_middle = true,
-    disabled_filetypes = {'NvimTree'}
+    disabled_filetypes = {'NvimTree', 'vista_kind'}
   },
   sections = {
     lualine_a = {'mode'},
@@ -345,6 +358,14 @@ require('lualine').setup {
 EOF
 " }}}
 
+" Vista {{{
+let g:vista_default_executive = 'nvim_lsp'
+let g:vista#renderer#enable_icon = 0
+let g:vista_sidebar_width = 51
+let g:vista_echo_cursor = 0
+let g:vista_update_on_text_changed = 1
+" }}}
+
 " Keymaps {{{
 nnoremap <Space> <Nop>
 nnoremap <silent> <C-n> :NvimTreeToggle<CR>
@@ -372,6 +393,7 @@ nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <Return> za
 nnoremap <silent> <C-q> :terminal<CR>
 tnoremap <silent> <C-q> <C-\><C-n>
+nnoremap <silent> <C-m> :Vista!!<CR>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0

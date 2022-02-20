@@ -84,7 +84,8 @@ Update secrets:
 | Key            | Mode | Action                          |
 |:--------------:|:----:|---------------------------------|
 | <kbd>⌃T</kbd>  | N    | new buffer                      |
-| <kbd>⌃N</kbd>  | N    | open Netrw                      |
+| <kbd>⌃N</kbd>  | N    | open file tree                  |
+| <kbd>⌃M</kbd>  | N    | open symbols browser            |
 | <kbd>↹</kbd>   | N    | next buffer                     |
 | <kbd>⇧↹</kbd>  | N    | previous buffer                 |
 | <kbd>⌃W</kbd>  | N    | close buffer                    |
@@ -101,8 +102,6 @@ Update secrets:
 | <kbd>⌃J</kbd>  | N    | navigate down                   |
 | <kbd>⌃K</kbd>  | N    | navigate up                     |
 | <kbd>⌃L</kbd>  | N    | navigate right                  |
-| <kbd>⌃P</kbd>  | N    | previous item in list           |
-| <kbd>⌃N</kbd>  | N    | next item in list               |
 | <kbd>⏎</kbd>   | N    | toggle folding                  |
 | <kbd>/-/</kbd> | N    | clear selection                 |
 | <kbd>t-n</kbd> | N    | run nearest test                |
