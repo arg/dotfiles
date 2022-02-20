@@ -93,7 +93,7 @@ Update secrets:
 | <kbd>⌃F</kbd>  | N    | LSP search in current file      |
 | <kbd>⌃T</kbd>  | N    | LSP search in all files         |
 | <kbd>⌃/</kbd>  | NV   | toggle line comment             |
-| <kbd>⌃S</kbd>  | N    | fix code                        |
+| <kbd>⌃S</kbd>  | N    | format code                     |
 | <kbd>⌃Q</kbd>  | N    | open terminal                   |
 | <kbd>⌃Q</kbd>  | T    | unfocus terminal                |
 | <kbd>⌃]</kbd>  | N    | go to definition                |
