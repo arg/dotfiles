@@ -81,27 +81,39 @@ Update secrets:
 
 ### Vim
 
-| Key            | Mode | Action                 |
-|:--------------:|:----:|------------------------|
-| <kbd>⌃T</kbd>  | N    | new buffer             |
-| <kbd>⌃N</kbd>  | N    | open Netrw             |
-| <kbd>↹</kbd>   | N    | next buffer            |
-| <kbd>⇧↹</kbd>  | N    | previous buffer        |
-| <kbd>⌃W</kbd>  | N    | close buffer           |
-| <kbd>⌃O</kbd>  | N    | open file              |
-| <kbd>⌃F</kbd>  | N    | search in current file |
-| <kbd>⌃G</kbd>  | N    | search in all files    |
-| <kbd>⌃T</kbd>  | N    | search in tags         |
-| <kbd>⌃/</kbd>  | NV   | toggle line comment    |
-| <kbd>⌃L</kbd>  | N    | fix code               |
-| <kbd>⌃Q</kbd>  | N    | open terminal          |
-| <kbd>⌃Q</kbd>  | T    | unfocus terminal       |
-| <kbd>⌃]</kbd>  | N    | go to definition       |
-| <kbd>⎵</kbd>   | N    | toggle folding         |
-| <kbd>/-/</kbd> | N    | clear selection        |
-| <kbd>t-n</kbd> | N    | run nearest test       |
-| <kbd>t-f</kbd> | N    | test current file      |
-| <kbd>t-s</kbd> | N    | run full test suite    |
+| Key            | Mode | Action                          |
+|:--------------:|:----:|---------------------------------|
+| <kbd>⌃T</kbd>  | N    | new buffer                      |
+| <kbd>⌃N</kbd>  | N    | open Netrw                      |
+| <kbd>↹</kbd>   | N    | next buffer                     |
+| <kbd>⇧↹</kbd>  | N    | previous buffer                 |
+| <kbd>⌃W</kbd>  | N    | close buffer                    |
+| <kbd>⌃O</kbd>  | N    | open file                       |
+| <kbd>⌃G</kbd>  | N    | search in all files             |
+| <kbd>⌃F</kbd>  | N    | LSP search in current file      |
+| <kbd>⌃T</kbd>  | N    | LSP search in all files         |
+| <kbd>⌃/</kbd>  | NV   | toggle line comment             |
+| <kbd>⌃S</kbd>  | N    | fix code                        |
+| <kbd>⌃Q</kbd>  | N    | open terminal                   |
+| <kbd>⌃Q</kbd>  | T    | unfocus terminal                |
+| <kbd>⌃]</kbd>  | N    | go to definition                |
+| <kbd>⌃H</kbd>  | N    | navigate left                   |
+| <kbd>⌃J</kbd>  | N    | navigate down                   |
+| <kbd>⌃K</kbd>  | N    | navigate up                     |
+| <kbd>⌃L</kbd>  | N    | navigate right                  |
+| <kbd>⌃P</kbd>  | N    | previous item in list           |
+| <kbd>⌃N</kbd>  | N    | next item in list               |
+| <kbd>⏎</kbd>   | N    | toggle folding                  |
+| <kbd>/-/</kbd> | N    | clear selection                 |
+| <kbd>t-n</kbd> | N    | run nearest test                |
+| <kbd>t-f</kbd> | N    | test current file               |
+| <kbd>t-s</kbd> | N    | run full test suite             |
+| <kbd>⌃⎵</kbd>  | I    | show completion suggestions (C) |
+| <kbd>↹</kbd>   | I(C) | next completion suggestion      |
+| <kbd>⇧↹</kbd>  | I(C) | previous completion suggestion  |
+| <kbd>⏎</kbd>   | I(C) | accept completion suggestion    |
+
+Leader key is set to <kbd>⎵</kbd> (space).
 
 ### Tmux
 
@@ -117,7 +129,7 @@ Update secrets:
 | <kbd>⌃⇧←</kbd> | swap windows to the left           |
 | <kbd>⌃⇧→</kbd> | swap windows to the right          |
 
-Note: prefix (P) is set to <kbd>`</kbd> (back quote) key.
+Prefix (P) is set to <kbd>`</kbd> (back quote).
 
 ## Notes
 

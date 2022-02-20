@@ -25,6 +25,7 @@ Plug 'akinsho/bufferline.nvim'
 Plug 'mhinz/vim-sayonara'
 Plug '907th/vim-auto-save'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'terrortylor/nvim-comment'
 Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
@@ -75,20 +76,22 @@ set textwidth=103
 set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
+
+let mapleader=" "
 " }}}
 
 " nvim-tree.lua {{{
 let g:nvim_tree_show_icons = { 'git': 0, 'folders': 0, 'files': 0, 'folder_arrows': 0 }
 let g:nvim_tree_disable_window_picker = 1
+let g:nvim_tree_special_files = { 'README.md': 1, 'Gemfile': 1 }
 lua <<EOF
 require'nvim-tree'.setup {
   open_on_tab = true,
-  hijack_cursor = true,
   update_to_buf_dir = { enable = false },
   git = { enable = false },
   filters = {
-    dotfiles = true,
-    custom = {'node_modules', 'log', 'tmp' }
+    dotfiles = false,
+    custom = {'.git', 'node_modules', 'log', 'tmp' }
   },
   view = {
     width = 50,
@@ -97,6 +100,7 @@ require'nvim-tree'.setup {
       custom_only = false,
       list = {}
     },
+    mappings = false,
     signcolumn = 'yes'
   }
 }
@@ -163,15 +167,17 @@ EOF
 lua <<EOF
 local telescope = require('telescope')
 telescope.setup {
-  extensions = {
-    fzf = {
-      fuzzy = true,
-      override_generic_sorter = true,
-      override_file_sorter = true,
-      case_mode = 'smart_case'
+  defaults = {
+    file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
+                             'db/schema.rb' }
+  },
+  pickers = {
+    find_files = {
+      hidden = true
     }
   }
 }
+telescope.load_extension('fzf')
 EOF
 " }}}
 
@@ -340,9 +346,9 @@ EOF
 " }}}
 
 " Keymaps {{{
-let mapleader=","
+nnoremap <Space> <Nop>
 nnoremap <silent> <C-n> :NvimTreeToggle<CR>
-noremap  <silent>// :nohlsearch<CR>
+nnoremap <silent>// :nohlsearch<CR>
 inoremap <silent><expr> <C-Space> compe#complete()
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 nnoremap <silent> tn :TestNearest<CR>
@@ -350,19 +356,20 @@ nnoremap <silent> tf :TestFile<CR>
 nnoremap <silent> ts :TestSuite<CR>
 nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
 nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
-noremap <silent> <C-w> :Sayonara!<CR>
-nnoremap <silent> <C-k> :wincmd k<CR>
-nnoremap <silent> <C-j> :wincmd j<CR>
+nnoremap <silent> <C-w> :Sayonara!<CR>
 nnoremap <silent> <C-h> :wincmd h<CR>
+nnoremap <silent> <C-j> :wincmd j<CR>
+nnoremap <silent> <C-k> :wincmd k<CR>
 nnoremap <silent> <C-l> :wincmd l<CR>
 nnoremap <silent> <C-o> :Telescope find_files<CR>
 nnoremap <silent> <C-g> :Telescope live_grep<CR>
+nnoremap <silent> <C-f> :Telescope lsp_document_symbols<CR>
 nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
 nmap <silent> <C-_> :CommentToggle<CR>
 vmap <silent> <C-_> :CommentToggle<CR>
-nnoremap <silent> <C-l> <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <Space> za
+nnoremap <silent> <Return> za
 nnoremap <silent> <C-q> :terminal<CR>
 tnoremap <silent> <C-q> <C-\><C-n>
 " }}}
