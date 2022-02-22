@@ -1,3 +1,22 @@
+volumes:
+  movies:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3,noatime"
+      device: ":/volume1/video/movies"
+
+  tv_shows:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3,noatime"
+      device: ":/volume1/video/tv_shows"
+
+  music:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3,noatime"
+      device: ":/volume1/music"
+
 services:
   traefik:
     image: "traefik:v2.5"
@@ -91,7 +110,7 @@ services:
     restart: "no"
     volumes:
       - "/home/arg/network/radarr:/config"
-      - "/home/arg/video/movies:/movies"
+      - "movies:/movies"
       - "/home/arg/network/downloads:/downloads"
     env_file:
       - "linuxserver.env"
@@ -110,7 +129,7 @@ services:
     restart: "no"
     volumes:
       - "/home/arg/network/sonarr:/config"
-      - "/home/arg/video/tv_shows:/tv"
+      - "tv_shows:/tv"
       - "/home/arg/network/downloads:/downloads"
     env_file:
       - "linuxserver.env"
@@ -128,7 +147,7 @@ services:
     restart: "no"
     volumes:
       - "/home/arg/network/lidarr:/config"
-      - "/home/arg/music:/music"
+      - "music:/music"
       - "/home/arg/network/downloads:/downloads"
     env_file:
       - "linuxserver.env"
