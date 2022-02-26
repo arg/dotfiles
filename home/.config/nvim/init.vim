@@ -378,6 +378,8 @@ nnoremap <silent> ts :TestSuite<CR>
 nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
 nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
 nnoremap <silent> <C-w> :Sayonara!<CR>
+nnoremap J <PageDown>
+nnoremap K <PageUp>
 nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>

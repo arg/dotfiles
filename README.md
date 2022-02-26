@@ -98,6 +98,8 @@ Update secrets:
 | <kbd>⌃Q</kbd>  | N    | open terminal                   |
 | <kbd>⌃Q</kbd>  | T    | unfocus terminal                |
 | <kbd>⌃]</kbd>  | N    | go to definition                |
+| <kbd>⇧J</kbd>  | N    | page down                       |
+| <kbd>⇧K</kbd>  | N    | page up                         |
 | <kbd>⌃H</kbd>  | N    | navigate left                   |
 | <kbd>⌃J</kbd>  | N    | navigate down                   |
 | <kbd>⌃K</kbd>  | N    | navigate up                     |
