@@ -82,6 +82,9 @@ bindsym $mod+r mode "resize"
 for_window [urgent=latest] focus
 assign [class="^firefox$"] $ws3
 assign [class="^Thunderbird$"] $ws4
+assign [class="^TelegramDesktop$"] $ws5
+assign [class="^Slack$"] $ws6
+assign [class="^zoom$"] $ws6
 assign [class="^Steam$"] $ws8
 
 exec_always --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
