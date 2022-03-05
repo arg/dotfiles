@@ -6,5 +6,4 @@ xset -b &&
 feh --bg-center --no-fehbg --randomize ~/wallpapers &&
 eval $(/usr/bin/gnome-keyring-daemon --start) &&
 export SSH_AUTH_SOCK &&
-dunst &&
 exec i3

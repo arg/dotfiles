@@ -1,0 +1,50 @@
+[global]
+monitor = 0
+follow = none
+origin = top-right
+offset = 1x80
+width = 400
+height = 400
+indicate_hidden = true
+separator_height = 2
+padding = 8
+horizontal_padding = 8
+frame_width = 1
+separator_color = auto
+sort = yes
+font = "PT Sans 13"
+markup = full
+format = "<b>%s</b>\n%b"
+alignment = left
+ellipsize = middle
+ignore_newline = false
+show_indicators = true
+icon_position = left
+icon_path = "/usr/share/icons/gruvbox-dark-icons-gtk/32x32@2x/status/:/usr/share/icons/gruvbox-dark-icons-gtk/32x32@2x/devices/"
+min_icon_size = 16
+max_icon_size = 64
+history_length = 20
+always_run_script = true
+title = Dunst
+class = Dunst
+corner_radius = 0
+
+[urgency_low]
+background = "#282828"
+foreground = "#ebdbb2"
+frame_color = "#98971a"
+timeout = 4
+
+[urgency_normal]
+background = "#282828"
+foreground = "#ebdbb2"
+frame_color = "#d79921"
+timeout = 7
+
+[urgency_critical]
+background = "#282828"
+foreground = "#ebdbb2"
+frame_color= "#cc241d"
+timeout = 0
+
+# vim: ft=cfg
