@@ -19,7 +19,7 @@ bindsym $mod+Shift+p exec --no-startup-id "setxkbmap -model hhk -layout us,ua -o
 bindsym $mod+Return exec "alacritty"
 bindsym $mod+d exec "dmenu_run -b -nb '#282828' -nf '#ebdbb2' -sb '#98971a' -sf '#ebdbb2' -fn 'Hack Nerd Font-13'"
 bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/documents/lock.png"
-bindsym Print exec "scrot -z -q 100"
+bindsym Print exec "flameshot gui"
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -90,4 +90,4 @@ assign [class="^Steam$"] $ws8
 exec_always --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
 exec_always --no-startup-id "xmodmap -e 'keycode 102 = Super_L Super_L' && xset -r 102"
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh"
-exec_always --no-startup-id "dunst"
+exec_always --no-startup-id "killall dunst; dunst"
