@@ -120,15 +120,16 @@ Leader key is set to <kbd>⎵</kbd> (space).
 
 | Key            | Action                             |
 |:--------------:|------------------------------------|
-| <kbd>P-r</kbd> | reload configuration               |
 | <kbd>P-c</kbd> | new window                         |
 | <kbd>P-w</kbd> | close window                       |
 | <kbd>P-,</kbd> | rename window                      |
 | <kbd>P-d</kbd> | detach Tmux                        |
 | <kbd>P-t</kbd> | show clock                         |
-| <kbd>⌥↑</kbd>  | scroll up (exit with <kbd>q</kbd>) |
-| <kbd>⌃⇧←</kbd> | swap windows to the left           |
-| <kbd>⌃⇧→</kbd> | swap windows to the right          |
+| <kbd>P-k</kbd> | copy mode (exit with <kbd>q</kbd>) |
+| <kbd>P-h</kbd> | swap windows to the left           |
+| <kbd>P-l</kbd> | swap windows to the right          |
+| <kbd>⌃b</kbd>  | scroll page up in copy mode        |
+| <kbd>⌃f</kbd>  | scroll page down in copy mode      |
 
 Prefix (P) is set to <kbd>`</kbd> (back quote).
 
