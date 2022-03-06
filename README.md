@@ -136,7 +136,7 @@ Update secrets:
 | <kbd>⌃J</kbd>  | N    | navigate down                   |
 | <kbd>⌃K</kbd>  | N    | navigate up                     |
 | <kbd>⌃L</kbd>  | N    | navigate right                  |
-| <kbd>⏎</kbd>   | N    | toggle folding                  |
+| <kbd>⌃⎵</kbd>  | N    | toggle folding                  |
 | <kbd>/-/</kbd> | N    | clear selection                 |
 | <kbd>t-n</kbd> | N    | run nearest test                |
 | <kbd>t-f</kbd> | N    | test current file               |

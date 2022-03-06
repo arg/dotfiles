@@ -399,11 +399,11 @@ nnoremap <silent> <C-o> :Telescope find_files<CR>
 nnoremap <silent> <C-g> :Telescope live_grep<CR>
 nnoremap <silent> <C-f> :Telescope lsp_document_symbols<CR>
 nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
-nmap <silent> <C-_> :CommentToggle<CR>
-vmap <silent> <C-_> :CommentToggle<CR>
+nnoremap <silent> <C-_> :CommentToggle<CR>
+vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <Return> za
+nnoremap <silent> <C-Space> za
 nnoremap <silent> <C-q> :terminal<CR>
 tnoremap <silent> <C-q> <C-\><C-n>
 nnoremap <silent> <C-m> :Vista!!<CR>
