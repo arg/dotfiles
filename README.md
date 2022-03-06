@@ -50,6 +50,38 @@ Update secrets:
 
 ## Key bindings
 
+### i3
+
+| Key                | Action                                       |
+|:------------------:|----------------------------------------------|
+| <kbd>⌘⇧Q</kbd>     | quit active application                      |
+| <kbd>⌘⇧R</kbd>     | restart i3                                   |
+| <kbd>⌘⇧E</kbd>     | exit i3                                      |
+| <kbd>⌘⏎</kbd>      | open terminal (Alacritty)                    |
+| <kbd>⌘D</kbd>      | open application launcher (dmenu)            |
+| <kbd>⌘0</kbd>      | lock the machine                             |
+| <kbd>⌘P</kbd>      | take screenshot                              |
+| <kbd>⌘H</kbd>      | move focus to the left                       |
+| <kbd>⌘J</kbd>      | move focus to the bottom                     |
+| <kbd>⌘K</kbd>      | move focus to the top                        |
+| <kbd>⌘L</kbd>      | move focus to the right                      |
+| <kbd>⌘⇧H</kbd>     | move active window to the left               |
+| <kbd>⌘⇧J</kbd>     | move active window to the bottom             |
+| <kbd>⌘⇧K</kbd>     | move active window to the top                |
+| <kbd>⌘⇧L</kbd>     | move active window to the right              |
+| <kbd>⌘↹</kbd>      | cycle current <-> previous workspace         |
+| <kbd>⌘C</kbd>      | set split direction to horizontal            |
+| <kbd>⌘V</kbd>      | set split direction to vertical              |
+| <kbd>⌘F</kbd>      | toggle fullscreen for active window          |
+| <kbd>⌘⇧F</kbd>     | toggle floating for active window            |
+| <kbd>⌘<1-8></kbd>  | go to workspace 1-8                          |
+| <kbd>⌘⇧<1-8></kbd> | move window to workspace 1-8                 |
+| <kbd>⌘R</kbd>      | toggle resize mode                           |
+| <kbd>H</kbd>       | decrease active window width in resize mode  |
+| <kbd>J</kbd>       | increase active window height in resize mode |
+| <kbd>K</kbd>       | decrease active window height in resize mode |
+| <kbd>L</kbd>       | increase active window width in resize mode  |
+
 ### Fish
 
 | Key           | Action                   |

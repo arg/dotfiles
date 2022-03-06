@@ -15,11 +15,10 @@ client.focused #4c7899 #285577 #ffffff #2e9ef4 #98971a
 bindsym $mod+Shift+q "kill"
 bindsym $mod+Shift+r "restart"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you want to exit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+p exec --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
 bindsym $mod+Return exec "alacritty"
 bindsym $mod+d exec "dmenu_run -b -nb '#282828' -nf '#ebdbb2' -sb '#98971a' -sf '#ebdbb2' -fn 'Hack Nerd Font-13'"
 bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/documents/lock.png"
-bindsym Print exec "flameshot gui"
+bindsym $mod+p exec "flameshot gui"
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
