@@ -34,6 +34,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'liuchengxu/vista.vim'
+Plug 'pwntester/octo.nvim'
 call plug#end()
 " }}}
 
@@ -69,7 +70,7 @@ set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
-" set switchbuf-=split
+set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
 set termguicolors
@@ -196,7 +197,10 @@ EOF
 " }}}
 
 " GitSigns {{{
-lua require('gitsigns').setup()
+lua <<EOF
+local gitsigns = require('gitsigns')
+gitsigns.setup()
+EOF
 " }}}
 
 " Netrw {{{
@@ -364,6 +368,13 @@ let g:vista#renderer#enable_icon = 0
 let g:vista_sidebar_width = 51
 let g:vista_echo_cursor = 0
 let g:vista_update_on_text_changed = 1
+" }}}
+
+" Octo {{{
+lua <<EOF
+local octo = require('octo')
+octo.setup()
+EOF
 " }}}
 
 " Keymaps {{{
