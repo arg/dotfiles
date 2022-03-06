@@ -134,9 +134,10 @@ function e -a path -d "Opens editor in the current directory or with given path"
   $EDITOR $path
 end
 
-function dockerize -a command -a container -d "Runs command in Docker container"
-  test -z "$container"; and set container "app"
-  docker-compose exec $container $command
+function dockerize -d "Runs command in Docker container"
+  set -l container "app"
+  test -n "$APP_CONTAINER"; and set container "$APP_CONTAINER"
+  docker-compose exec $container $argv
 end
 
 function extract -a filename -d "Extracts files from the archive"
