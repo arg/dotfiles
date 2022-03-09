@@ -165,6 +165,22 @@ Leader key is set to <kbd>⎵</kbd> (space).
 
 Prefix (P) is set to <kbd>`</kbd> (back quote).
 
+### Zathura
+
+| Key           | Action                      |
+|:-------------:|-----------------------------|
+| <kbd>q</kbd>  | quit Zathura                |
+| <kbd>]</kbd>  | zoom in                     |
+| <kbd>[</kbd>  | zoom out                    |
+| <kbd>0</kbd>  | zoom default                |
+| <kbd>h</kbd>  | previous page               |
+| <kbd>j</kbd>  | scroll down                 |
+| <kbd>k</kbd>  | scroll up                   |
+| <kbd>l</kbd>  | next page                   |
+| <kbd>x</kbd>  | toggle rendering mode       |
+| <kbd>c</kbd>  | recolor (Gruvbox the page!) |
+| <kbd>r</kbd>  | rotate                      |
+
 ## Notes
 
 * <kbd>Key1-Key2</kbd> - press and release <kbd>Key1</kbd>, then press <kbd>Key2</kbd>
