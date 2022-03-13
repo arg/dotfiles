@@ -9,6 +9,14 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
+
+if exists('$TMUX')
+    let &t_SI .= "\ePtmux;\e\e[=1c\e\\"
+    let &t_EI .= "\ePtmux;\e\e[=2c\e\\"
+ else
+    let &t_SI .= "\e[=1c"
+    let &t_EI .= "\e[=2c"
+ endif
 " }}}
 
 " Plugins {{{
