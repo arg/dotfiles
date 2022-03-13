@@ -13,6 +13,7 @@ set -gx RUBYOPT "-W0"
 set -gx BUNDLE_PATH "/home/arg/.gem"
 
 fish_add_path -mP ~/.gem/ruby/2.7/bin
+fish_add_path -mP ~/node_modules/.bin
 fish_add_path -mP ~/.local/bin
 
 set fish_greeting ""
