@@ -101,7 +101,7 @@ require'nvim-tree'.setup {
   git = { enable = false },
   filters = {
     dotfiles = false,
-    custom = {'.git', '.bundle', 'node_modules', 'log', 'tmp' }
+    custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
   },
   view = {
     width = 50,
