@@ -43,6 +43,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'liuchengxu/vista.vim'
 Plug 'pwntester/octo.nvim'
+Plug 'akinsho/toggleterm.nvim'
 call plug#end()
 " }}}
 
@@ -223,6 +224,22 @@ try
 catch
 endtry
 let g:gruvbox_bold = '0'
+" }}}
+
+" ToggleTerm {{{
+lua <<EOF
+local toggleterm = require('toggleterm')
+toggleterm.setup{
+  open_mapping = [[<C-q>]],
+  direction = 'float',
+  hide_numbers = true,
+  start_in_insert = true,
+  insert_mappings = true,
+  terminal_mappings = true,
+  persist_size = true,
+  border = 'single'
+}
+EOF
 " }}}
 
 " GitGutter {{{
@@ -412,8 +429,8 @@ vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <C-Space> za
-nnoremap <silent> <C-q> :terminal<CR>
-tnoremap <silent> <C-q> <C-\><C-n>
+" nnoremap <silent> <C-q> :terminal<CR>
+" tnoremap <silent> <C-q> <C-\><C-n>
 nnoremap <silent> <C-m> :Vista!!<CR>
 " }}}
 
