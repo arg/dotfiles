@@ -100,7 +100,7 @@ require'nvim-tree'.setup {
   update_to_buf_dir = { enable = false },
   git = { enable = false },
   filters = {
-    dotfiles = false,
+    dotfiles = true,
     custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
   },
   view = {
