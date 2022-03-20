@@ -9,14 +9,6 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
-
-if exists('$TMUX')
-    let &t_SI .= "\ePtmux;\e\e[=1c\e\\"
-    let &t_EI .= "\ePtmux;\e\e[=2c\e\\"
- else
-    let &t_SI .= "\e[=1c"
-    let &t_EI .= "\e[=2c"
- endif
 " }}}
 
 " Plugins {{{
@@ -429,8 +421,6 @@ vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <C-Space> za
-" nnoremap <silent> <C-q> :terminal<CR>
-" tnoremap <silent> <C-q> <C-\><C-n>
 nnoremap <silent> <C-m> :Vista!!<CR>
 " }}}
 
