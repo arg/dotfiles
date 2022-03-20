@@ -11,8 +11,8 @@ set -gx FZF_DEFAULT_OPTS "--color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928
 set -gx MANPAGER "nvim +Man!"
 set -gx RUBYOPT "-W0"
 set -gx BUNDLE_PATH "/home/arg/.gem"
+set -gx BUNDLE_BIN "~/.local/bin"
 
-fish_add_path -mP ~/.gem/ruby/2.7/bin
 fish_add_path -mP ~/node_modules/.bin
 fish_add_path -mP ~/.local/bin
 
