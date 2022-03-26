@@ -85,7 +85,6 @@ let mapleader=" "
 
 " nvim-tree.lua {{{
 let g:nvim_tree_show_icons = { 'git': 0, 'folders': 0, 'files': 0, 'folder_arrows': 0 }
-let g:nvim_tree_disable_window_picker = 1
 let g:nvim_tree_special_files = { 'README.md': 1, 'Gemfile': 1 }
 lua <<EOF
 require'nvim-tree'.setup {
@@ -95,6 +94,16 @@ require'nvim-tree'.setup {
   filters = {
     dotfiles = true,
     custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
+  },
+  actions = {
+    change_dir = {
+      enable = false
+    },
+    --open_file = {
+      --window_picker = {
+        --enable = false
+      --}
+    --}
   },
   view = {
     width = 50,
