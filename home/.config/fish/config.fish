@@ -109,14 +109,14 @@ function __git_status_color
   end
 end
 
-function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .envrc"
+function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .direnv"
   if set -q -g dirvariables
     for variable_to_unset in $dirvariables
       set -e -g $variable_to_unset
     end
     set -e -g dirvariables
   end
-  set -l envrc "$PWD/.envrc"
+  set -l envrc "$PWD/.direnv"
   if test -f $envrc
     while read -la line
       set -l dirvariable (string split -m 1 '=' $line)
