@@ -24,11 +24,11 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client 7-zip alacritty barrier curl dbus devcpu-data dmenu doas feh \
-  firefox fish flacon fzf git gmake gnome-keyring gnupg htop i3 i3lock jq keepassxc libsecret mc \
-  mosh musikcube neovim nerd-fonts nextcloudclient nvidia-driver nvidia-settings nvidia-xconfig \
-  paratype pcmanfm polybar remmina-lite ripgrep rsync scrot telegram-desktop thunderbird tmux \
-  vifm vlc wget xdg-utils xdm xorg zathura zathura-pdf-mupdf
+pkg install -y 1password-client 7-zip acme.sh alacritty barrier cmus curl dbus devcpu-data dmenu \
+  doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg htop i3 i3lock \
+  keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings nvidia-xconfig \
+  sysutils/nut paratype polybar ripgrep rsync telegram-desktop thunderbird tmux vifm vlc wget \
+  xdg-utils xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
@@ -75,14 +75,15 @@ sysrc powerd_enable="YES"
 sysrc sshd_enable="YES"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
-sysrc syncthing_enable="YES"
-sysrc syncthing_user="arg"
-sysrc syncthing_group="arg"
+# sysrc syncthing_enable="YES"
+# sysrc syncthing_user="arg"
+# sysrc syncthing_group="arg"
 sysrc firewall_enable="YES"
 sysrc firewall_type="workstation"
 sysrc firewall_quiet="YES"
 sysrc firewall_logdeny="NO"
-sysrc firewall_myservices="22/tcp 22000/tcp 3000/tcp 1234/tcp"
+# sysrc firewall_myservices="22/tcp 22000/tcp 3000/tcp 1234/tcp"
+sysrc firewall_myservices="22/tcp"
 sysrc firewall_allowservices="any"
 
 sysrc -f /boot/loader.conf autoboot_delay="3"
