@@ -2,6 +2,10 @@
 
 ![theme-min](https://user-images.githubusercontent.com/1044277/162889532-264523d3-289c-445d-9bca-186cf08b4fcd.png)
 
+<p align="center">
+FreeBSD/Arch, i3, Fish, Alacritty, Tmux, Neovim, Dmenu, Polybar, Firefox, Thunderbird. Everything gruvboxed.
+</p>
+
 ## Installation
 
 ### New environment bootstrap
