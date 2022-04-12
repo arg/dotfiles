@@ -1,5 +1,7 @@
 # /home/arg/.dotfiles
 
+![theme-min](https://user-images.githubusercontent.com/1044277/162889532-264523d3-289c-445d-9bca-186cf08b4fcd.png)
+
 ## Installation
 
 ### New environment bootstrap
