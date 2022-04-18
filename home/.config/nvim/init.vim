@@ -33,7 +33,6 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'liuchengxu/vista.vim'
 Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
 call plug#end()
@@ -54,6 +53,7 @@ set fcs=eob:\ " hide ~
 set foldenable " enable folding
 set hidden " hide files in the background instead of closing them
 set ignorecase " case-insensitive search
+set laststatus=3 " global status bar
 set lazyredraw " don’t update screen during macro and script execution
 set list " show hidden characters
 set listchars=tab:\*\ ,trail:· " show · for trailing space, * for trailing tab
@@ -341,7 +341,8 @@ require('lualine').setup {
     component_separators = '',
     section_separators = '',
     always_divide_middle = true,
-    disabled_filetypes = {'NvimTree', 'vista_kind'}
+    disabled_filetypes = {'NvimTree', 'vista_kind'},
+    globalstatus = true
   },
   sections = {
     lualine_a = {'mode'},
@@ -388,14 +389,6 @@ require('lualine').setup {
 EOF
 " }}}
 
-" Vista {{{
-let g:vista_default_executive = 'nvim_lsp'
-let g:vista#renderer#enable_icon = 0
-let g:vista_sidebar_width = 51
-let g:vista_echo_cursor = 0
-let g:vista_update_on_text_changed = 1
-" }}}
-
 " Octo {{{
 lua <<EOF
 local octo = require('octo')
@@ -430,7 +423,6 @@ vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <C-Space> za
-nnoremap <silent> <C-m> :Vista!!<CR>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
