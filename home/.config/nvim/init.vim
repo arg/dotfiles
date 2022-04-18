@@ -341,7 +341,7 @@ require('lualine').setup {
     component_separators = '',
     section_separators = '',
     always_divide_middle = true,
-    disabled_filetypes = {'NvimTree', 'vista_kind'},
+    disabled_filetypes = {'NvimTree'},
     globalstatus = true
   },
   sections = {
