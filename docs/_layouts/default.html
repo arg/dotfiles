@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ site.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="{{ site.description }}" />
+    <meta property="og:title" content="{{ site.title }}" />
+    <meta property="og:description" content="{{ site.description }}" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:url" content="{{ site.url }}" />
+    <link rel="canonical" href="{{ site.url }}" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <a href="{{ site.url }}"><h1>{{ site.title }}</h1></a>
+        <nav>
+          {% for page in site.html_pages %}
+            {% if page.title %}
+              <a href="{{ page.url }}">{{ page.title }}</a>
+            {% endif %}
+          {% endfor %}
+        </nav>
+      </div>
+    </header>
+    <main>
+      {{ content }}
+    </main>
+    <footer>
+      <p><a href="https://github.com/arg/arg.network">Made</a> with ❤️ to my family</p>
+    </footer>
+  </body>
+</html>
