@@ -24,17 +24,18 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client 7-zip acme.sh alacritty barrier cmus curl dbus devcpu-data dmenu \
+pkg install -y 1password-client 7-zip acme.sh alacritty chromium cmus curl dbus devcpu-data dmenu \
   doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg htop i3 i3lock \
   keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings nvidia-xconfig \
-  sysutils/nut paratype polybar ripgrep rsync telegram-desktop thunderbird tmux vifm vlc wget \
-  xdg-utils xdm xorg zathura zathura-pdf-mupdf
+  sysutils/nut paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
+  redis ripgrep rsync ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
+  xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
 echo "**********************"
 
-pw usermod arg -G wheel,video -s /usr/local/bin/fish
+pw usermod arg -G wheel,video,webcamd -s /usr/local/bin/fish
 
 echo "***********************************"
 echo "* Updating configuration files... *"
@@ -75,6 +76,9 @@ sysrc powerd_enable="YES"
 sysrc sshd_enable="YES"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
+sysrc webcamd_enable="YES"
+sysrc postgresql_enable="YES"
+sysrc redis_enable="YES"
 # sysrc syncthing_enable="YES"
 # sysrc syncthing_user="arg"
 # sysrc syncthing_group="arg"
@@ -89,6 +93,7 @@ sysrc firewall_allowservices="any"
 sysrc -f /boot/loader.conf autoboot_delay="3"
 sysrc -f /boot/loader.conf coretemp_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_load="YES"
+sysrc -f /boot/loader.conf cuse_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_name="/boot/firmware/intel-ucode.bin"
 
 sysrc -f /etc/periodic.conf daily_clean_hoststat_enable="NO"
@@ -110,6 +115,8 @@ echo "newaliases /usr/libexec/dma" >> /etc/mail/mailer.conf
 echo "rmail /usr/libexec/dma" >> /etc/mail/mailer.conf
 
 echo "@daily root freebsd-update cron" >> /etc/crontab
+
+/usr/local/etc/rc.d/postgresql initdb
 
 # The following commands are required for running bhyve
 # pkg install -y bhyve-firmware vm-bhyve

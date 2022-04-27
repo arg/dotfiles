@@ -24,8 +24,8 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'akinsho/bufferline.nvim'
 Plug 'mhinz/vim-sayonara'
 Plug '907th/vim-auto-save'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope.nvim', { 'tag': 'nvim-0.6' }
+" Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'terrortylor/nvim-comment'
 Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
@@ -53,7 +53,7 @@ set fcs=eob:\ " hide ~
 set foldenable " enable folding
 set hidden " hide files in the background instead of closing them
 set ignorecase " case-insensitive search
-set laststatus=3 " global status bar
+" set laststatus=3 " global status bar DISBLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
 set lazyredraw " don’t update screen during macro and script execution
 set list " show hidden characters
 set listchars=tab:\*\ ,trail:· " show · for trailing space, * for trailing tab
@@ -89,7 +89,6 @@ let g:nvim_tree_special_files = { 'README.md': 1, 'Gemfile': 1 }
 lua <<EOF
 require'nvim-tree'.setup {
   open_on_tab = true,
-  update_to_buf_dir = { enable = false },
   git = { enable = false },
   filters = {
     dotfiles = true,
@@ -202,7 +201,6 @@ telescope.setup {
     }
   }
 }
-telescope.load_extension('fzf')
 EOF
 " }}}
 
@@ -342,7 +340,7 @@ require('lualine').setup {
     section_separators = '',
     always_divide_middle = true,
     disabled_filetypes = {'NvimTree'},
-    globalstatus = true
+    --- globalstatus = true DISABLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
   },
   sections = {
     lualine_a = {'mode'},
