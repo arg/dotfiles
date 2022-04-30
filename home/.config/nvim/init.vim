@@ -193,7 +193,7 @@ local telescope = require('telescope')
 telescope.setup {
   defaults = {
     file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
-                             'db/schema.rb' }
+                             'db/schema.rb', '.bundle' }
   },
   pickers = {
     find_files = {
