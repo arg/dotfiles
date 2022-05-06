@@ -28,7 +28,7 @@ pkg install -y 1password-client 7-zip acme.sh alacritty chromium cmus curl dbus 
   doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg htop i3 i3lock \
   keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings nvidia-xconfig \
   sysutils/nut paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
-  redis ripgrep rsync ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
+  rclone redis ripgrep ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
   xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
@@ -79,14 +79,10 @@ sysrc dbus_enable="YES"
 sysrc webcamd_enable="YES"
 sysrc postgresql_enable="YES"
 sysrc redis_enable="YES"
-# sysrc syncthing_enable="YES"
-# sysrc syncthing_user="arg"
-# sysrc syncthing_group="arg"
 sysrc firewall_enable="YES"
 sysrc firewall_type="workstation"
 sysrc firewall_quiet="YES"
 sysrc firewall_logdeny="NO"
-# sysrc firewall_myservices="22/tcp 22000/tcp 3000/tcp 1234/tcp"
 sysrc firewall_myservices="22/tcp"
 sysrc firewall_allowservices="any"
 

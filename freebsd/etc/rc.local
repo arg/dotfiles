@@ -1,0 +1,2 @@
+zfs load-key storage
+zfs mount storage/home

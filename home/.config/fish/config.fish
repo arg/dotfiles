@@ -123,10 +123,6 @@ function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .diren
   end
 end
 
-function backup -a filename -d "Makes a backup of the given file"
-  cp $filename $filename.bak
-end
-
 function e -a path -d "Opens editor in the current directory or with given path"
   test -z "$path"; and set path "."
   $EDITOR $path
