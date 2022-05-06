@@ -1,9 +1,9 @@
 # /home/arg/.dotfiles
 
-![theme-min](https://user-images.githubusercontent.com/1044277/162889532-264523d3-289c-445d-9bca-186cf08b4fcd.png)
+![desktop](https://user-images.githubusercontent.com/1044277/167194297-f48bbc21-fd73-4840-8b16-e434b8f21082.png)
 
 <p align="center">
-FreeBSD/Arch, i3, Fish, Alacritty, Tmux, Neovim, Dmenu, Polybar, Firefox, Thunderbird. Everything gruvboxed.
+FreeBSD, i3, Fish, Alacritty, Tmux, Neovim, Dmenu, Polybar, Firefox, Thunderbird. Everything gruvboxed.
 </p>
 
 ## Installation
