@@ -24,10 +24,10 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client 7-zip acme.sh alacritty chromium cmus curl dbus devcpu-data dmenu \
-  doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg htop i3 i3lock \
-  keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings nvidia-xconfig \
-  sysutils/nut paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
+pkg install -y 1password-client 7-zip acme.sh alacritty apcupsd chromium cmus curl dbus devcpu-data \
+  dmenu doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg htop i3 \
+  i3lock keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings \
+  nvidia-xconfig paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
   rclone redis ripgrep ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
   xdm xorg zathura zathura-pdf-mupdf
 
@@ -65,6 +65,9 @@ echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
+mkdir -p /usr/local/etc/apcupsd
+curl -sLS -o /usr/local/etc/apcupsd/apcupsd.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/apcupsd/apcupsd.conf"
+
 sysrc kld_list+="nvidia-modeset"
 sysrc clear_tmp_enable="YES"
 sysrc syslogd_flags="-ss"
@@ -73,10 +76,10 @@ sysrc dumpdev="NO"
 sysrc keymap="us.kbd"
 sysrc zfs_enable="YES"
 sysrc powerd_enable="YES"
+sysrc apcupsd_enable="YES"
 sysrc sshd_enable="YES"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
-sysrc webcamd_enable="YES"
 sysrc postgresql_enable="YES"
 sysrc redis_enable="YES"
 sysrc firewall_enable="YES"
