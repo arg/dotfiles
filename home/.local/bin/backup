@@ -1,15 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ $# -ne 2 ]]; then
-  echo "Use backup <directory> <service>"
-  echo "Where service is: b2, gdrive."
-  echo ""
-  echo "Example: backup documents b2"
+if [[ $# -lt 2 ]]; then
+  echo "Use backup [-i] <directory> <target 1> <target 2> ... <target n>"
+  echo "Where target is: b2, gdrive."
   exit 2
 fi
-
-directory=$1
-service=$2
 
 declare -A matrix
 matrix["documents","b2"]="b2-crypt"
@@ -21,4 +16,8 @@ matrix["backups","gdrive"]="gdrive-crypt"
 matrix["archive","b2"]="b2-crypt"
 matrix["archive","gdrive"]="gdrive-crypt"
 
-rclone sync --fast-list --progress /home/arg/$directory ${matrix[$directory,$service]}:$directory
+directory=$1
+
+for target in "${@:2}"; do
+  rclone sync --fast-list --syslog --log-level INFO /home/arg/$directory ${matrix[$directory,$target]}:$directory
+done
