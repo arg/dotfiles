@@ -17,8 +17,9 @@ scrolling:
 font:
   size: 13.0
   offset:
-    x: 0
     y: 8
+  glyph_offset:
+    y: 4
 
   normal:
     family: "Hack Nerd Font"
@@ -42,19 +43,6 @@ colors:
   vi_mode_cursor:
     text: CellBackground
     cursor: CellForeground
-  # search:
-  #   matches:
-  #     foreground: "#000000"
-  #     background: "#ffffff"
-  #   focused_match:
-  #    foreground: CellBackground
-  #    background: CellForeground
-  #   bar:
-  #     background: ""
-  #     foreground: ""
-  # line_indicator:
-  #   foreground: None
-  #   background: None
   selection:
     text: *gruvbox_dark_bg
     background: "#d79921"
@@ -85,7 +73,6 @@ colors:
     magenta: "#8f3f71"
     cyan: "#427b58"
     white: "#928374"
-  # indexed_colors: []
 
 selection:
   save_to_clipboard: true
