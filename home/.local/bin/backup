@@ -15,9 +15,11 @@ matrix["backups","b2"]="b2-crypt"
 matrix["backups","gdrive"]="gdrive-crypt"
 matrix["archive","b2"]="b2-crypt"
 matrix["archive","gdrive"]="gdrive-crypt"
+matrix["videos","b2"]="b2-crypt"
+matrix["videos","gdrive"]="gdrive-crypt"
 
 directory=$1
 
 for target in "${@:2}"; do
-  rclone sync --fast-list --syslog --log-level INFO /home/arg/$directory ${matrix[$directory,$target]}:$directory
+  rclone sync --fast-list --progress --syslog --log-level INFO /home/arg/$directory ${matrix[$directory,$target]}:$directory
 done
