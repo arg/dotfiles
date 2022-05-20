@@ -25,8 +25,8 @@ echo "* Installing new packages... *"
 echo "******************************"
 
 pkg install -y 1password-client 7-zip acme.sh alacritty apcupsd chromium cmus curl dbus devcpu-data \
-  dmenu doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg htop i3 \
-  i3lock keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings \
+  dmenu dmidecode doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg \
+  htop i3 i3lock keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings \
   nvidia-xconfig paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
   rclone redis ripgrep ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
   xdm xorg zathura zathura-pdf-mupdf
