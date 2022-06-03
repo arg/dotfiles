@@ -87,6 +87,6 @@ assign [class="^zoom$"] $ws6
 assign [class="^Steam$"] $ws8
 
 exec_always --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
-exec_always --no-startup-id "xmodmap -e 'keycode 102 = Super_L Super_L' && xset -r 102"
+exec_always --no-startup-id "xmodmap ~/.Xmodmap"
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh"
 exec_always --no-startup-id "killall dunst; dunst"
