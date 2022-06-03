@@ -92,7 +92,7 @@ require'nvim-tree'.setup {
   git = { enable = false },
   filters = {
     dotfiles = true,
-    custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
+    custom = {'.git', '.github', '.bundle', 'node_modules', 'log/', 'tmp/' }
   },
   actions = {
     change_dir = {
@@ -192,7 +192,7 @@ lua <<EOF
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
-    file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
+    file_ignore_patterns = { '.git', 'node_modules', 'log/', 'tmp/', '.lock', '.enc', 'public',
                              'db/schema.rb', '.bundle' }
   },
   pickers = {
