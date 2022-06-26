@@ -84,7 +84,7 @@ end
 
 function fish_right_prompt -d "Draws right prompt (hostname)"
   test -n "$TMUX"; and return # tmux also draws hostname, no need to duplicate
-  echo -ns "[" (set_color yellow) (hostname) (set_color normal) "]"
+  echo -ns "[" (set_color yellow) (hostname -s) (set_color normal) "]"
 end
 
 function __git_status_color
