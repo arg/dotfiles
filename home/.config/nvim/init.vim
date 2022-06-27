@@ -24,7 +24,8 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'akinsho/bufferline.nvim'
 Plug 'mhinz/vim-sayonara'
 Plug '907th/vim-auto-save'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': 'nvim-0.6' }
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'terrortylor/nvim-comment'
 Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
@@ -34,7 +35,6 @@ Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
-Plug 'dhruvasagar/vim-table-mode'
 call plug#end()
 " }}}
 
@@ -53,7 +53,7 @@ set fcs=eob:\ " hide ~
 set foldenable " enable folding
 set hidden " hide files in the background instead of closing them
 set ignorecase " case-insensitive search
-" set laststatus=3 " global status bar DISABLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
+set laststatus=3 " global status bar DISBLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
 set lazyredraw " don’t update screen during macro and script execution
 set list " show hidden characters
 set listchars=tab:\*\ ,trail:· " show · for trailing space, * for trailing tab
@@ -84,28 +84,31 @@ let mapleader=" "
 " }}}
 
 " nvim-tree.lua {{{
-let g:nvim_tree_show_icons = { 'git': 0, 'folders': 0, 'files': 0, 'folder_arrows': 0 }
-let g:nvim_tree_special_files = { 'README.md': 1, 'Gemfile': 1 }
 lua <<EOF
 require'nvim-tree'.setup {
   open_on_tab = true,
   git = { enable = false },
+  renderer = {
+    special_files = { 'README.md', 'Gemfile' },
+    icons = {
+      show = {
+        file = false,
+        folder = false,
+        folder_arrow = false
+      }
+    }
+  },
   filters = {
     dotfiles = true,
-    custom = {'.git', '.github', '.bundle', 'node_modules', 'log/', 'tmp/' }
+    custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
   },
   actions = {
     change_dir = {
       enable = false
     },
-    --open_file = {
-      --window_picker = {
-        --enable = false
-      --}
-    --}
   },
   view = {
-    width = 50,
+    width = 40,
     hide_root_folder = true,
     mappings = {
       custom_only = false,
@@ -192,7 +195,7 @@ lua <<EOF
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
-    file_ignore_patterns = { '.git', 'node_modules', 'log/', 'tmp/', '.lock', '.enc', 'public',
+    file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
                              'db/schema.rb', '.bundle' }
   },
   pickers = {
@@ -201,6 +204,7 @@ telescope.setup {
     }
   }
 }
+telescope.load_extension('fzf')
 EOF
 " }}}
 
@@ -340,7 +344,7 @@ require('lualine').setup {
     section_separators = '',
     always_divide_middle = true,
     disabled_filetypes = {'NvimTree'},
-    --- globalstatus = true DISABLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
+    globalstatus = true
   },
   sections = {
     lualine_a = {'mode'},
@@ -392,10 +396,6 @@ lua <<EOF
 local octo = require('octo')
 octo.setup()
 EOF
-" }}}
-
-" Vim Table Mode {{{
-let g:table_mode_corner='|'
 " }}}
 
 " Keymaps {{{
