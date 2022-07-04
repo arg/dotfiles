@@ -31,7 +31,8 @@ targets["videos","b2"]="b2-crypt"
 targets["videos","gdrive"]="gdrive-crypt"
 
 name=${1,,}
+excludelist="/Users/arg/.config/rclone/excludelist.txt"
 
 for target in "${@:2}"; do
-  rclone sync --fast-list --progress --syslog --log-level INFO --exclude .DS_Store ${sources[$name]} ${targets[$name,$target]}:$name
+  rclone sync --fast-list --progress --syslog --log-level INFO --exclude-from $excludelist ${sources[$name]} ${targets[$name,$target]}:$name
 done
