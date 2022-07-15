@@ -9,6 +9,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
+autocmd TermOpen * setlocal signcolumn=no
 " }}}
 
 " Plugins {{{
@@ -24,9 +25,9 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'akinsho/bufferline.nvim'
 Plug 'mhinz/vim-sayonara'
 Plug '907th/vim-auto-save'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': 'nvim-0.6' }
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'terrortylor/nvim-comment'
-Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
@@ -35,6 +36,7 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
 Plug 'dhruvasagar/vim-table-mode'
+Plug 'github/copilot.vim'
 call plug#end()
 " }}}
 
@@ -51,9 +53,10 @@ set cursorline " highlight the line currently under cursor
 set expandtab " use spaces, not tabs
 set fcs=eob:\ " hide ~
 set foldenable " enable folding
+set formatoptions-=t " do not auto-wrap text
 set hidden " hide files in the background instead of closing them
 set ignorecase " case-insensitive search
-" set laststatus=3 " global status bar DISABLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
+set laststatus=3 " global status bar
 set lazyredraw " don’t update screen during macro and script execution
 set list " show hidden characters
 set listchars=tab:\*\ ,trail:· " show · for trailing space, * for trailing tab
@@ -84,28 +87,31 @@ let mapleader=" "
 " }}}
 
 " nvim-tree.lua {{{
-let g:nvim_tree_show_icons = { 'git': 0, 'folders': 0, 'files': 0, 'folder_arrows': 0 }
-let g:nvim_tree_special_files = { 'README.md': 1, 'Gemfile': 1 }
 lua <<EOF
 require'nvim-tree'.setup {
   open_on_tab = true,
   git = { enable = false },
+  renderer = {
+    special_files = { 'README.md', 'Gemfile' },
+    icons = {
+      show = {
+        file = false,
+        folder = false,
+        folder_arrow = false
+      }
+    }
+  },
   filters = {
     dotfiles = true,
-    custom = {'.git', '.github', '.bundle', 'node_modules', 'log/', 'tmp/' }
+    custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
   },
   actions = {
     change_dir = {
       enable = false
     },
-    --open_file = {
-      --window_picker = {
-        --enable = false
-      --}
-    --}
   },
   view = {
-    width = 50,
+    width = 40,
     hide_root_folder = true,
     mappings = {
       custom_only = false,
@@ -192,7 +198,7 @@ lua <<EOF
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
-    file_ignore_patterns = { '.git', 'node_modules', 'log/', 'tmp/', '.lock', '.enc', 'public',
+    file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
                              'db/schema.rb', '.bundle' }
   },
   pickers = {
@@ -201,6 +207,7 @@ telescope.setup {
     }
   }
 }
+telescope.load_extension('fzf')
 EOF
 " }}}
 
@@ -236,6 +243,7 @@ toggleterm.setup{
   insert_mappings = true,
   terminal_mappings = true,
   persist_size = true,
+  shade_terminals = false,
   border = 'single'
 }
 EOF
@@ -308,15 +316,6 @@ let g:auto_save_silent = 1
 let g:auto_save_events = ['InsertLeave', 'TextChanged']
 " }}}
 
-" VimTest {{{
-let test#ruby#rspec#file_pattern = '_spec\.rb'
-let test#ruby#rspec#options = {
-  \ 'nearest': '--backtrace',
-  \ 'file':    '--format documentation',
-  \ 'suite':   '',
-\}
-" }}}
-
 " LuaLine {{{
 lua <<EOF
 local custom_gruvbox = require'lualine.themes.gruvbox'
@@ -340,7 +339,7 @@ require('lualine').setup {
     section_separators = '',
     always_divide_middle = true,
     disabled_filetypes = {'NvimTree'},
-    --- globalstatus = true DISABLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
+    globalstatus = true
   },
   sections = {
     lualine_a = {'mode'},
@@ -395,7 +394,15 @@ EOF
 " }}}
 
 " Vim Table Mode {{{
-let g:table_mode_corner='|'
+ let g:table_mode_corner='|'
+" }}}
+
+" Copilot {{{
+let g:copilot_no_maps = v:true
+let g:copilot_filetypes = {
+  \ '*': v:false,
+  \ 'ruby': v:true,
+  \ }
 " }}}
 
 " Keymaps {{{
@@ -403,10 +410,9 @@ nnoremap <Space> <Nop>
 nnoremap <silent> <C-n> :NvimTreeToggle<CR>
 nnoremap <silent>// :nohlsearch<CR>
 inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-nnoremap <silent> tn :TestNearest<CR>
-nnoremap <silent> tf :TestFile<CR>
-nnoremap <silent> ts :TestSuite<CR>
+inoremap <silent><expr> <C-j> copilot#Accept("\<CR>")
+inoremap <silent><expr> <C-h> copilot#Next()
+inoremap <silent><expr> <C-l> copilot#Next()
 nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
 nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
 nnoremap <silent> <C-w> :Sayonara!<CR>
@@ -425,6 +431,8 @@ vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <C-Space> za
+tnoremap <silent> <C-w> <C-\><C-n>
+nnoremap <silent> <Leader>g :0G<CR>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
