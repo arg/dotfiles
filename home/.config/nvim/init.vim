@@ -9,6 +9,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
+autocmd TermOpen * setlocal signcolumn=no
 " }}}
 
 " Plugins {{{
@@ -27,7 +28,6 @@ Plug '907th/vim-auto-save'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'terrortylor/nvim-comment'
-Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
@@ -35,6 +35,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
+Plug 'github/copilot.vim'
 call plug#end()
 " }}}
 
@@ -51,9 +52,10 @@ set cursorline " highlight the line currently under cursor
 set expandtab " use spaces, not tabs
 set fcs=eob:\ " hide ~
 set foldenable " enable folding
+set formatoptions-=t " do not auto-wrap text
 set hidden " hide files in the background instead of closing them
 set ignorecase " case-insensitive search
-set laststatus=3 " global status bar DISBLED TILL NEOVIM GETS UPGRADED TO 0.7 ON FREEBSD QUARTERLY
+set laststatus=3 " global status bar
 set lazyredraw " don’t update screen during macro and script execution
 set list " show hidden characters
 set listchars=tab:\*\ ,trail:· " show · for trailing space, * for trailing tab
@@ -240,6 +242,7 @@ toggleterm.setup{
   insert_mappings = true,
   terminal_mappings = true,
   persist_size = true,
+  shade_terminals = false,
   border = 'single'
 }
 EOF
@@ -310,15 +313,6 @@ let g:splitjoin_join_mapping = ''
 let g:auto_save = 1
 let g:auto_save_silent = 1
 let g:auto_save_events = ['InsertLeave', 'TextChanged']
-" }}}
-
-" VimTest {{{
-let test#ruby#rspec#file_pattern = '_spec\.rb'
-let test#ruby#rspec#options = {
-  \ 'nearest': '--backtrace',
-  \ 'file':    '--format documentation',
-  \ 'suite':   '',
-\}
 " }}}
 
 " LuaLine {{{
@@ -398,15 +392,22 @@ octo.setup()
 EOF
 " }}}
 
+" Copilot {{{
+let g:copilot_no_maps = v:true
+let g:copilot_filetypes = {
+  \ '*': v:false,
+  \ 'ruby': v:true,
+  \ }
+" }}}
+
 " Keymaps {{{
 nnoremap <Space> <Nop>
 nnoremap <silent> <C-n> :NvimTreeToggle<CR>
 nnoremap <silent>// :nohlsearch<CR>
 inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-nnoremap <silent> tn :TestNearest<CR>
-nnoremap <silent> tf :TestFile<CR>
-nnoremap <silent> ts :TestSuite<CR>
+inoremap <silent><expr> <C-j> copilot#Accept("\<CR>")
+inoremap <silent><expr> <C-h> copilot#Next()
+inoremap <silent><expr> <C-l> copilot#Next()
 nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
 nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
 nnoremap <silent> <C-w> :Sayonara!<CR>
@@ -425,6 +426,8 @@ vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <C-Space> za
+tnoremap <silent> <C-w> <C-\><C-n>
+nnoremap <silent> <Leader>g :0G<CR>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
