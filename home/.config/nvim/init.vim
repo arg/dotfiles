@@ -35,6 +35,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'github/copilot.vim'
 call plug#end()
 " }}}
@@ -390,6 +391,10 @@ lua <<EOF
 local octo = require('octo')
 octo.setup()
 EOF
+" }}}
+
+" Vim Table Mode {{{
+ let g:table_mode_corner='|'
 " }}}
 
 " Copilot {{{
