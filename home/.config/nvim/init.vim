@@ -90,20 +90,23 @@ let mapleader=" "
 lua <<EOF
 require'nvim-tree'.setup {
   open_on_tab = true,
-  git = { enable = false },
+  git = {
+    enable = true
+  },
   renderer = {
     special_files = { 'README.md', 'Gemfile' },
     icons = {
+      git_placement = 'signcolumn',
       show = {
         file = false,
         folder = false,
-        folder_arrow = false
+        folder_arrow = false,
+        git = false
       }
     }
   },
   filters = {
-    dotfiles = true,
-    custom = {'.git', '.github', '.bundle', 'node_modules', 'log', 'tmp' }
+    custom = {'^.git$' }
   },
   actions = {
     change_dir = {
@@ -111,14 +114,9 @@ require'nvim-tree'.setup {
     },
   },
   view = {
+    signcolumn = "no",
     width = 40,
-    hide_root_folder = true,
-    mappings = {
-      custom_only = false,
-      list = {}
-    },
-    mappings = false,
-    signcolumn = 'yes'
+    hide_root_folder = true
   }
 }
 EOF
@@ -198,8 +196,7 @@ lua <<EOF
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
-    file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
-                             'db/schema.rb', '.bundle' }
+    file_ignore_patterns = { '^.git/', '.lock', '.keep', '.enc', 'db/schema.rb' }
   },
   pickers = {
     find_files = {
