@@ -79,7 +79,7 @@ set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
 set termguicolors
-set textwidth=103
+set textwidth=120
 set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
