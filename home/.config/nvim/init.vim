@@ -69,6 +69,7 @@ set noswapfile " don't use swapfile
 set nowrap " don't wrap lines
 set nu rnu " show mixed line numbers
 set number relativenumber " show mixed line numbers
+set rtp+=/opt/homebrew/opt/fzf
 set shiftwidth=2 " normal mode indentation commands use 2 spaces
 set showmatch " highlight matching [{()}]
 set showtabline=2 " always show tabline
@@ -129,7 +130,9 @@ require('bufferline').setup {
   options = {
     numbers = 'none',
     close_command = "bdelete! %d",
-    indicator_icon = '',
+    indicator = {
+      style = 'none'
+    },
     max_name_length = 20,
     max_prefix_length = 15,
     tab_size = 20,
@@ -159,13 +162,13 @@ require('bufferline').setup {
   },
   highlights = {
     fill = {
-      guibg = '#282828'
+      bg = '#282828'
     },
     background = {
-      guibg = '#282828'
+      bg = '#282828'
     },
     buffer_selected = {
-      guibg = '#3c3836'
+      bg = '#3c3836'
     }
   }
 }

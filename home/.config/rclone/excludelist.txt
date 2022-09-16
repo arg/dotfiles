@@ -1,5 +1,6 @@
 .DS_Store
 ._.DS_Store
+*.icloud
 .metadata
 .localized
 .com.apple.timemachine.supported
