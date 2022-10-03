@@ -445,7 +445,7 @@ nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
 nnoremap <silent> <C-d> :Telescope dash search<CR>
 nnoremap <silent> <C-_> :CommentToggle<CR>
 vnoremap <silent> <C-_> :CommentToggle<CR>
-nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.format { async = true }<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> <C-Space> za
 tnoremap <silent> <C-w> <C-\><C-n>
