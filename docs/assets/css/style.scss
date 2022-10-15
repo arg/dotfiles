@@ -120,10 +120,17 @@ header, footer {
 }
 
 header h1 {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
   flex: 1 1 0%;
   margin: 0;
+}
+
+@media (min-width: 500px) {
+  header h1 {
+    font-size: 1.875rem;
+  line-height: 2.25rem;
+  }
 }
 
 header nav {
@@ -165,9 +172,15 @@ section h2 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(1, minmax(0, 1fr));
   grid-auto-flow: row;
   gap: 1rem;
+}
+
+@media (min-width: 500px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .grid a {
