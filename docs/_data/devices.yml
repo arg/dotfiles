@@ -1,6 +1,6 @@
 - name: 'Router'
   description: 'Unifi Dream Machine'
-  url: 'https://router.arg.network'
+  url: 'https://unifi.ui.com'
   hostname: 'router.arg.network'
   ip: '192.168.0.1'
 - name: 'Sun'
