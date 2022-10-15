@@ -14,8 +14,6 @@
   url: 'https://www.linuxserver.io'
 - name: 'Docker Hub'
   url: 'https://hub.docker.com'
-- name: 'Keybase'
-  url: 'https://keybase.io'
 - name: 'Дія'
   url: 'https://diia.gov.ua'
 - name: 'Кабінет водія'
