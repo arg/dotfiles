@@ -1,3 +1,20 @@
+volumes:
+  mariadb_data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.1.2,nolock,hard,rw,noatime,nfsvers=3"
+      device: ":/mnt/storage/network/mariadb"
+  monica_data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.1.2,nolock,hard,rw,noatime,nfsvers=3"
+      device: ":/mnt/storage/network/monica"
+  photos_data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.1.2,nolock,hard,ro,noatime,nfsvers=3"
+      device: ":/mnt/storage/photos"
+
 services:
   traefik:
     image: "traefik:v2.9"
@@ -30,15 +47,6 @@ services:
     healthcheck:
       test: "traefik healthcheck --ping"
 
-  mariadb:
-    image: "mariadb:10.9"
-    restart: "no"
-    env_file:
-      - "network.env"
-    volumes:
-      - "/home/arg/network/mariadb:/var/lib/mysql"
-      - "${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
-
   portainer:
     image: "portainer/portainer-ce:2.15.1-alpine"
     restart: "no"
@@ -57,11 +65,23 @@ services:
     healthcheck:
       test: "wget -q --spider 'http://localhost:9000'"
 
+  mariadb:
+    image: "mariadb:10.9"
+    restart: "no"
+    env_file:
+      - "network.env"
+    volumes:
+      - "mariadb_data:/var/lib/mysql"
+      - "${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
+    command: "--transaction-isolation=READ-COMMITTED --log-bin=mysqld-bin --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed"
+    healthcheck:
+       test: "mysqladmin --silent --user=root --password=$${MARIADB_ROOT_PASSWORD} ping"
+
   monica:
     image: "monica:3.7-apache"
     restart: "no"
     depends_on:
-      - mariadb
+      - "mariadb"
     env_file:
       - "network.env"
     environment:
@@ -73,10 +93,48 @@ services:
       APP_TRUSTED_PROXIES: "*"
       APP_URL: "https://monica.arg.network"
     volumes:
-      - "/home/arg/network/monica:/var/www/html/storage"
+      - "monica_data:/var/www/html/storage"
     labels:
       traefik.enable: true
       traefik.http.services.monica.loadbalancer.server.port: 80
       traefik.http.routers.monica.rule: "Host(`monica.arg.network`)"
       traefik.http.routers.monica.entrypoints: "websecure"
       traefik.http.routers.monica.tls.certresolver: "letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
+
+  photoprism:
+    image: "photoprism/photoprism:latest"
+    restart: "no"
+    depends_on:
+      - "mariadb"
+    environment:
+      PHOTOPRISM_ADMIN_PASSWORD: "insecure"
+      PHOTOPRISM_AUTH_MODE: "public"
+      PHOTOPRISM_SITE_URL: "https://photoprism.arg.network"
+      PHOTOPRISM_ORIGINALS_LIMIT: 100
+      PHOTOPRISM_LOG_LEVEL: "warning"
+      PHOTOPRISM_READONLY: true
+      PHOTOPRISM_DISABLE_WEBDAV: true
+      PHOTOPRISM_DISABLE_TENSORFLOW: true
+      PHOTOPRISM_JPEG_QUALITY: 95
+      PHOTOPRISM_DATABASE_DRIVER: "mysql"
+      PHOTOPRISM_DATABASE_SERVER: "mariadb:3306"
+      PHOTOPRISM_DATABASE_NAME: "photoprism"
+      PHOTOPRISM_DATABASE_USER: "photoprism"
+      PHOTOPRISM_DATABASE_PASSWORD: "photoprism"
+      PHOTOPRISM_SITE_CAPTION: "Family photos"
+      PHOTOPRISM_SITE_AUTHOR: "Andrii Gladkyi"
+      PHOTOPRISM_UID: 1000
+      PHOTOPRISM_GID: 1000
+    volumes:
+      - "photos_data:/photoprism/originals"
+      - "/home/arg/network/photoprism:/photoprism/storage"
+    labels:
+      traefik.enable: true
+      traefik.http.services.photoprism.loadbalancer.server.port: 2342
+      traefik.http.routers.photoprism.rule: "Host(`photoprism.arg.network`)"
+      traefik.http.routers.photoprism.entrypoints: "websecure"
+      traefik.http.routers.photoprism.tls.certresolver: "letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:2342' || exit 1"
