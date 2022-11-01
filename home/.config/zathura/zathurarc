@@ -1,0 +1,48 @@
+set selection-clipboard clipboard
+set window-title-home-tilde true
+set statusbar-home-tilde true
+set font "Hack Nerd Font 13"
+#set recolor true
+set recolor-keephue false
+set render-loading true
+set guioptions "sv"
+
+map ] zoom in
+map [ zoom out
+map 0 zoom default
+map h navigate previous
+map j scroll down
+map k scroll up
+map l navigate next
+map x toggle_page_mode
+map c recolor
+map r rotate
+
+set notification-error-bg "#282828"
+set notification-error-fg "#fb4934"
+set notification-warning-bg "#282828"
+set notification-warning-fg "#fabd2f"
+set notification-bg "#282828"
+set notification-fg "#b8bb26"
+set completion-bg "#504945"
+set completion-fg "#ebdbb2"
+set completion-group-bg "#3c3836"
+set completion-group-fg "#928374"
+set completion-highlight-bg "#83a598"
+set completion-highlight-fg "#504945"
+set index-bg "#504945"
+set index-fg "#ebdbb2"
+set index-active-bg "#83a598"
+set index-active-fg "#504945"
+set inputbar-bg "#282828"
+set inputbar-fg "#ebdbb2"
+set statusbar-bg "#504945"
+set statusbar-fg "#ebdbb2"
+set highlight-color "#fabd2f"
+set highlight-active-color "#fe8019"
+set default-bg "#282828"
+set default-fg "#ebdbb2"
+set render-loading-bg "#282828"
+set render-loading-fg "#ebdbb2"
+set recolor-lightcolor "#282828"
+set recolor-darkcolor "#ebdbb2"

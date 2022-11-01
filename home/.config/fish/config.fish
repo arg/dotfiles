@@ -10,9 +10,8 @@ set -gx FZF_DEFAULT_COMMAND "rg --files --follow"
 set -gx FZF_DEFAULT_OPTS "--color=bg+:#3c3836,bg:#32302f,spinner:#fb4934,hl:#928374,fg:#ebdbb2,header:#928374,info:#8ec07c,pointer:#fb4934,marker:#fb4934,fg+:#ebdbb2,prompt:#fb4934,hl+:#fb4934"
 set -gx MANPAGER "nvim +Man!"
 set -gx RUBYOPT "-W0"
-set -gx BUNDLE_PATH "/home/arg/.gem"
+set -gx GPG_TTY (tty)
 
-fish_add_path -mP ~/.gem/ruby/2.7/bin
 fish_add_path -mP ~/.local/bin
 
 set fish_greeting ""
@@ -85,7 +84,7 @@ end
 
 function fish_right_prompt -d "Draws right prompt (hostname)"
   test -n "$TMUX"; and return # tmux also draws hostname, no need to duplicate
-  echo -ns "[" (set_color yellow) (hostname) (set_color normal) "]"
+  echo -ns "[" (set_color yellow) (hostname -s) (set_color normal) "]"
 end
 
 function __git_status_color
@@ -108,14 +107,14 @@ function __git_status_color
   end
 end
 
-function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .envrc"
+function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .direnv"
   if set -q -g dirvariables
     for variable_to_unset in $dirvariables
       set -e -g $variable_to_unset
     end
     set -e -g dirvariables
   end
-  set -l envrc "$PWD/.envrc"
+  set -l envrc "$PWD/.direnv"
   if test -f $envrc
     while read -la line
       set -l dirvariable (string split -m 1 '=' $line)
@@ -125,18 +124,15 @@ function __set_dirvariables -v PWD -d "Loads dir-based ENV variables from .envrc
   end
 end
 
-function backup -a filename -d "Makes a backup of the given file"
-  cp $filename $filename.bak
-end
-
 function e -a path -d "Opens editor in the current directory or with given path"
   test -z "$path"; and set path "."
   $EDITOR $path
 end
 
-function dockerize -a command -a container -d "Runs command in Docker container"
-  test -z "$container"; and set container "app"
-  docker-compose exec $container $command
+function dockerize -d "Runs command in Docker container"
+  set -l container "app"
+  test -n "$APP_CONTAINER"; and set container "$APP_CONTAINER"
+  docker-compose exec $container $argv
 end
 
 function extract -a filename -d "Extracts files from the archive"

@@ -38,8 +38,9 @@ mark h ~/
 
 command! zip zip -r %f.zip %f
 
-" filextype *.html,*.htm firefox %c %i &
-" filextype *.pdf zathura %c
+filextype *.html,*.htm firefox %c %i &
+filextype *.pdf zathura %c
+filextype *.jpg,*.jpeg,*.png feh %c
 " filetype *.[1-8] man ./%c
 filextype * xdg-open
 

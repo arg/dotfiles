@@ -24,17 +24,18 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client 7-zip alacritty barrier curl dbus devcpu-data dmenu doas feh \
-  firefox fish flacon fzf git gmake gnome-keyring gnupg htop i3 i3lock jq keepassxc libsecret mc \
-  mosh musikcube neovim nerd-fonts nextcloudclient nvidia-driver nvidia-settings nvidia-xconfig \
-  paratype pcmanfm polybar remmina-lite ripgrep rsync scrot telegram-desktop thunderbird tmux \
-  vifm vlc wget xdg-utils xdm xorg zathura zathura-pdf-mupdf
+pkg install -y 1password-client 7-zip acme.sh alacritty apcupsd chromium cmus curl dbus devcpu-data \
+  dmenu dmidecode doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg \
+  htop i3 i3lock keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings \
+  nvidia-xconfig paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
+  rclone redis ripgrep ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
+  xdm xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
 echo "**********************"
 
-pw usermod arg -G wheel,video -s /usr/local/bin/fish
+pw usermod arg -G wheel,video,webcamd -s /usr/local/bin/fish
 
 echo "***********************************"
 echo "* Updating configuration files... *"
@@ -64,6 +65,9 @@ echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
+mkdir -p /usr/local/etc/apcupsd
+curl -sLS -o /usr/local/etc/apcupsd/apcupsd.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/apcupsd/apcupsd.conf"
+
 sysrc kld_list+="nvidia-modeset"
 sysrc clear_tmp_enable="YES"
 sysrc syslogd_flags="-ss"
@@ -72,26 +76,25 @@ sysrc dumpdev="NO"
 sysrc keymap="us.kbd"
 sysrc zfs_enable="YES"
 sysrc powerd_enable="YES"
+sysrc apcupsd_enable="YES"
 sysrc sshd_enable="YES"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
-sysrc syncthing_enable="YES"
-sysrc syncthing_user="arg"
-sysrc syncthing_group="arg"
-sysrc spotifyd_enable="YES"
-sysrc spotifyd_config="/usr/home/arg/.config/spotifyd/spotifyd.conf"
-sysrc spotifyd_user="arg"
+sysrc postgresql_enable="YES"
+sysrc redis_enable="YES"
 sysrc firewall_enable="YES"
 sysrc firewall_type="workstation"
 sysrc firewall_quiet="YES"
 sysrc firewall_logdeny="NO"
-sysrc firewall_myservices="22/tcp 22000/tcp 3000/tcp 1234/tcp"
+sysrc firewall_myservices="22/tcp"
 sysrc firewall_allowservices="any"
 
 sysrc -f /boot/loader.conf autoboot_delay="3"
 sysrc -f /boot/loader.conf coretemp_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_name="/boot/firmware/intel-ucode.bin"
+sysrc -f /boot/loader.conf snd_hda_load="YES"
+sysrc -f /boot/loader.conf cuse_load="YES"
 
 sysrc -f /etc/periodic.conf daily_clean_hoststat_enable="NO"
 sysrc -f /etc/periodic.conf daily_status_mail_rejects_enable="NO"
@@ -112,6 +115,8 @@ echo "newaliases /usr/libexec/dma" >> /etc/mail/mailer.conf
 echo "rmail /usr/libexec/dma" >> /etc/mail/mailer.conf
 
 echo "@daily root freebsd-update cron" >> /etc/crontab
+
+/usr/local/etc/rc.d/postgresql initdb
 
 # The following commands are required for running bhyve
 # pkg install -y bhyve-firmware vm-bhyve

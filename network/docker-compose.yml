@@ -1,25 +1,23 @@
 volumes:
-  movies:
+  mariadb_data:
     driver_opts:
       type: "nfs"
-      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3,noatime"
-      device: ":/volume1/video/movies"
-
-  tv_shows:
+      o: "addr=192.168.1.2,nolock,hard,rw,noatime,nfsvers=3"
+      device: ":/mnt/storage/network/mariadb"
+  monica_data:
     driver_opts:
       type: "nfs"
-      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3,noatime"
-      device: ":/volume1/video/tv_shows"
-
-  music:
+      o: "addr=192.168.1.2,nolock,hard,rw,noatime,nfsvers=3"
+      device: ":/mnt/storage/network/monica"
+  photos_data:
     driver_opts:
       type: "nfs"
-      o: "addr=192.168.100.2,nolock,rw,soft,nfsvers=3,noatime"
-      device: ":/volume1/music"
+      o: "addr=192.168.1.2,nolock,hard,ro,noatime,nfsvers=3"
+      device: ":/mnt/storage/photos"
 
 services:
   traefik:
-    image: "traefik:v2.5"
+    image: "traefik:v2.9"
     command:
       - "--ping=true"
       - "--providers.docker=true"
@@ -50,7 +48,7 @@ services:
       test: "traefik healthcheck --ping"
 
   portainer:
-    image: "portainer/portainer-ce:2.11.1-alpine"
+    image: "portainer/portainer-ce:2.15.1-alpine"
     restart: "no"
     security_opt:
       - "no-new-privileges:true"
@@ -59,103 +57,84 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/localtime:/etc/localtime:ro"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.arg.network`)"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.portainer.loadbalancer.server.port: 9000
+      traefik.http.routers.portainer.rule: "Host(`portainer.arg.network`)"
+      traefik.http.routers.portainer.entrypoints: "websecure"
+      traefik.http.routers.portainer.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "wget -q --spider 'http://localhost:9000'"
 
-  qbittorrent:
-    image: "linuxserver/qbittorrent:latest"
+  mariadb:
+    image: "mariadb:10.9"
     restart: "no"
+    env_file:
+      - "network.env"
     volumes:
-      - "/home/arg/network/qbittorrent:/config"
-      - "/home/arg/network/downloads:/downloads"
+      - "mariadb_data:/var/lib/mysql"
+      - "${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
+    command: "--transaction-isolation=READ-COMMITTED --log-bin=mysqld-bin --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed"
+    healthcheck:
+       test: "mysqladmin --silent --user=root --password=$${MARIADB_ROOT_PASSWORD} ping"
+
+  monica:
+    image: "monica:3.7-apache"
+    restart: "no"
+    depends_on:
+      - "mariadb"
+    env_file:
+      - "network.env"
     environment:
-      WEBUI_PORT: 8080
-    env_file:
-      - "linuxserver.env"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.arg.network`)"
-      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
-      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
-
-  jackett:
-    image: "linuxserver/jackett:latest"
-    restart: "no"
+      DB_HOST: "mariadb"
+      DB_USERNAME: "monica"
+      DB_PASSWORD: "monica"
+      APP_ENV: "production"
+      APP_DISABLE_SIGNUP: true
+      APP_TRUSTED_PROXIES: "*"
+      APP_URL: "https://monica.arg.network"
     volumes:
-      - "/home/arg/network/jackett:/config"
-      - "/home/arg/network/downloads:/downloads"
+      - "monica_data:/var/www/html/storage"
+    labels:
+      traefik.enable: true
+      traefik.http.services.monica.loadbalancer.server.port: 80
+      traefik.http.routers.monica.rule: "Host(`monica.arg.network`)"
+      traefik.http.routers.monica.entrypoints: "websecure"
+      traefik.http.routers.monica.tls.certresolver: "letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
+
+  photoprism:
+    image: "photoprism/photoprism:latest"
+    restart: "no"
+    depends_on:
+      - "mariadb"
     environment:
-      AUTO_UPDATE: "true"
-    env_file:
-      - "linuxserver.env"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.jackett.loadbalancer.server.port=9117"
-      - "traefik.http.routers.jackett.rule=Host(`jackett.arg.network`)"
-      - "traefik.http.routers.jackett.entrypoints=websecure"
-      - "traefik.http.routers.jackett.tls.certresolver=letsencrypt"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:9117' || exit 1"
-
-  radarr:
-    image: "linuxserver/radarr:latest"
-    restart: "no"
+      PHOTOPRISM_ADMIN_PASSWORD: "insecure"
+      PHOTOPRISM_AUTH_MODE: "public"
+      PHOTOPRISM_SITE_URL: "https://photoprism.arg.network"
+      PHOTOPRISM_ORIGINALS_LIMIT: 100
+      PHOTOPRISM_LOG_LEVEL: "warning"
+      PHOTOPRISM_READONLY: true
+      PHOTOPRISM_DISABLE_WEBDAV: true
+      PHOTOPRISM_DISABLE_TENSORFLOW: true
+      PHOTOPRISM_JPEG_QUALITY: 95
+      PHOTOPRISM_DATABASE_DRIVER: "mysql"
+      PHOTOPRISM_DATABASE_SERVER: "mariadb:3306"
+      PHOTOPRISM_DATABASE_NAME: "photoprism"
+      PHOTOPRISM_DATABASE_USER: "photoprism"
+      PHOTOPRISM_DATABASE_PASSWORD: "photoprism"
+      PHOTOPRISM_SITE_CAPTION: "Family photos"
+      PHOTOPRISM_SITE_AUTHOR: "Andrii Gladkyi"
+      PHOTOPRISM_UID: 1000
+      PHOTOPRISM_GID: 1000
     volumes:
-      - "/home/arg/network/radarr:/config"
-      - "movies:/movies"
-      - "/home/arg/network/downloads:/downloads"
-    env_file:
-      - "linuxserver.env"
+      - "photos_data:/photoprism/originals"
+      - "/home/arg/network/photoprism:/photoprism/storage"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.arg.network`)"
-      - "traefik.http.routers.radarr.entrypoints=websecure"
-      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
-    # disabled due to API error after upgrading Radarr to v4
-    # healthcheck:
-      # test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878' || exit 1"
-
-  sonarr:
-    image: "linuxserver/sonarr:latest"
-    restart: "no"
-    volumes:
-      - "/home/arg/network/sonarr:/config"
-      - "tv_shows:/tv"
-      - "/home/arg/network/downloads:/downloads"
-    env_file:
-      - "linuxserver.env"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.arg.network`)"
-      - "traefik.http.routers.sonarr.entrypoints=websecure"
-      - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.photoprism.loadbalancer.server.port: 2342
+      traefik.http.routers.photoprism.rule: "Host(`photoprism.arg.network`)"
+      traefik.http.routers.photoprism.entrypoints: "websecure"
+      traefik.http.routers.photoprism.tls.certresolver: "letsencrypt"
     healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8989' || exit 1"
-
-  lidarr:
-    image: "linuxserver/lidarr:latest"
-    restart: "no"
-    volumes:
-      - "/home/arg/network/lidarr:/config"
-      - "music:/music"
-      - "/home/arg/network/downloads:/downloads"
-    env_file:
-      - "linuxserver.env"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
-      - "traefik.http.routers.lidarr.rule=Host(`lidarr.arg.network`)"
-      - "traefik.http.routers.lidarr.entrypoints=websecure"
-      - "traefik.http.routers.lidarr.tls.certresolver=letsencrypt"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8686' || exit 1"
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:2342' || exit 1"

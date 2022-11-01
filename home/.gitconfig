@@ -1,7 +1,7 @@
 [user]
   name = Andrii Gladkyi
   email = arg@arg.zone
-  signingkey = 3660FAA76C043E51
+  signingkey = 1BEB7ADE8931AB17
 
 [color]
   ui = true
@@ -20,6 +20,7 @@
 
 [push]
   default = simple
+  autoSetupRemote = true
 
 [format]
   pretty = %C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s - %C(green)%cr%C(reset), %C(blue)%an%C(reset)

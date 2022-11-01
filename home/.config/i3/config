@@ -15,11 +15,10 @@ client.focused #4c7899 #285577 #ffffff #2e9ef4 #98971a
 bindsym $mod+Shift+q "kill"
 bindsym $mod+Shift+r "restart"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you want to exit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+p exec --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
 bindsym $mod+Return exec "alacritty"
 bindsym $mod+d exec "dmenu_run -b -nb '#282828' -nf '#ebdbb2' -sb '#98971a' -sf '#ebdbb2' -fn 'Hack Nerd Font-13'"
 bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/documents/lock.png"
-bindsym Print exec "scrot -z -q 100"
+bindsym $mod+p exec "flameshot gui"
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -82,8 +81,12 @@ bindsym $mod+r mode "resize"
 for_window [urgent=latest] focus
 assign [class="^firefox$"] $ws3
 assign [class="^Thunderbird$"] $ws4
+assign [class="^TelegramDesktop$"] $ws5
+assign [class="^Slack$"] $ws6
+assign [class="^zoom$"] $ws6
 assign [class="^Steam$"] $ws8
 
 exec_always --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
-exec_always --no-startup-id "xmodmap -e 'keycode 102 = Super_L Super_L' && xset -r 102"
+exec_always --no-startup-id "xmodmap ~/.Xmodmap"
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh"
+exec_always --no-startup-id "killall dunst; dunst"

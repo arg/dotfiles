@@ -1,0 +1,5 @@
+.include /etc/pulse/default.pa
+
+set-default-sink alsa_output.usb-Creative_Technology_Ltd_Sound_Blaster_X7_0000009u-00.analog-stereo
+set-default-source alsa_input.usb-R__DE_Microphones_R__DE_NT-USB_Mini_EA6699D1-00.mono-fallback
+set-card-profile alsa_card.pci-0000_01_00.1 off

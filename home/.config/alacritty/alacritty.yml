@@ -8,17 +8,19 @@ window:
     instance: Alacritty
     general: Alacritty
   padding:
-    x: 3
-    y: 3
+    x: 0
+    y: 0
 
 scrolling:
   history: 10000
 
 font:
-  size: 13.0
+  size: 16.0
+  use_thin_strokes: true
   offset:
-    x: 0
-    y: 2
+    y: 12
+  glyph_offset:
+    y: 8
 
   normal:
     family: "Hack Nerd Font"
@@ -42,19 +44,6 @@ colors:
   vi_mode_cursor:
     text: CellBackground
     cursor: CellForeground
-  # search:
-  #   matches:
-  #     foreground: "#000000"
-  #     background: "#ffffff"
-  #   focused_match:
-  #    foreground: CellBackground
-  #    background: CellForeground
-  #   bar:
-  #     background: ""
-  #     foreground: ""
-  # line_indicator:
-  #   foreground: None
-  #   background: None
   selection:
     text: *gruvbox_dark_bg
     background: "#d79921"
@@ -85,7 +74,6 @@ colors:
     magenta: "#8f3f71"
     cyan: "#427b58"
     white: "#928374"
-  # indexed_colors: []
 
 selection:
   save_to_clipboard: true

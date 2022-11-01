@@ -1,0 +1,39 @@
+---
+layout: default
+---
+<section>
+  <h2>Devices and VMs</h2>
+  <div class="grid">
+  {% for device in site.data.devices %}
+    <a href="{{ device.url }}">
+      <p class="title">{{ device.name }}</p>
+      <p class="description" title="Hostname">{{ device.hostname }}</p>
+      <p class="description" title="IP address">{{ device.ip }}</p>
+      <p class="description" title="Description">{{ device.description }}</p>
+    </a>
+  {% endfor %}
+  </div>
+</section>
+<section>
+  <h2>Applications</h2>
+  <div class="grid">
+  {% for application in site.data.applications %}
+    <a href="{{ application.url }}">
+      <p class="title">{{ application.name }}</p>
+      <p class="description" title="Hostname">{{ application.hostname }}</p>
+      <p class="description" title="Location">{{ application.location }}</p>
+      <p class="description" title="Description">{{ application.description }}</p>
+    </a>
+  {% endfor %}
+  </div>
+</section>
+<section>
+  <h2>Bookmarks</h2>
+  <div class="grid">
+  {% for bookmark in site.data.bookmarks %}
+    <a href="{{ bookmark.url }}">
+      <p class="title">{{ bookmark.name }}</p>
+    </a>
+  {% endfor %}
+  </div>
+</section>

@@ -1,6 +1,6 @@
 " Autocmd {{{
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
-  silent exec '!\curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  silent exec '!curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -9,6 +9,7 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
 autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
+autocmd TermOpen * setlocal signcolumn=no
 " }}}
 
 " Plugins {{{
@@ -27,13 +28,16 @@ Plug '907th/vim-auto-save'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'terrortylor/nvim-comment'
-Plug 'vim-test/vim-test'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'rust-lang/rust.vim'
 Plug 'kyazdani42/nvim-tree.lua'
-Plug 'liuchengxu/vista.vim'
+Plug 'pwntester/octo.nvim'
+Plug 'akinsho/toggleterm.nvim'
+Plug 'dhruvasagar/vim-table-mode'
+Plug 'github/copilot.vim'
+Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
 call plug#end()
 " }}}
 
@@ -50,8 +54,10 @@ set cursorline " highlight the line currently under cursor
 set expandtab " use spaces, not tabs
 set fcs=eob:\ " hide ~
 set foldenable " enable folding
+set formatoptions-=t " do not auto-wrap text
 set hidden " hide files in the background instead of closing them
 set ignorecase " case-insensitive search
+set laststatus=3 " global status bar
 set lazyredraw " don’t update screen during macro and script execution
 set list " show hidden characters
 set listchars=tab:\*\ ,trail:· " show · for trailing space, * for trailing tab
@@ -63,17 +69,18 @@ set noswapfile " don't use swapfile
 set nowrap " don't wrap lines
 set nu rnu " show mixed line numbers
 set number relativenumber " show mixed line numbers
+set rtp+=/opt/homebrew/opt/fzf
 set shiftwidth=2 " normal mode indentation commands use 2 spaces
 set showmatch " highlight matching [{()}]
 set showtabline=2 " always show tabline
 set signcolumn=yes
 set smartcase " switch search to case-sensitive when uppercase letter
 set softtabstop=2
-" set switchbuf-=split
+set switchbuf-=split
 set tabstop=2
 set termencoding=utf8
 set termguicolors
-set textwidth=103
+set textwidth=120
 set undodir=~/.config/nvim/undo
 set undofile
 set updatetime=1000
@@ -82,27 +89,36 @@ let mapleader=" "
 " }}}
 
 " nvim-tree.lua {{{
-let g:nvim_tree_show_icons = { 'git': 0, 'folders': 0, 'files': 0, 'folder_arrows': 0 }
-let g:nvim_tree_disable_window_picker = 1
-let g:nvim_tree_special_files = { 'README.md': 1, 'Gemfile': 1 }
 lua <<EOF
 require'nvim-tree'.setup {
   open_on_tab = true,
-  update_to_buf_dir = { enable = false },
-  git = { enable = false },
+  git = {
+    enable = true
+  },
+  renderer = {
+    special_files = { 'README.md', 'Gemfile' },
+    icons = {
+      git_placement = 'signcolumn',
+      show = {
+        file = false,
+        folder = false,
+        folder_arrow = false,
+        git = false
+      }
+    }
+  },
   filters = {
-    dotfiles = false,
-    custom = {'.git', 'node_modules', 'log', 'tmp' }
+    custom = {'^.git$' }
+  },
+  actions = {
+    change_dir = {
+      enable = false
+    },
   },
   view = {
-    width = 50,
-    hide_root_folder = true,
-    mappings = {
-      custom_only = false,
-      list = {}
-    },
-    mappings = false,
-    signcolumn = 'yes'
+    signcolumn = "no",
+    width = 40,
+    hide_root_folder = true
   }
 }
 EOF
@@ -114,7 +130,9 @@ require('bufferline').setup {
   options = {
     numbers = 'none',
     close_command = "bdelete! %d",
-    indicator_icon = '',
+    indicator = {
+      style = 'none'
+    },
     max_name_length = 20,
     max_prefix_length = 15,
     tab_size = 20,
@@ -144,13 +162,13 @@ require('bufferline').setup {
   },
   highlights = {
     fill = {
-      guibg = '#282828'
+      bg = '#282828'
     },
     background = {
-      guibg = '#282828'
+      bg = '#282828'
     },
     buffer_selected = {
-      guibg = '#3c3836'
+      bg = '#3c3836'
     }
   }
 }
@@ -182,12 +200,26 @@ lua <<EOF
 local telescope = require('telescope')
 telescope.setup {
   defaults = {
-    file_ignore_patterns = { '.git', 'node_modules', 'log', 'tmp', '.lock', '.enc', 'public',
-                             'db/schema.rb' }
+    file_ignore_patterns = { '^.git/', '.lock', '.keep', '.enc', 'db/schema.rb' }
   },
   pickers = {
     find_files = {
       hidden = true
+    }
+  },
+  extensions = {
+    dash = {
+      search_engine = 'google',
+      debounce = 500,
+      file_type_keywords = {
+        dashboard = false,
+        NvimTree = false,
+        TelescopePrompt = false,
+        terminal = false,
+        fzf = false,
+        ruby = { 'ruby', 'rails' },
+        javascript = { 'javascript' }
+      }
     }
   }
 }
@@ -196,7 +228,10 @@ EOF
 " }}}
 
 " GitSigns {{{
-lua require('gitsigns').setup()
+lua <<EOF
+local gitsigns = require('gitsigns')
+gitsigns.setup()
+EOF
 " }}}
 
 " Netrw {{{
@@ -211,6 +246,23 @@ try
 catch
 endtry
 let g:gruvbox_bold = '0'
+" }}}
+
+" ToggleTerm {{{
+lua <<EOF
+local toggleterm = require('toggleterm')
+toggleterm.setup{
+  open_mapping = [[<C-q>]],
+  direction = 'float',
+  hide_numbers = true,
+  start_in_insert = true,
+  insert_mappings = true,
+  terminal_mappings = true,
+  persist_size = true,
+  shade_terminals = false,
+  border = 'single'
+}
+EOF
 " }}}
 
 " GitGutter {{{
@@ -248,9 +300,7 @@ EOF
 lua <<EOF
 local nvim_lsp = require('lspconfig')
 local servers = {'solargraph', 'rls'}
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
@@ -280,15 +330,6 @@ let g:auto_save_silent = 1
 let g:auto_save_events = ['InsertLeave', 'TextChanged']
 " }}}
 
-" VimTest {{{
-let test#ruby#rspec#file_pattern = '_spec\.rb'
-let test#ruby#rspec#options = {
-  \ 'nearest': '--backtrace',
-  \ 'file':    '--format documentation',
-  \ 'suite':   '',
-\}
-" }}}
-
 " LuaLine {{{
 lua <<EOF
 local custom_gruvbox = require'lualine.themes.gruvbox'
@@ -311,7 +352,8 @@ require('lualine').setup {
     component_separators = '',
     section_separators = '',
     always_divide_middle = true,
-    disabled_filetypes = {'NvimTree', 'vista_kind'}
+    disabled_filetypes = {'NvimTree'},
+    globalstatus = true
   },
   sections = {
     lualine_a = {'mode'},
@@ -358,12 +400,23 @@ require('lualine').setup {
 EOF
 " }}}
 
-" Vista {{{
-let g:vista_default_executive = 'nvim_lsp'
-let g:vista#renderer#enable_icon = 0
-let g:vista_sidebar_width = 51
-let g:vista_echo_cursor = 0
-let g:vista_update_on_text_changed = 1
+" Octo {{{
+lua <<EOF
+local octo = require('octo')
+octo.setup()
+EOF
+" }}}
+
+" Vim Table Mode {{{
+ let g:table_mode_corner='|'
+" }}}
+
+" Copilot {{{
+let g:copilot_no_maps = v:true
+let g:copilot_filetypes = {
+  \ '*': v:false,
+  \ 'ruby': v:true,
+  \ }
 " }}}
 
 " Keymaps {{{
@@ -371,13 +424,14 @@ nnoremap <Space> <Nop>
 nnoremap <silent> <C-n> :NvimTreeToggle<CR>
 nnoremap <silent>// :nohlsearch<CR>
 inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-nnoremap <silent> tn :TestNearest<CR>
-nnoremap <silent> tf :TestFile<CR>
-nnoremap <silent> ts :TestSuite<CR>
+inoremap <silent><expr> <C-j> copilot#Accept("\<CR>")
+inoremap <silent><expr> <C-h> copilot#Next()
+inoremap <silent><expr> <C-l> copilot#Next()
 nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
 nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
 nnoremap <silent> <C-w> :Sayonara!<CR>
+nnoremap J <PageDown>
+nnoremap K <PageUp>
 nnoremap <silent> <C-h> :wincmd h<CR>
 nnoremap <silent> <C-j> :wincmd j<CR>
 nnoremap <silent> <C-k> :wincmd k<CR>
@@ -386,14 +440,14 @@ nnoremap <silent> <C-o> :Telescope find_files<CR>
 nnoremap <silent> <C-g> :Telescope live_grep<CR>
 nnoremap <silent> <C-f> :Telescope lsp_document_symbols<CR>
 nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
-nmap <silent> <C-_> :CommentToggle<CR>
-vmap <silent> <C-_> :CommentToggle<CR>
-nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <C-d> :Telescope dash search<CR>
+nnoremap <silent> <C-_> :CommentToggle<CR>
+vnoremap <silent> <C-_> :CommentToggle<CR>
+nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.format { async = true }<CR>
 nnoremap <silent> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> <Return> za
-nnoremap <silent> <C-q> :terminal<CR>
-tnoremap <silent> <C-q> <C-\><C-n>
-nnoremap <silent> <C-m> :Vista!!<CR>
+nnoremap <silent> <C-Space> za
+tnoremap <silent> <C-w> <C-\><C-n>
+nnoremap <silent> <Leader>g :0G<CR>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0

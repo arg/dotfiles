@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# This script requires Bash v4+. Make sure it's installed before runing it.
+# MacOS still includes v3.2, so it should be updated by running
+# brew install bash
+
+if [[ $# -lt 2 ]]; then
+  echo "Use backup [-i] <name> <target 1> <target 2> ... <target n>"
+  echo "Where name is one of: documents, photos, backups, archive, videos"
+  echo "and target is: b2, gdrive."
+  exit 2
+fi
+
+declare -A sources
+sources["documents"]="/Users/arg/Documents"
+sources["photos"]="/Volumes/Storage/photos"
+sources["backups"]="/Volumes/Storage/backups"
+sources["archive"]="/Volumes/Storage/archive"
+sources["videos"]="/Volumes/Storage/videos"
+
+declare -A targets
+targets["documents","b2"]="b2-crypt"
+targets["documents","gdrive"]="gdrive"
+targets["photos","b2"]="b2-crypt"
+targets["photos","gdrive"]="gdrive"
+targets["backups","b2"]="b2-crypt"
+targets["backups","gdrive"]="gdrive-crypt"
+targets["archive","b2"]="b2-crypt"
+targets["archive","gdrive"]="gdrive-crypt"
+targets["videos","b2"]="b2-crypt"
+targets["videos","gdrive"]="gdrive-crypt"
+
+name=${1,,}
+excludelist="/Users/arg/.config/rclone/excludelist.txt"
+
+for target in "${@:2}"; do
+  rclone sync --fast-list --progress --syslog --log-level INFO --exclude-from $excludelist ${sources[$name]} ${targets[$name,$target]}:$name
+done
