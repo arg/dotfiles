@@ -2198,7 +2198,7 @@
 	<key>TabViewType</key>
 	<integer>0</integer>
 	<key>TerminalMargin</key>
-	<integer>4</integer>
+	<integer>12</integer>
 	<key>TerminalVMargin</key>
 	<integer>0</integer>
 	<key>TmuxUsesDedicatedProfile</key>
