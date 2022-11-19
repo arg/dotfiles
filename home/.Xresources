@@ -5,8 +5,8 @@ Xft.hintstyle: hintslight
 Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
-Xcursor.theme: simple
-Xcursor.size: 36
+Xcursor.theme: macOS-BigSur
+Xcursor.size: 48
 
 *background: #282828
 *foreground: #ebdbb2

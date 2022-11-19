@@ -15,10 +15,10 @@ scrolling:
   history: 10000
 
 font:
-  size: 16.0
+  size: 14
   use_thin_strokes: true
   offset:
-    y: 12
+    y: 14
   glyph_offset:
     y: 8
 

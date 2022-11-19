@@ -24,18 +24,18 @@ echo "******************************"
 echo "* Installing new packages... *"
 echo "******************************"
 
-pkg install -y 1password-client 7-zip acme.sh alacritty apcupsd chromium cmus curl dbus devcpu-data \
-  dmenu dmidecode doas dunst feh firefox fish flacon flameshot fzf git gmake gnome-keyring gnupg \
-  htop i3 i3lock keepassxc libsecret mac mc mosh neovim nerd-fonts nvidia-driver nvidia-settings \
-  nvidia-xconfig paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv \
-  rclone redis ripgrep ruby-build telegram-desktop thunderbird tmux vifm vlc webcamd wget xdg-utils \
-  xdm xorg zathura zathura-pdf-mupdf
+pkg install -y 1password-client 7-zip acme.sh alacritty chromium cmus curl dbus devcpu-data \
+  dmenu dmidecode dosbox-x drm-kmod doas dunst feh firefox fish flacon flameshot fzf git \
+  gmake gnome-keyring gnupg htop i3 i3lock keepassxc libsecret mac mc mosh neovim nerd-fonts \
+  paratype polybar postgresql13-client postgresql13-contrib postgresql13-server rbenv rclone \
+  redis ripgrep ruby-build telegram-desktop thunderbird tmux vifm vlc wget xdg-utils xdm \
+  xorg zathura zathura-pdf-mupdf
 
 echo "**********************"
 echo "* Setting up user... *"
 echo "**********************"
 
-pw usermod arg -G wheel,video,webcamd -s /usr/local/bin/fish
+pw usermod arg -G wheel,video -s /usr/local/bin/fish
 
 echo "***********************************"
 echo "* Updating configuration files... *"
@@ -65,10 +65,11 @@ echo "#!/bin/sh" > /usr/local/etc/X11/xdm/Xsetup_0
 mkdir -p /etc/X11
 curl -sLS -o /etc/X11/xorg.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/etc/X11/xorg.conf"
 
-mkdir -p /usr/local/etc/apcupsd
-curl -sLS -o /usr/local/etc/apcupsd/apcupsd.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/apcupsd/apcupsd.conf"
+# mkdir -p /usr/local/etc/apcupsd
+# curl -sLS -o /usr/local/etc/apcupsd/apcupsd.conf "https://raw.githubusercontent.com/arg/dotfiles/master/freebsd/apcupsd/apcupsd.conf"
 
-sysrc kld_list+="nvidia-modeset"
+sysrc kld_list+="i915kms"
+sysrc kld_list+="snd_hda"
 sysrc clear_tmp_enable="YES"
 sysrc syslogd_flags="-ss"
 sysrc sendmail_enable="NONE"
@@ -76,7 +77,6 @@ sysrc dumpdev="NO"
 sysrc keymap="us.kbd"
 sysrc zfs_enable="YES"
 sysrc powerd_enable="YES"
-sysrc apcupsd_enable="YES"
 sysrc sshd_enable="YES"
 sysrc xdm_enable="YES"
 sysrc dbus_enable="YES"
@@ -93,13 +93,14 @@ sysrc -f /boot/loader.conf autoboot_delay="3"
 sysrc -f /boot/loader.conf coretemp_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_load="YES"
 sysrc -f /boot/loader.conf cpu_microcode_name="/boot/firmware/intel-ucode.bin"
-sysrc -f /boot/loader.conf snd_hda_load="YES"
-sysrc -f /boot/loader.conf cuse_load="YES"
 
 sysrc -f /etc/periodic.conf daily_clean_hoststat_enable="NO"
 sysrc -f /etc/periodic.conf daily_status_mail_rejects_enable="NO"
 sysrc -f /etc/periodic.conf daily_status_include_submit_mailq="NO"
 sysrc -f /etc/periodic.conf daily_submit_queuerun="NO"
+
+echo 'hint.hdaa.0.nid3.config="as=2 seq=0 device=Headphones conn=Jack misc=0"' >> /boot/device.hints
+echo 'hint.acpi_throttle.0.disabled="1"' >> /boot/device.hints
 
 echo "SMARTHOST mail.arg.network" >> /etc/dma/dma.conf
 echo "PORT 25" >> /etc/dma/dma.conf
