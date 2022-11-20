@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# This script requires Bash v4+. Make sure it's installed before runing it.
+# MacOS still includes v3.2, so it should be updated by running
+# brew install bash
+
+if [[ $# -lt 1 ]]; then
+  echo "Use restore <name>"
+  echo "Where name is one of: documents"
+  exit 2
+fi
+
+declare -A sources
+declare -A targets
+
+sources["documents"]="gdrive"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  excludelist="/Users/arg/.config/rclone/excludelist.txt"
+  targets["documents"]="/Users/arg/Documents"
+else
+  excludelist="/home/arg/.config/rclone/excludelist.txt"
+  targets["documents"]="/home/arg/documents"
+fi
+
+name=${1,,}
+
+rclone sync --fast-list --progress --drive-acknowledge-abuse --syslog --log-level INFO --exclude-from $excludelist ${sources[$name]}:$name ${targets[$name]}
