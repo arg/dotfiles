@@ -95,3 +95,5 @@ exec_always --no-startup-id "killall dunst; dunst"
 # https://github.com/i3/i3/issues/5149
 for_window [class="Alacritty"] border pixel 2
 for_window [class="KeePassXC"] border pixel 2
+for_window [title="^DOSBox"] border pixel 2
+for_window [title="^DOSBox"] floating disable
