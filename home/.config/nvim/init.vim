@@ -26,7 +26,7 @@ Plug 'akinsho/bufferline.nvim'
 Plug 'mhinz/vim-sayonara'
 Plug '907th/vim-auto-save'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'gmake' }
 Plug 'terrortylor/nvim-comment'
 Plug 'ojroques/vim-oscyank'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -37,7 +37,6 @@ Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'github/copilot.vim'
-Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
 call plug#end()
 " }}}
 
@@ -205,21 +204,6 @@ telescope.setup {
   pickers = {
     find_files = {
       hidden = true
-    }
-  },
-  extensions = {
-    dash = {
-      search_engine = 'google',
-      debounce = 500,
-      file_type_keywords = {
-        dashboard = false,
-        NvimTree = false,
-        TelescopePrompt = false,
-        terminal = false,
-        fzf = false,
-        ruby = { 'ruby', 'rails' },
-        javascript = { 'javascript' }
-      }
     }
   }
 }
@@ -440,7 +424,6 @@ nnoremap <silent> <C-o> :Telescope find_files<CR>
 nnoremap <silent> <C-g> :Telescope live_grep<CR>
 nnoremap <silent> <C-f> :Telescope lsp_document_symbols<CR>
 nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
-nnoremap <silent> <C-d> :Telescope dash search<CR>
 nnoremap <silent> <C-_> :CommentToggle<CR>
 vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.format { async = true }<CR>
