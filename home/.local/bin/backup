@@ -6,8 +6,8 @@
 
 if [[ $# -lt 2 ]]; then
   echo "Use backup <name> <target 1> <target 2> ... <target n>"
-  echo "Where name is one of: documents, photos, backups, archive, videos"
-  echo "and target is: b2, gdrive."
+  echo "Where name is one of: archive, backups, documents, photos, videos"
+  echo "and target is: gdrive, b2."
   exit 2
 fi
 
@@ -19,11 +19,23 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sources["documents"]="/Users/arg/Documents"
 else
   excludelist="/home/arg/.config/rclone/excludelist.txt"
+  sources["archive"]="/home/arg/archive"
+  sources["backups"]="/home/arg/backups"
   sources["documents"]="/home/arg/documents"
+  sources["photos"]="/home/arg/photos"
+  sources["videos"]="/home/arg/videos"
 fi
 
+targets["archive","b2"]="b2-crypt"
+targets["archive","gdrive"]="gdrive-crypt"
+targets["backups","b2"]="b2-crypt"
+targets["backups","gdrive"]="gdrive-crypt"
 targets["documents","b2"]="b2-crypt"
 targets["documents","gdrive"]="gdrive"
+targets["photos","b2"]="b2-crypt"
+targets["photos","gdrive"]="gdrive"
+targets["videos","b2"]="b2-crypt"
+targets["videos","gdrive"]="gdrive-crypt"
 
 name=${1,,}
 
