@@ -39,7 +39,7 @@
   gpgsign = true
 
 [tag]
-	gpgsign = true
+  gpgsign = true
 
 [alias]
   commend = commit --amend --no-edit
@@ -57,3 +57,5 @@
 [diff "rspec"]
   xfuncname = "^[ \t]*((RSpec|describe|context|it|before|after|around|feature|scenario|background)[ \t].*)$"
 
+[init]
+  defaultBranch = master
