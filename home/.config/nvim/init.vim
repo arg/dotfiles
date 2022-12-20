@@ -107,7 +107,7 @@ require'nvim-tree'.setup {
     }
   },
   filters = {
-    custom = {'^.git$' }
+    custom = { '^.git$' }
   },
   actions = {
     change_dir = {
@@ -143,11 +143,6 @@ require('bufferline').setup {
           return vim.fn.getcwd()
         end,
         text_align = 'left'
-      },
-      {
-        filetype = 'vista_kind',
-        text = 'File Symbols',
-        text_align = 'center'
       }
     },
     show_buffer_icons = false,
@@ -336,7 +331,6 @@ require('lualine').setup {
     component_separators = '',
     section_separators = '',
     always_divide_middle = true,
-    disabled_filetypes = {'NvimTree'},
     globalstatus = true
   },
   sections = {
