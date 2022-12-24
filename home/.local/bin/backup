@@ -40,5 +40,6 @@ targets["videos","gdrive"]="gdrive-crypt"
 name=${1,,}
 
 for target in "${@:2}"; do
-  rclone sync --fast-list --progress --syslog --log-level INFO --exclude-from $excludelist ${sources[$name]} ${targets[$name,$target]}:$name
+  rclone sync --fast-list --progress --syslog --log-level INFO \
+    --exclude-from $excludelist ${sources[$name]} ${targets[$name,$target]}:$name
 done
