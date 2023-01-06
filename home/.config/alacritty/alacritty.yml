@@ -2,7 +2,7 @@ env:
   TERM: xterm-256color
 
 window:
-  decorations: full
+  decorations: none
   dynamic_title: true
   class:
     instance: Alacritty
