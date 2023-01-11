@@ -16,7 +16,6 @@ scrolling:
 
 font:
   size: 14
-  use_thin_strokes: true
   offset:
     y: 14
   glyph_offset:
