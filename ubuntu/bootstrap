@@ -11,6 +11,7 @@ echo "* Adding package repositories... *"
 echo "**********************************"
 
 apt-add-repository ppa:fish-shell/release-3 -y
+apt-add-repository ppa:keithw/mosh-dev -y
 
 echo "********************************"
 echo "* Upgrading system packages... *"
