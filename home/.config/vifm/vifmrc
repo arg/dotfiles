@@ -42,6 +42,7 @@ filextype *.html,*.htm firefox %c %i &
 filextype *.pdf zathura %c
 filextype *.jpg,*.jpeg,*.png feh %c
 " filetype *.[1-8] man ./%c
+filextype *.md nvim
 filextype * xdg-open
 
 set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,bmarks
