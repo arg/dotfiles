@@ -47,7 +47,6 @@ alias mc="mc -u"
 alias rm="rm -i"
 alias df="df -h"
 alias free="free -m"
-alias tm="tmux a -t main"
 alias brakeman="brakeman -A -6 --summary -q --no-pager"
 
 function fish_user_key_bindings
@@ -128,6 +127,11 @@ end
 function e -a path -d "Opens editor in the current directory or with given path"
   test -z "$path"; and set path "."
   $EDITOR $path
+end
+
+function tm -a session -d "Creates and attaches to tmux session"
+  test -z "$session"; and set session "main"
+  tmux new -A -s $session
 end
 
 function dockerize -d "Runs command in Docker container"
