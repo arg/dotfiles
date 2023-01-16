@@ -1839,7 +1839,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>HackNerdFontCompleteM-Regular 15</string>
+			<string>HackNerdFontCompleteM-Regular 16</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -2125,7 +2125,7 @@
 			<key>Use Underline Color</key>
 			<false/>
 			<key>Vertical Spacing</key>
-			<real>1.1699999999999999</real>
+			<real>1.22</real>
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
