@@ -129,8 +129,11 @@ function e -a path -d "Opens editor in the current directory or with given path"
   $EDITOR $path
 end
 
-function tm -a session -d "Creates and attaches to tmux session"
-  test -z "$session"; and set session "main"
+function tm -a session -d "Selects and attaches to tmux session"
+  if test -z "$session"
+    set session (tmux ls -F '#{session_name}' | fzf --height 40% --border)
+  end
+  test -z "$session"; and return
   tmux new -A -s $session
 end
 
