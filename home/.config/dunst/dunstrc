@@ -2,7 +2,7 @@
 monitor = 0
 follow = none
 origin = top-right
-offset = 1x80
+offset = 0x134
 width = 400
 height = 400
 indicate_hidden = true
