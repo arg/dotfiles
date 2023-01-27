@@ -14,7 +14,7 @@
   hostname: 'sirius.arg.network'
   ip: '192.168.0.4'
 - name: 'Polaris'
-  description: 'Dell T40 (ESXi host)'
+  description: 'Synology DS720+'
   url: 'https://polaris.arg.network'
   hostname: 'polaris.arg.network'
   ip: '192.168.0.5'
