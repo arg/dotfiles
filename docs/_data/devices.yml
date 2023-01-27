@@ -19,7 +19,7 @@
   hostname: 'polaris.arg.network'
   ip: '192.168.0.5'
 - name: 'Antares'
-  description: 'Ubuntu 22.04 VM on Sirius (development)'
+  description: 'Ubuntu 22.04 VM on Sirius'
   url: 'https://antares.arg.network'
   hostname: 'antares.arg.network'
   ip: '192.168.0.6'
