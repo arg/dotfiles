@@ -2,7 +2,7 @@ env:
   TERM: xterm-256color
 
 window:
-  decorations: none
+  decorations: full
   dynamic_title: true
   class:
     instance: Alacritty
@@ -15,9 +15,9 @@ scrolling:
   history: 10000
 
 font:
-  size: 14
+  size: 16
   offset:
-    y: 14
+    y: 18
   glyph_offset:
     y: 8
 
@@ -81,7 +81,7 @@ hints:
   enabled:
     - regex: "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
               [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
-      command: firefox
+      command: open
       post_processing: true
       mouse:
         enabled: true
