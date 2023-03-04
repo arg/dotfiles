@@ -1,3 +1,6 @@
+# TODO:
+# Open URL with middle click
+# Fix Ctrl-/
 env:
   TERM: xterm-256color
 
@@ -91,7 +94,6 @@ mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
 
 key_bindings:
-  - { key: P, mods: Control, action: Paste }
   - { key: K, mods: Alt, action: ScrollPageUp }
   - { key: J, mods: Alt, action: ScrollPageDown }
   - { key: H, mods: Alt, action: ScrollToTop }
