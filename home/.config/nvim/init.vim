@@ -8,7 +8,7 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | exe 'cd' argv()[0] | endif
 autocmd CursorHold * lua vim.diagnostic.open_float(0, { scope = 'cursor', focus = false })
 autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
-autocmd FileType text,markdown,mail,gitcommit setlocal spell spelllang=en_us
+autocmd FileType text,markdown,mail,gitcommit,cucumber setlocal spell spelllang=en_us
 autocmd TermOpen * setlocal signcolumn=no
 " }}}
 
@@ -37,6 +37,7 @@ Plug 'pwntester/octo.nvim'
 Plug 'akinsho/toggleterm.nvim'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'github/copilot.vim'
+Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
 call plug#end()
 " }}}
 
@@ -199,6 +200,21 @@ telescope.setup {
   pickers = {
     find_files = {
       hidden = true
+    }
+  },
+  extensions = {
+    dash = {
+      search_engine = 'google',
+      debounce = 500,
+      file_type_keywords = {
+        dashboard = false,
+        NvimTree = false,
+        TelescopePrompt = false,
+        terminal = false,
+        fzf = false,
+        ruby = { 'ruby', 'rails' },
+        javascript = { 'javascript' }
+      }
     }
   }
 }
@@ -418,6 +434,7 @@ nnoremap <silent> <C-o> :Telescope find_files<CR>
 nnoremap <silent> <C-g> :Telescope live_grep<CR>
 nnoremap <silent> <C-f> :Telescope lsp_document_symbols<CR>
 nnoremap <silent> <C-t> :Telescope lsp_workspace_symbols<CR>
+nnoremap <silent> <C-d> :Telescope dash search<CR>
 nnoremap <silent> <C-_> :CommentToggle<CR>
 vnoremap <silent> <C-_> :CommentToggle<CR>
 nnoremap <silent> <C-s> <cmd>lua vim.lsp.buf.format { async = true }<CR>
