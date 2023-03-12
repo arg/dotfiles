@@ -137,12 +137,6 @@ function tm -a session -d "Selects and attaches to tmux session"
   tmux new -A -s $session
 end
 
-function dockerize -d "Runs command in Docker container"
-  set -l container "app"
-  test -n "$APP_CONTAINER"; and set container "$APP_CONTAINER"
-  docker-compose exec $container $argv
-end
-
 function extract -a filename -d "Extracts files from the archive"
   switch $filename
     case "*.tar"
