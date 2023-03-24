@@ -518,7 +518,7 @@
 	<key>HideScrollbar</key>
 	<true/>
 	<key>HideTab</key>
-	<false/>
+	<true/>
 	<key>HotkeyMigratedFromSingleToMulti</key>
 	<true/>
 	<key>NeverWarnAboutShortLivedSessions_109417EF-3536-401C-8CF6-49F394ACED79</key>
@@ -1831,7 +1831,7 @@
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Mouse Reporting allow clicks and drags</key>
-			<false/>
+			<true/>
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
@@ -2125,7 +2125,7 @@
 			<key>Use Underline Color</key>
 			<false/>
 			<key>Vertical Spacing</key>
-			<real>1.22</real>
+			<real>1.3</real>
 			<key>Visual Bell</key>
 			<true/>
 			<key>Window Type</key>
@@ -2205,6 +2205,8 @@
 	<integer>12</integer>
 	<key>TerminalVMargin</key>
 	<integer>0</integer>
+	<key>TmuxSyncClipboard</key>
+	<true/>
 	<key>TmuxUsesDedicatedProfile</key>
 	<false/>
 	<key>UseBorder</key>
