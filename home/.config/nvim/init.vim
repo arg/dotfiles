@@ -184,6 +184,7 @@ require('nvim-treesitter.configs').setup {
     'javascript',
     'scss',
     'rust',
+    'terraform',
     'toml'
   },
 }
