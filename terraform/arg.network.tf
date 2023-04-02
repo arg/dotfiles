@@ -21,6 +21,38 @@ variable "cloudflare_zone_id" {
   sensitive = true
 }
 
+resource "cloudflare_record" "arg_network_a" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "arg.network"
+  value = "185.199.108.153"
+  proxied = true
+}
+
+resource "cloudflare_record" "arg_network_b" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "arg.network"
+  value = "185.199.109.153"
+  proxied = true
+}
+
+resource "cloudflare_record" "arg_network_c" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "arg.network"
+  value = "185.199.110.153"
+  proxied = true
+}
+
+resource "cloudflare_record" "arg_network_d" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "arg.network"
+  value = "185.199.111.153"
+  proxied = true
+}
+
 resource "cloudflare_record" "adminer" {
   zone_id = var.cloudflare_zone_id
   type = "A"
