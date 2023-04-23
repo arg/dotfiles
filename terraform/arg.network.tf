@@ -62,6 +62,15 @@ resource "cloudflare_record" "adminer" {
   comment = "MySQL web interface"
 }
 
+resource "cloudflare_record" "altair" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "altair"
+  value = "192.168.0.7"
+  proxied = false
+  comment = "Dell PowerEdge T40"
+}
+
 resource "cloudflare_record" "antares" {
   zone_id = var.cloudflare_zone_id
   type = "A"
