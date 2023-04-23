@@ -295,15 +295,21 @@ EOF
 " LSP {{{
 lua <<EOF
 local nvim_lsp = require('lspconfig')
-local servers = {'solargraph', 'rls'}
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    capabilities = capabilities,
-    flags = { debounce_text_changes = 500 }
-  }
-end
+nvim_lsp.solargraph.setup {
+  capabilities = capabilities,
+  flags = { debounce_text_changes = 500 }
+}
+
+nvim_lsp.stylelint_lsp.setup {
+  flags = { debounce_text_changes = 500 },
+  settings = {
+    stylelintplus = {
+      autoFixOnFormat = true
+    }
+  },
+}
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
