@@ -96,6 +96,7 @@ require'nvim-tree'.setup {
     enable = true
   },
   renderer = {
+    root_folder_label = false,
     special_files = { 'README.md', 'Gemfile' },
     icons = {
       git_placement = 'signcolumn',
@@ -117,8 +118,7 @@ require'nvim-tree'.setup {
   },
   view = {
     signcolumn = "no",
-    width = 40,
-    hide_root_folder = true
+    width = 40
   }
 }
 EOF
