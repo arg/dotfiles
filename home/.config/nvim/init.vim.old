@@ -14,30 +14,30 @@ autocmd TermOpen * setlocal signcolumn=no
 
 " Plugins {{{
 call plug#begin('~/.config/nvim/plugged')
-Plug 'gruvbox-community/gruvbox'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-Plug 'neovim/nvim-lspconfig'
-Plug 'lewis6991/gitsigns.nvim'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-haml'
-Plug 'nvim-lualine/lualine.nvim'
-Plug 'akinsho/bufferline.nvim'
-Plug 'mhinz/vim-sayonara'
-Plug '907th/vim-auto-save'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'gmake' }
-Plug 'terrortylor/nvim-comment'
-Plug 'ojroques/vim-oscyank'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'rust-lang/rust.vim'
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'pwntester/octo.nvim'
-Plug 'akinsho/toggleterm.nvim'
-Plug 'dhruvasagar/vim-table-mode'
-Plug 'github/copilot.vim'
-Plug 'mrjones2014/dash.nvim', { 'do': 'make install' }
+Plug 'gruvbox-community/gruvbox' " +
+Plug 'nvim-lua/plenary.nvim' " +
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' } " +
+Plug 'neovim/nvim-lspconfig' " +
+Plug 'lewis6991/gitsigns.nvim' " +
+Plug 'tpope/vim-fugitive' " +
+Plug 'tpope/vim-haml' " -
+Plug 'nvim-lualine/lualine.nvim' " +
+Plug 'akinsho/bufferline.nvim' " +
+Plug 'mhinz/vim-sayonara' " +
+Plug '907th/vim-auto-save' " +
+Plug 'nvim-telescope/telescope.nvim' " +
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'gmake' } " +
+Plug 'terrortylor/nvim-comment' " +
+Plug 'ojroques/vim-oscyank' " +
+Plug 'hrsh7th/cmp-nvim-lsp' " +
+Plug 'hrsh7th/nvim-cmp' " +
+Plug 'rust-lang/rust.vim' " -
+Plug 'kyazdani42/nvim-tree.lua' " +
+Plug 'pwntester/octo.nvim' " -
+Plug 'akinsho/toggleterm.nvim' " -
+Plug 'dhruvasagar/vim-table-mode' " -
+Plug 'github/copilot.vim' " +
+Plug 'mrjones2014/dash.nvim', { 'do': 'make install' } " -
 call plug#end()
 " }}}
 
@@ -219,7 +219,7 @@ telescope.setup {
     }
   }
 }
-telescope.load_extension('fzf')
+--telescope.load_extension('fzf')
 EOF
 " }}}
 
@@ -421,22 +421,6 @@ let g:copilot_filetypes = {
 " }}}
 
 " Keymaps {{{
-nnoremap <Space> <Nop>
-nnoremap <silent> <C-n> :NvimTreeToggle<CR>
-nnoremap <silent>// :nohlsearch<CR>
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <C-j> copilot#Accept("\<CR>")
-inoremap <silent><expr> <C-h> copilot#Next()
-inoremap <silent><expr> <C-l> copilot#Next()
-nnoremap <silent> <Tab> :BufferLineCycleNext<CR>
-nnoremap <silent> <S-Tab> :BufferLineCyclePrev<CR>
-nnoremap <silent> <C-w> :Sayonara!<CR>
-nnoremap J <PageDown>
-nnoremap K <PageUp>
-nnoremap <silent> <C-h> :wincmd h<CR>
-nnoremap <silent> <C-j> :wincmd j<CR>
-nnoremap <silent> <C-k> :wincmd k<CR>
-nnoremap <silent> <C-l> :wincmd l<CR>
 nnoremap <silent> <C-o> :Telescope find_files<CR>
 nnoremap <silent> <C-g> :Telescope live_grep<CR>
 nnoremap <silent> <C-f> :Telescope lsp_document_symbols<CR>
