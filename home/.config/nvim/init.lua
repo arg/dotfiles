@@ -79,8 +79,14 @@ require("lazy").setup({
     opts = {
       ensure_installed = { "ruby", "dockerfile", "fish", "json", "yaml", "html", "javascript", "scss", "rust",
                            "terraform", "toml", "lua" },
-      highlight = { enable = true },
-      autopairs = { enable = true },
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = { "ruby" }
+      },
+      indent = {
+        enable = true,
+        disable = { "ruby" }
+      },
       incremental_selection = {
         enable = true,
         keymaps = {
@@ -98,10 +104,13 @@ require("lazy").setup({
     build = "make" -- this command may fail on M1, in this case run "make clean && make" manually from the plugin's dir
   },
   {
+    "nvim-telescope/telescope-ui-select.nvim"
+  },
+  {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.1",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter",
-                     "nvim-telescope/telescope-fzf-native.nvim" },
+                     "nvim-telescope/telescope-fzf-native.nvim", "nvim-telescope/telescope-ui-select.nvim" },
     config = function()
       local telescope = require("telescope")
       telescope.setup({
@@ -113,6 +122,7 @@ require("lazy").setup({
         }
       })
       telescope.load_extension("fzf")
+      telescope.load_extension("ui-select")
     end
   },
   {
@@ -318,6 +328,27 @@ require("lazy").setup({
   },
   {
     "github/copilot.vim"
+  },
+  {
+    "ethanholz/nvim-lastplace",
+    config = true
+  },
+  {
+    "vim-ruby/vim-ruby",
+    config = function()
+      vim.g.ruby_indent_assignment_style = "variable"
+    end
+  },
+  {
+    "tpope/vim-rails",
+    dependencies = { "vim-ruby/vim-ruby" },
+    config = function()
+      vim.g.rails_projections = {
+        ["app/lib/*.rb"] = {
+          test = "spec/lib/{}_spec.rb",
+        }
+      }
+    end
   }
 })
 
