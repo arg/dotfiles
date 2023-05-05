@@ -62,6 +62,7 @@ end
 
 -- Plugins {{{
 require("lazy").setup({
+  -- gruvbox.nvim {{{
   {
     "ellisonleao/gruvbox.nvim",
     priority = 1000,
@@ -82,6 +83,8 @@ require("lazy").setup({
       vim.cmd.colorscheme("gruvbox")
     end
   },
+  -- }}}
+  -- nvim-treesitter {{{
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
@@ -108,14 +111,20 @@ require("lazy").setup({
       }
     }
   },
+  -- }}}
+  -- telescope-fzf-native {{{
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     commit = "580b6c48651cabb63455e97d7e131ed557b8c7e2",
     build = "make" -- this command may fail on M1, in this case run "make clean && make" manually from the plugin's dir
   },
+  -- }}}
+  -- telescope-ui-select {{{ 
   {
     "nvim-telescope/telescope-ui-select.nvim"
   },
+  -- }}}
+  -- telescope {{{
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.1",
@@ -135,6 +144,8 @@ require("lazy").setup({
       telescope.load_extension("ui-select")
     end
   },
+  -- }}}
+  -- nvim-cmp {{{
   {
     "hrsh7th/nvim-cmp",
     config = function()
@@ -153,6 +164,8 @@ require("lazy").setup({
       })
     end
   },
+  -- }}}
+  -- nvim-lspconfig {{{
   {
     "neovim/nvim-lspconfig",
     dependencies = { "hrsh7th/cmp-nvim-lsp" },
@@ -179,6 +192,8 @@ require("lazy").setup({
       )
     end
   },
+  -- }}}
+  -- bufferline {{{
   {
     "akinsho/bufferline.nvim",
     opts = {
@@ -215,6 +230,8 @@ require("lazy").setup({
       }
     }
   },
+  -- }}}
+  -- nvim-tree {{{
   {
     "kyazdani42/nvim-tree.lua",
     opts = {
@@ -245,6 +262,8 @@ require("lazy").setup({
       }
     }
   },
+  -- }}}
+  -- lualine {{{
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "kyazdani42/nvim-tree.lua" },
@@ -306,16 +325,24 @@ require("lazy").setup({
       })
     end
   },
+  -- }}}
+  -- gitsigns {{{
   {
     "lewis6991/gitsigns.nvim",
     config = true
   },
+  -- }}}
+  -- vim-fugitive {{{
   {
     "tpope/vim-fugitive"
   },
+  -- }}}
+  -- vim-sayonara {{{
   {
     "mhinz/vim-sayonara"
   },
+  -- }}}
+  -- auto-save {{{
   {
     "pocco81/auto-save.nvim",
     branch = "dev",
@@ -325,6 +352,8 @@ require("lazy").setup({
       trigger_events = { "InsertLeave", "TextChanged" }
     }
   },
+  -- }}}
+  -- nvim-comment {{{
   {
     "terrortylor/nvim-comment",
     main = "nvim_comment",
@@ -333,19 +362,27 @@ require("lazy").setup({
       create_mappings = false
     }
   },
+  -- }}}
+  -- copilot {{{
   {
     "github/copilot.vim"
   },
+  -- }}}
+  -- nvim-lastplace {{{
   {
     "ethanholz/nvim-lastplace",
     config = true
   },
+  -- }}}
+  -- vim-ruby {{{
   {
     "vim-ruby/vim-ruby",
     config = function()
       vim.g.ruby_indent_assignment_style = "variable"
     end
   },
+  -- }}}
+  -- vim-rails {{{
   {
     "tpope/vim-rails",
     dependencies = { "vim-ruby/vim-ruby" },
@@ -357,9 +394,12 @@ require("lazy").setup({
       }
     end
   },
+  -- }}}
+  -- nvim-osc52 {{{
   {
     "ojroques/nvim-osc52"
   }
+  -- }}}
 })
 -- }}}
 
