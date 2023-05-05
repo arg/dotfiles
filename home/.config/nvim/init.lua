@@ -349,6 +349,9 @@ require("lazy").setup({
         }
       }
     end
+  },
+  {
+    "ojroques/nvim-osc52"
   }
 })
 
@@ -372,16 +375,6 @@ vim.keymap.set("n", "<C-s>", function() vim.lsp.buf.format({ async = true }) end
 vim.keymap.set("n", "<C-]>", function() vim.lsp.buf.definition() end, { silent = true, desc = "Go to definition" })
 vim.keymap.set("n", "<Leader>g", ":0G<CR>", { silent = true, desc = "Show Git window" })
 
-vim.api.nvim_create_autocmd("StdinReadPre", {
-  pattern = "",
-  command = "let s:std_in = 1"
-})
-
-vim.api.nvim_create_autocmd("VimEnter", {
-  pattern = "",
-  command = "if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') | exe 'cd' argv()[0] | endif"
-})
-
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Enable spell checking for certain file types",
   pattern = { "text", "markdown", "mail", "gitcommit", "cucumber" },
@@ -399,5 +392,10 @@ vim.api.nvim_create_autocmd("CursorHold", {
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Copy to clipboard/tmux/OSC52",
   pattern = "",
-  command = "if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister \"' | endif"
+  callback = function()
+    if vim.v.event.operator == "y" and vim.v.event.regname == "" then
+      require("osc52").copy_register(vim.v.event.regname)
+    end
+    vim.highlight.on_yank({ higroup = "IncSearch", timeout = 400 })
+  end
 })
