@@ -1,8 +1,11 @@
+-- Lazy.nvim {{{
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
 end
+-- }}}
 
+-- Options {{{
 vim.opt.background = "dark"
 vim.opt.backup = false
 vim.opt.bufhidden = "wipe"
@@ -50,7 +53,9 @@ local disabled_builtin_plugins = { "netrw", "netrwPlugin", "netrwSettings", "net
 for _, plugin in pairs(disabled_builtin_plugins) do
    vim.g["loaded_" .. plugin] = 1
 end
+-- }}}
 
+-- Plugins {{{
 require("lazy").setup({
   {
     "ellisonleao/gruvbox.nvim",
@@ -351,7 +356,9 @@ require("lazy").setup({
     "ojroques/nvim-osc52"
   }
 })
+-- }}}
 
+-- Keymaps {{{
 vim.keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>", { silent = true, desc = "Toggle NvimTree" })
 vim.keymap.set("n", "//", ":nohlsearch<CR>", { silent = true, desc = "Clear selection highlight" })
 vim.keymap.set("n", "<Tab>", ":BufferLineCycleNext<CR>", { silent = true, desc = "Go to next buffer" })
@@ -371,7 +378,9 @@ vim.keymap.set({ "n", "v" }, "<Leader>c", ":CommentToggle<CR>", { silent = true,
 vim.keymap.set("n", "<C-s>", function() vim.lsp.buf.format({ async = true }) end, { silent = true, desc = "Format code" })
 vim.keymap.set("n", "<C-]>", function() vim.lsp.buf.definition() end, { silent = true, desc = "Go to definition" })
 vim.keymap.set("n", "<Leader>g", ":0G<CR>", { silent = true, desc = "Show Git window" })
+-- }}}
 
+-- Autocmd {{{
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Enable spell checking for certain file types",
   pattern = { "text", "markdown", "mail", "gitcommit", "cucumber" },
@@ -399,3 +408,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank({ higroup = "IncSearch", timeout = 400 })
   end
 })
+-- }}}
+
+-- vim:foldmethod=marker:foldlevel=0
