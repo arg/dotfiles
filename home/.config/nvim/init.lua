@@ -58,8 +58,8 @@ require("lazy").setup({
     lazy = false,
     config = function()
       require("gruvbox").setup({
-        undercurl = false,
-        underline = false,
+        undercurl = true,
+        underline = true,
         bold = false,
         italic = {
           strings = false,
@@ -67,7 +67,7 @@ require("lazy").setup({
           operators = false,
           folds = false
         },
-        strikethrough = false
+        strikethrough = true
       })
       vim.cmd("colorscheme gruvbox")
     end
@@ -378,7 +378,10 @@ vim.keymap.set("n", "<Leader>g", ":0G<CR>", { silent = true, desc = "Show Git wi
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Enable spell checking for certain file types",
   pattern = { "text", "markdown", "mail", "gitcommit", "cucumber" },
-  command = "setlocal spell spelllang=en_us",
+  callback = function()
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = "en_us"
+  end
 })
 
 vim.api.nvim_create_autocmd("CursorHold", {
