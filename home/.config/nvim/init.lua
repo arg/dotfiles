@@ -324,9 +324,6 @@ require("lazy").setup({
     }
   },
   {
-    "ojroques/vim-oscyank"
-  },
-  {
     "github/copilot.vim"
   },
   {
