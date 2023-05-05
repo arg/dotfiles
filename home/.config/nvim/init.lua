@@ -49,6 +49,11 @@ vim.opt.wrap = false
 
 vim.g.mapleader = ","
 
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+
 local disabled_builtin_plugins = { "netrw", "netrwPlugin", "netrwSettings", "netrwFileHandlers", "tutor" }
 for _, plugin in pairs(disabled_builtin_plugins) do
    vim.g["loaded_" .. plugin] = 1
@@ -74,7 +79,7 @@ require("lazy").setup({
         },
         strikethrough = true
       })
-      vim.cmd("colorscheme gruvbox")
+      vim.cmd.colorscheme("gruvbox")
     end
   },
   {
@@ -405,7 +410,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     if vim.v.event.operator == "y" and vim.v.event.regname == "" then
       require("osc52").copy_register(vim.v.event.regname)
     end
-    vim.highlight.on_yank({ higroup = "IncSearch", timeout = 400 })
+    vim.highlight.on_yank({ timeout = 250 })
   end
 })
 -- }}}
