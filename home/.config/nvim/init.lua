@@ -98,7 +98,7 @@ require("lazy").setup({
       },
       indent = {
         enable = true,
-        disable = { "ruby" }
+        disable = { "ruby" } -- Treesitter indentation is broken for Ruby so we use vim-ruby instead
       },
       incremental_selection = {
         enable = true,
