@@ -106,7 +106,7 @@ require("lazy").setup({
           init_selection = "<space>",
           node_incremental = "<space>",
           node_decremental = "<bs>",
-          scope_incremental = "<tab>",
+          scope_incremental = false
         }
       }
     }
@@ -365,7 +365,16 @@ require("lazy").setup({
   -- }}}
   -- copilot {{{
   {
-    "github/copilot.vim"
+    "github/copilot.vim",
+    config = function()
+      -- Apparently there is a bug somewhere (Copilot?) that adds extra characters when using <C-J>
+      -- This is why I have to rely on the default mapping for now (<Tab>), which may conflict with other plugins
+      -- Also to prevent Copilot from reporing errors at :Copilot status, I have to set copilot_assume_mapped = true
+      -- Also copilot_no_tab_map doesn't seem to work :/
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
+      -- vim.keymap.set("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+    end
   },
   -- }}}
   -- nvim-lastplace {{{
