@@ -119,18 +119,14 @@ require("lazy").setup({
     build = "make" -- this command may fail on M1, in this case run "make clean && make" manually from the plugin's dir
   },
   -- }}}
-  -- telescope-ui-select {{{ 
-  {
-    "nvim-telescope/telescope-ui-select.nvim"
-  },
-  -- }}}
   -- telescope {{{
   {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.1",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter",
-                     "nvim-telescope/telescope-fzf-native.nvim", "nvim-telescope/telescope-ui-select.nvim" },
-    config = function()
+                     "nvim-telescope/telescope-fzf-native.nvim", "nvim-telescope/telescope-ui-select.nvim",
+                     "debugloop/telescope-undo.nvim" },
+    config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup({
         defaults = {
@@ -138,10 +134,20 @@ require("lazy").setup({
         },
         pickers = {
           find_files = { hidden = true }
+        },
+        extensions = {
+          undo = {
+            mappings = {
+              n = {
+                ["<CR>"] = require("telescope-undo.actions").restore,
+              },
+            },
+          },
         }
       })
       telescope.load_extension("fzf")
       telescope.load_extension("ui-select")
+      telescope.load_extension("undo")
     end
   },
   -- }}}
@@ -428,6 +434,7 @@ vim.keymap.set("n", "<C-o>", ":Telescope find_files<CR>", { silent = true, desc 
 vim.keymap.set("n", "<C-g>", ":Telescope live_grep<CR>", { silent = true, desc = "Search text in all files" })
 vim.keymap.set("n", "<C-f>", ":Telescope lsp_document_symbols<CR>", { silent = true, desc = "List LSP symbols from current file" })
 vim.keymap.set("n", "<C-t>", ":Telescope lsp_workspace_symbols<CR>", { silent = true, desc = "List LSP symbols from all files" })
+vim.keymap.set("n", "<C-u>", ":Telescope undo<CR>", { silent = true, desc = "Show undo tree" })
 vim.keymap.set({ "n", "v" }, "<Leader>c", ":CommentToggle<CR>", { silent = true, desc = "Toggle line comment" })
 vim.keymap.set("n", "<C-s>", function() vim.lsp.buf.format({ async = true }) end, { silent = true, desc = "Format code" })
 vim.keymap.set("n", "<C-]>", function() vim.lsp.buf.definition() end, { silent = true, desc = "Go to definition" })
