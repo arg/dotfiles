@@ -98,6 +98,15 @@ resource "cloudflare_record" "files" {
   comment = "Synology Files"
 }
 
+resource "cloudflare_record" "freshrss" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "freshrss"
+  value = "192.168.0.5"
+  proxied = false
+  comment = "RSS reader"
+}
+
 resource "cloudflare_record" "monica" {
   zone_id = var.cloudflare_zone_id
   type = "A"
