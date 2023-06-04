@@ -179,6 +179,15 @@ resource "cloudflare_record" "restclass" {
   comment = "Project"
 }
 
+resource "cloudflare_record" "restclass_subdomains" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "*.restclass"
+  value = "192.168.0.3"
+  proxied = false
+  comment = "Project"
+}
+
 resource "cloudflare_record" "router" {
   zone_id = var.cloudflare_zone_id
   type = "A"
