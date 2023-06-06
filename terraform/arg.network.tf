@@ -242,11 +242,11 @@ resource "cloudflare_record" "sun" {
   comment = "Mac Mini M1 2020"
 }
 
-resource "cloudflare_record" "transmission" {
+resource "cloudflare_record" "tools" {
   zone_id = var.cloudflare_zone_id
   type = "A"
-  name = "transmission"
+  name = "tools"
   value = "192.168.0.5"
   proxied = false
-  comment = "Content downloader"
+  comment = "IT Tools"
 }
