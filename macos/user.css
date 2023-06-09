@@ -1,3 +1,9 @@
+html, body {
+    /* font-family: 'Atkinson Hyperlegible'; */
+    font-family: 'Atkinson Hyperlegible';
+}
+
 * {
     -webkit-font-smoothing: subpixel-antialiased !important;
+    font-family: inherit !important;
 }
