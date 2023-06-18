@@ -397,6 +397,17 @@ require("lazy").setup({
     end
   },
   -- }}}
+  -- vim-test {{{
+  {
+    "vim-test/vim-test",
+    dependencies = { "preservim/vimux" },
+    config = function()
+      vim.g["test#strategy"] = "vimux"
+      vim.g.VimuxOrientation = "h"
+      vim.g.VimuxHeight = "40"
+    end
+  },
+  -- }}}
   -- vim-rails {{{
   {
     "tpope/vim-rails",
@@ -413,6 +424,19 @@ require("lazy").setup({
   -- nvim-osc52 {{{
   {
     "ojroques/nvim-osc52"
+  },
+  -- }}}
+  -- NeoTest {{{
+  {
+  "nvim-neotest/neotest",
+    dependencies = { "olimorris/neotest-rspec" },
+    config = function()
+      require("neotest").setup({
+        adapters = {
+          require("neotest-rspec")
+        }
+      })
+    end
   }
   -- }}}
 })
@@ -439,6 +463,8 @@ vim.keymap.set({ "n", "v" }, "<Leader>c", ":CommentToggle<CR>", { silent = true,
 vim.keymap.set("n", "<C-s>", function() vim.lsp.buf.format({ async = true }) end, { silent = true, desc = "Format code" })
 vim.keymap.set("n", "<C-]>", function() vim.lsp.buf.definition() end, { silent = true, desc = "Go to definition" })
 vim.keymap.set("n", "<Leader>g", ":0G<CR>", { silent = true, desc = "Show Git window" })
+vim.keymap.set("n", "<Leader>tn", function() require("neotest").run.run() end, { silent = true, desc = "Run nearest test" })
+vim.keymap.set("n", "<Leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, { silent = true, desc = "Run test file" })
 -- }}}
 
 -- Autocmd {{{
