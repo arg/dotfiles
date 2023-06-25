@@ -3,6 +3,7 @@
 *.icloud
 .metadata
 .localized
+Icon.
 .com.apple.timemachine.supported
 ._*.jpg
 ._*.JPG
@@ -24,3 +25,7 @@
 ._*.pptx
 ._*.ppt
 Thumbs.db
+Drawings
+EVE
+OpenSCAD
+Zoom
