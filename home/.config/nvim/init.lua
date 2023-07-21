@@ -467,6 +467,10 @@ vim.keymap.set("n", "<Leader>tn", function() require("neotest").run.run() end, {
 vim.keymap.set("n", "<Leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end, { silent = true, desc = "Run test file" })
 -- }}}
 
+-- Abbreivations {{{
+vim.cmd("inoreabbrev bp binding.pry")
+-- }}}
+
 -- Autocmd {{{
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Enable spell checking for certain file types",
