@@ -501,4 +501,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 -- }}}
 
+-- Functions {{{
+vim.cmd("command! FormatXML :%!python3 -c 'import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())'")
+-- }}}
+
 -- vim:foldmethod=marker:foldlevel=0
