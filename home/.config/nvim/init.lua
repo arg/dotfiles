@@ -54,6 +54,8 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 
+vim.g.editorconfig_enable = false
+
 local disabled_builtin_plugins = { "netrw", "netrwPlugin", "netrwSettings", "netrwFileHandlers", "tutor" }
 for _, plugin in pairs(disabled_builtin_plugins) do
    vim.g["loaded_" .. plugin] = 1
