@@ -1,0 +1,13 @@
+name: restclass
+root: ~/Development/restclass
+startup_window: editor
+windows:
+  - editor: nvim .
+  - shell:
+  - server:
+      layout: main-vertical
+      panes:
+        - rails: bin/rails server -p 7000
+        - js: yarn build --watch
+        - css: yarn build:css --watch
+  - fm: vifm .
