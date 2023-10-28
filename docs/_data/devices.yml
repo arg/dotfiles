@@ -23,7 +23,7 @@
   ip: '192.168.0.5'
 
 - name: 'Altair'
-  description: 'Ubuntu 22.04 VM on Sirius'
+  description: 'Ubuntu VM on Sirius'
   url: 'https://altair.arg.network'
   hostname: 'altair.arg.network'
   ip: '192.168.0.6'
