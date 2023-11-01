@@ -250,3 +250,12 @@ resource "cloudflare_record" "tools" {
   proxied = false
   comment = "IT Tools"
 }
+
+resource "cloudflare_record" "ups" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "ups"
+  value = "192.168.0.10"
+  proxied = false
+  comment = "APC Smart-UPS 750"
+}

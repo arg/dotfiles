@@ -45,3 +45,9 @@
   url: 'https://scanner.arg.network'
   hostname: 'scanner.arg.network'
   ip: '192.168.0.9'
+
+- name: 'UPS'
+  description: 'APC Smart-UPS 750'
+  url: 'http://ups.arg.network'
+  hostname: 'ups.arg.network'
+  ip: '192.168.0.10'
