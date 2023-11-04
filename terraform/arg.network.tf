@@ -57,7 +57,7 @@ resource "cloudflare_record" "adminer" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "adminer"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "MySQL web interface"
 }
@@ -84,7 +84,7 @@ resource "cloudflare_record" "downloads" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "downloads"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "Content downloader"
 }
@@ -93,7 +93,7 @@ resource "cloudflare_record" "files" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "files"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "File manager"
 }
@@ -102,7 +102,7 @@ resource "cloudflare_record" "freshrss" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "freshrss"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "RSS reader"
 }
@@ -129,7 +129,7 @@ resource "cloudflare_record" "monica" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "monica"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "Monica CRM"
 }
@@ -147,7 +147,7 @@ resource "cloudflare_record" "photos" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "photos"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "Photo viewer"
 }
@@ -156,7 +156,7 @@ resource "cloudflare_record" "plex" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "plex"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "Plex Media Server"
 }
@@ -174,7 +174,7 @@ resource "cloudflare_record" "prowlarr" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "prowlarr"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "Content search tool"
 }
@@ -183,7 +183,7 @@ resource "cloudflare_record" "radarr" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "radarr"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "Movies organizer"
 }
@@ -228,7 +228,7 @@ resource "cloudflare_record" "sonarr" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "sonarr"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "TV shows organizer"
 }
@@ -246,7 +246,7 @@ resource "cloudflare_record" "tools" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "tools"
-  value = "192.168.0.7"
+  value = "192.168.0.6"
   proxied = false
   comment = "IT Tools"
 }
