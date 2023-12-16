@@ -1,7 +1,3 @@
-# TODO:
-# 4. Encrypt network.env
-# 5. Fix Monica photos
-#
 volumes:
   mariadb_data:
     driver_opts:
@@ -156,6 +152,7 @@ services:
     volumes:
       - "/home/arg/network/plex:/config"
       - "/home/arg/videos:/videos"
+      - "/home/arg/network/videos:/videos2"
     devices:
       - "/dev/dri/card0:/dev/dri/card0"
       - "/dev/dri/renderD128:/dev/dri/renderD128"
