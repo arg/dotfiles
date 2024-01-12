@@ -470,6 +470,7 @@ vim.keymap.set("n", "<Leader>tf", function() require("neotest").run.run(vim.fn.e
 -- }}}
 
 -- Abbreivations {{{
+vim.cmd("inoreabbrev bi binding.irb")
 vim.cmd("inoreabbrev bp binding.pry")
 -- }}}
 
