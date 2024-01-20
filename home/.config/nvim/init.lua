@@ -184,9 +184,27 @@ require("lazy").setup({
         flags = { debounce_text_changes = 500 }
       })
       nvim_lsp.stylelint_lsp.setup({
+        capabilities = capabilities,
         flags = { debounce_text_changes = 500 },
         settings = {
           stylelintplus = { autoFixOnFormat = true }
+        }
+      })
+      nvim_lsp.rust_analyzer.setup({
+        capabilities = capabilities,
+        flags = { debounce_text_changes = 500 },
+        settings = {
+          ["rust-analyzer"] = {
+            diagnostics = { enable = true },
+            imports = {
+              granularity = { group = "module" },
+              prefix = "self",
+            },
+            cargo = {
+              buildScripts = { enable = true }
+            },
+            procMacro = { enable = true }
+          }
         }
       })
       vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
