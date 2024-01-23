@@ -1,0 +1,59 @@
+[window]
+decorations = "full"
+dynamic_title = true
+option_as_alt = "Both"
+class = { general = "Alacritty", instance = "Alacritty" }
+padding = { x = 0, y = 0 }
+
+[scrolling]
+history = 10000
+
+[selection]
+save_to_clipboard = true
+
+[terminal]
+osc52 = "OnlyCopy"
+
+[font]
+size = 16
+offset = { x = 0, y = 18 }
+glyph_offset = { x = 0, y = 8 }
+normal = { family = "Hack Nerd Font", style = "Regular" }
+bold = { style = "Regular" }
+italic = { style = "Regular" }
+bold_italic = { style = "Regular" }
+builtin_box_drawing = true
+
+[colors]
+normal = { black = "#282828", blue = "#458588", cyan = "#689d6a", green = "#98971a", magenta = "#b16286", red = "#cc241d", white = "#a89984", yellow = "#d79921" }
+bright = { black = "#928374", blue = "#83a598", cyan = "#8ec07c", green = "#b8bb26", magenta = "#d3869b", red = "#fb4934", white = "#ebdbb2", yellow = "#fabd2f" }
+dim    = { black = "#32302f", blue = "#076678", cyan = "#427b58", green = "#79740e", magenta = "#8f3f71", red = "#9d0006", white = "#928374", yellow = "#b57614" }
+primary = { background = "#282828", foreground = "#ebdbb2", bright_foreground = "#fbf1c7", dim_foreground = "#a89984" }
+selection = { background = "#d79921", text = "#282828" }
+cursor = { cursor = "CellForeground", text = "CellBackground" }
+vi_mode_cursor = { cursor = "CellForeground", text = "CellBackground" }
+
+[keyboard]
+bindings = [
+  { key = "K", mods = "Alt", action = "ScrollPageUp" },
+  { key = "J", mods = "Alt", action = "ScrollPageDown" },
+  { key = "H", mods = "Alt", action = "ScrollToTop" },
+  { key = "L", mods = "Alt", action = "ScrollToBottom" },
+  { key = "F", mods = "Alt", action = "ToggleFullscreen" },
+  { key = "V", mods = "Alt", action = "ToggleViMode" },
+  { key = "N", mods = "Alt", action = "CreateNewTab" },
+  { key = "1", mods = "Alt", action = "SelectTab1" },
+  { key = "2", mods = "Alt", action = "SelectTab2" },
+  { key = "3", mods = "Alt", action = "SelectTab3" },
+  { key = "4", mods = "Alt", action = "SelectTab4" },
+  { key = "5", mods = "Alt", action = "SelectTab5" },
+  { key = "6", mods = "Alt", action = "SelectTab6" },
+  { key = "7", mods = "Alt", action = "SelectTab7" },
+  { key = "8", mods = "Alt", action = "SelectTab8" },
+  { key = "9", mods = "Alt", action = "SelectTab9" }
+]
+
+[mouse]
+bindings = [
+  { mouse = "Middle", action = "PasteSelection" }
+]
