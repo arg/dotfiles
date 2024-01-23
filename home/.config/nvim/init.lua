@@ -71,11 +71,13 @@ require("lazy").setup({
     lazy = false,
     config = function()
       require("gruvbox").setup({
+        terminal_colors = true,
         undercurl = true,
         underline = true,
         bold = false,
         italic = {
           strings = false,
+          emphasis = false,
           comments = false,
           operators = false,
           folds = false
@@ -89,6 +91,7 @@ require("lazy").setup({
   -- nvim-treesitter {{{
   {
     "nvim-treesitter/nvim-treesitter",
+    tag = "v0.9.1",
     build = ":TSUpdate",
     main = "nvim-treesitter.configs",
     opts = {
