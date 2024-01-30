@@ -96,7 +96,7 @@ require("lazy").setup({
     main = "nvim-treesitter.configs",
     opts = {
       ensure_installed = { "ruby", "dockerfile", "fish", "json", "yaml", "html", "javascript", "scss", "rust",
-                           "terraform", "toml", "lua" },
+                           "terraform", "toml", "lua", "pascal", "go" },
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = { "ruby" }
@@ -207,6 +207,21 @@ require("lazy").setup({
               buildScripts = { enable = true }
             },
             procMacro = { enable = true }
+          }
+        }
+      })
+      -- efm-langserver must be installed: brew install efm-langserver
+      nvim_lsp.efm.setup({
+        capabilities = capabilities,
+        init_options = { documentFormatting = true, formatting = true },
+        filetypes = { "pascal" },
+        settings = {
+          rootMarkers = { ".git/" },
+          languages = {
+            pascal = {
+              -- the dumbest way to format Pascal code
+              { formatCommand = "ptop ${FILENAME} ptop.tmp; cat ptop.tmp; rm ptop.tmp", formatStdin = false }
+            }
           }
         }
       })
