@@ -5,9 +5,10 @@ windows:
   - editor: nvim .
   - shell:
   - server:
-      layout: main-vertical
+      layout: tiled
       panes:
-        - rails: bin/rails server -p 7000
-        - js: yarn build --watch
+        - js: yarn build --watch --minify=false
         - css: yarn build:css --watch
+        - rails: bin/rails server -p 7000
+        - worker: sidekiq
   - fm: vifm .
