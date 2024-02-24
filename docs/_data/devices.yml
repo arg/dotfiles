@@ -16,11 +16,11 @@
   hostname: 'antares.arg.network'
   ip: '192.168.0.4'
 
-# - name: 'Sirius'
-#   description: 'Supermicro X11 (IPMI)'
-#   url: 'https://sirius.arg.network'
-#   hostname: 'sirius.arg.network'
-#   ip: '192.168.0.5'
+- name: 'Sirius'
+  description: 'Supermicro X11 (IPMI)'
+  url: 'https://sirius.arg.network'
+  hostname: 'sirius.arg.network'
+  ip: '192.168.0.5'
 
 - name: 'Polaris'
   description: 'Supermicro X11 (server)'

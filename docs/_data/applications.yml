@@ -24,7 +24,7 @@
   hostname: 'freshrss.arg.network'
   location: 'Polaris'
 - name: 'Nextcloud'
-  description: 'Content collaboration platform'
+  description: 'Content collaboration'
   url: 'https://nextcloud.arg.network'
   hostname: 'nextcloud.arg.network'
   location: 'Polaris'
