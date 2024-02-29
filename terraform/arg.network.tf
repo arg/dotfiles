@@ -134,6 +134,15 @@ resource "cloudflare_record" "monica" {
   comment = "Monica CRM"
 }
 
+resource "cloudflare_record" "monit" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "monit"
+  value = "192.168.0.6"
+  proxied = false
+  comment = "Monitoring tool"
+}
+
 resource "cloudflare_record" "nextcloud" {
   zone_id = var.cloudflare_zone_id
   type = "A"
