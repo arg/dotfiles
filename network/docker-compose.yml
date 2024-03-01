@@ -1,15 +1,3 @@
-volumes:
-  mariadb_data:
-    driver_opts:
-      type: "nfs"
-      o: "addr=192.168.47.2,nolock,hard,rw,noatime,nfsvers=3"
-      device: ":/mnt/tank/network/mariadb"
-  monica_data:
-    driver_opts:
-      type: "nfs"
-      o: "addr=192.168.47.2,nolock,hard,rw,noatime,nfsvers=3"
-      device: ":/mnt/tank/network/monica"
-
 services:
   traefik:
     image: "traefik:v2.10"
@@ -42,6 +30,19 @@ services:
     healthcheck:
       test: "traefik healthcheck --ping"
 
+  monit:
+    image: "caddy:latest"
+    restart: "no"
+    command: "caddy reverse-proxy --from http://monit.arg.network --to http://host.docker.internal:2812"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      traefik.enable: true
+      traefik.http.services.monit.loadbalancer.server.port: 80
+      traefik.http.routers.monit.rule: "Host(`monit.arg.network`)"
+      traefik.http.routers.monit.entrypoints: "websecure"
+      traefik.http.routers.monit.tls.certresolver: "letsencrypt"
+
   portainer:
     image: "portainer/portainer-ce:2.19.3-alpine"
     restart: "no"
@@ -66,8 +67,9 @@ services:
     env_file:
       - "network.env"
     volumes:
-      - "mariadb_data:/var/lib/mysql"
+      - "/home/arg/network/mariadb:/var/lib/mysql"
       - "${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
+      - "/etc/localtime:/etc/localtime:ro"
     command: "--transaction-isolation=READ-COMMITTED --log-bin=mysqld-bin --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed"
     healthcheck:
       test: "healthcheck.sh --su-mysql --connect --innodb_initialized"
@@ -79,33 +81,36 @@ services:
         condition: service_healthy
     restart: "no"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
-      - "traefik.http.routers.adminer.rule=Host(`adminer.arg.network`)"
-      - "traefik.http.routers.adminer.entrypoints=websecure"
-      - "traefik.http.routers.adminer.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.adminer.loadbalancer.server.port: 8080
+      traefik.http.routers.adminer.rule: "Host(`adminer.arg.network`)"
+      traefik.http.routers.adminer.entrypoints: "websecure"
+      traefik.http.routers.adminer.tls.certresolver: "letsencrypt"
     # disabled as there is nether curl nor wget installed
     # healthcheck:
     #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
 
   monica:
-    image: "monica:latest"
+    image: "linuxserver/monica:latest"
     restart: "no"
     depends_on:
       mariadb:
         condition: service_healthy
     env_file:
+      - "linuxserver.env"
       - "network.env"
     environment:
       DB_HOST: "mariadb"
       DB_USERNAME: "monica"
       DB_PASSWORD: "monica"
+      DB_DATABASE: "monica"
+      APP_URL: "https://monica.arg.network"
+      TRUSTED_PROXIES: "*"
       APP_ENV: "production"
       APP_DISABLE_SIGNUP: true
-      APP_TRUSTED_PROXIES: "*"
-      APP_URL: "https://monica.arg.network"
     volumes:
-      - "monica_data:/var/www/html/storage"
+      - "/home/arg/network/monica:/config"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       traefik.enable: true
       traefik.http.services.monica.loadbalancer.server.port: 80
@@ -122,9 +127,11 @@ services:
       mariadb:
         condition: service_healthy
     env_file:
+      - "linuxserver.env"
       - "network.env"
     volumes:
       - "/home/arg/network/freshrss:/config"
+      - "/etc/localtime:/etc/localtime:ro"
     labels:
       traefik.enable: true
       traefik.http.services.freshrss.loadbalancer.server.port: 80
@@ -152,19 +159,19 @@ services:
     volumes:
       - "/home/arg/network/plex:/config"
       - "/home/arg/videos:/videos"
-      - "/home/arg/network/videos:/videos2"
+      - "/etc/localtime:/etc/localtime:ro"
     devices:
-      - "/dev/dri/card0:/dev/dri/card0"
+      - "/dev/dri/card1:/dev/dri/card0"
       - "/dev/dri/renderD128:/dev/dri/renderD128"
     env_file:
       - "linuxserver.env"
       - "network.env"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.plex.loadbalancer.server.port=32400"
-      - "traefik.http.routers.plex.rule=Host(`plex.arg.network`)"
-      - "traefik.http.routers.plex.entrypoints=websecure"
-      - "traefik.http.routers.plex.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.plex.loadbalancer.server.port: 32400
+      traefik.http.routers.plex.rule: "Host(`plex.arg.network`)"
+      traefik.http.routers.plex.entrypoints: "websecure"
+      traefik.http.routers.plex.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:32400/identity' || exit 1"
 
@@ -174,16 +181,17 @@ services:
     volumes:
       - "/home/arg/network/qbittorrent:/config"
       - "/home/arg/downloads:/downloads"
+      - "/etc/localtime:/etc/localtime:ro"
     environment:
       WEBUI_PORT: 8080
     env_file:
       - "linuxserver.env"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
-      - "traefik.http.routers.qbittorrent.rule=Host(`downloads.arg.network`)"
-      - "traefik.http.routers.qbittorrent.entrypoints=websecure"
-      - "traefik.http.routers.qbittorrent.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.qbittorrent.loadbalancer.server.port: 8080
+      traefik.http.routers.qbittorrent.rule: "Host(`downloads.arg.network`)"
+      traefik.http.routers.qbittorrent.entrypoints: "websecure"
+      traefik.http.routers.qbittorrent.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
 
@@ -197,14 +205,15 @@ services:
       - "/home/arg/network/radarr:/config"
       - "/home/arg/videos/movies:/movies"
       - "/home/arg/downloads:/downloads"
+      - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - "linuxserver.env"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.arg.network`)"
-      - "traefik.http.routers.radarr.entrypoints=websecure"
-      - "traefik.http.routers.radarr.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.radarr.loadbalancer.server.port: 7878
+      traefik.http.routers.radarr.rule: "Host(`radarr.arg.network`)"
+      traefik.http.routers.radarr.entrypoints: "websecure"
+      traefik.http.routers.radarr.tls.certresolver: "letsencrypt"
     # disabled due to API error after upgrading Radarr to v4
     # despite having https://github.com/Radarr/Radarr/issues/6785 
     # healthcheck:
@@ -220,30 +229,33 @@ services:
       - "/home/arg/network/sonarr:/config"
       - "/home/arg/videos/tv_shows:/tv"
       - "/home/arg/downloads:/downloads"
+      - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - "linuxserver.env"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
-      - "traefik.http.routers.sonarr.rule=Host(`sonarr.arg.network`)"
-      - "traefik.http.routers.sonarr.entrypoints=websecure"
-      - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
+      traefik.enable: true
+      traefik.http.services.sonarr.loadbalancer.server.port: 8989
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.arg.network`)"
+      traefik.http.routers.sonarr.entrypoints: "websecure"
+      traefik.http.routers.sonarr.tls.certresolver: "letsencrypt"
+    # disabled as it returns 401
+    # healthcheck:
+    #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
 
   prowlarr:
     image: "linuxserver/prowlarr:latest"
     restart: "no"
     volumes:
       - "/home/arg/network/prowlarr:/config"
+      - "/etc/localtime:/etc/localtime:ro"
     env_file:
       - "linuxserver.env"
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
-      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.arg.network`)"
-      - "traefik.http.routers.prowlarr.entrypoints=websecure"
-      - "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt"
+      traefik.enable: true
+      traefik.http.services.prowlarr.loadbalancer.server.port: 9696
+      traefik.http.routers.prowlarr.rule: "Host(`prowlarr.arg.network`)"
+      traefik.http.routers.prowlarr.entrypoints: "websecure"
+      traefik.http.routers.prowlarr.tls.certresolver: "letsencrypt"
     # disabled as it returns 401
     # healthcheck:
     #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"
