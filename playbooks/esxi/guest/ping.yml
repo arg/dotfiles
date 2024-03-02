@@ -1,6 +1,0 @@
-- name: "Ping virtual machines"
-  hosts: "virtual_machines"
-  gather_facts: false
-  tasks:
-   - name: "Ping virtual machine"
-     ansible.builtin.ping:

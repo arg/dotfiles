@@ -5,18 +5,16 @@ all:
     sun:
       ansible_host: "192.168.0.3"
     sirius:
-      ansible_host: "192.188.0.4"
+      ansible_host: "192.188.0.5"
     polaris:
-      ansible_host: "192.168.0.5"
-    antares:
       ansible_host: "192.168.0.6"
-    deneb:
-      ansible_host: "192.168.0.7"
   children:
-    virtual_machines:
+    servers:
       hosts:
         polaris:
-        antares:
+    ipmi_hosts:
+      hosts:
+        sirius:
     docker_hosts:
       hosts:
-        antares:
+        polaris:

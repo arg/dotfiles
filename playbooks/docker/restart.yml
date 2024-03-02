@@ -1,0 +1,8 @@
+- name: "Restart Network services"
+  hosts: "docker_hosts"
+  tasks:
+    - name: "Run `docker-compose restart`"
+      community.docker.docker_compose_v2:
+        project_src: "~/.dotfiles/network"
+        state: "restarted"
+        recreate: "never"

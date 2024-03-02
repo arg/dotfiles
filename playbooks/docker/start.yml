@@ -1,9 +1,8 @@
-- name: "Run Network services"
+- name: "Start Network services"
   hosts: "docker_hosts"
   tasks:
     - name: "Run `docker-compose up`"
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: "~/.dotfiles/network"
-        build: false
         state: "present"
-        stopped: false
+        recreate: "never"
