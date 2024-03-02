@@ -1,7 +1,7 @@
 name: unsplash
 root: ~/Development/unsplash-api
-on_project_first_start: colima start
-on_project_stop: colima stop
+# on_project_first_start: colima start
+# on_project_stop: colima stop
 startup_window: editor
 windows:
   - editor: nvim .
