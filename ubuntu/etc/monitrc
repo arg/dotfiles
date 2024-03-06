@@ -1,0 +1,42 @@
+set daemon 60
+set log /var/log/monit.log
+set pidfile /var/run/monit.pid
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+set alert arg+network@arg.zone
+set mail-format { from: monit@polaris.arg.network }
+
+set eventqueue
+  basedir /var/lib/monit/events
+  slots 100
+
+set httpd
+  port 2812
+  use address 0.0.0.0
+  allow 172.18.0.0/16
+
+check system "Polaris"
+  if loadavg (1min) per core > 2 for 5 cycles then alert
+  if loadavg (5min) per core > 1.5 for 10 cycles then alert
+  if cpu usage > 95% for 10 cycles then alert
+  if memory usage > 75% then alert
+
+check process "SSH daemon" with pidfile /var/run/sshd.pid
+  start program = "/bin/systemctl start sshd"
+  stop program = "/bin/systemctl stop sshd"
+
+check process "Docker daemon" with pidfile /var/run/docker.pid
+  start program = "/bin/systemctl start docker"
+  stop program = "/bin/systemctl stop docker"
+
+check program "IPMI health check" with path "/usr/local/bin/ipmi_health.sh"
+  timeout 10 seconds
+  if status != 0 then alert
+
+check program "ZFS health check" with path "/usr/local/bin/zfs_health.sh"
+  timeout 5 seconds
+  every 10 cycles
+  if status != 0 then alert
+
+include /etc/monit/conf.d/*
+include /etc/monit/conf-enabled/*
