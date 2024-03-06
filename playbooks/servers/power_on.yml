@@ -1,0 +1,13 @@
+- name: "Power on servers"
+  gather_facts: false
+  vars_files:
+    - "../secrets.yml"
+  hosts: "localhost"
+  tasks:
+   - name: "Power on via IPMI"
+     community.general.ipmi_power:
+       name: "192.168.0.5"
+       user: "{{ ipmi.username }}"
+       password: "{{ ipmi.password }}"
+       state: "on"
+     delegate_to: "localhost"

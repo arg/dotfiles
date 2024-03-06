@@ -1,0 +1,13 @@
+- name: "Reboot servers"
+  gather_facts: false
+  vars_files:
+    - "../secrets.yml"
+  hosts: "localhost"
+  tasks:
+   - name: "Reboot via IPMI"
+     community.general.ipmi_power:
+       name: "192.168.0.5"
+       user: "{{ ipmi.username }}"
+       password: "{{ ipmi.password }}"
+       state: "reset"
+     delegate_to: "localhost"

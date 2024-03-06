@@ -1,0 +1,13 @@
+- name: "Shutdown servers"
+  gather_facts: false
+  vars_files:
+    - "../secrets.yml"
+  hosts: "localhost"
+  tasks:
+   - name: "Shutdown via IPMI"
+     community.general.ipmi_power:
+       name: "192.168.0.5"
+       user: "{{ ipmi.username }}"
+       password: "{{ ipmi.password }}"
+       state: "shutdown"
+     delegate_to: "localhost"
