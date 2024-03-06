@@ -13,7 +13,8 @@ yt-dlp \
   --embed-thumbnail \
   --embed-subs \
   --match-filter "!is_live & !live" \
-  --output "~/Movies/Archives/%(title)s [%(id)s,%(upload_date)s].%(ext)s" \
+  --output "~/Movies/Archives/%(title)S [%(id)S, %(upload_date>%Y-%m-%d)s].%(ext)s" \
   --windows-filenames \
+  --restrict-filenames \
   --merge-output-format "mkv" \
   --batch-file "~/Movies/Archives/sources.txt"
