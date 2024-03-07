@@ -6,7 +6,7 @@
 
 if [[ $# -lt 2 ]]; then
   echo "Use backup <name> <target 1> <target 2> ... <target n>"
-  echo "Where name is one of: archive, backups, documents, photos, videos"
+  echo "Where name is one of: archives, backups, documents, literature, photos, videos"
   echo "and target is: gdrive, b2."
   exit 2
 fi
@@ -19,28 +19,40 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   sources["documents"]="/Users/arg/Documents"
 else
   excludelist="/home/arg/.config/rclone/excludelist.txt"
-  sources["archive"]="/home/arg/archive"
-  sources["backups"]="/home/arg/backups"
-  sources["documents"]="/home/arg/documents"
-  sources["photos"]="/home/arg/photos"
-  sources["videos"]="/home/arg/videos"
+  sources["archives"]="/archive/archives"
+  sources["backups"]="/archive/backups"
+  sources["documents"]="/archive/documents"
+  sources["literature"]="/archive/literature"
+  sources["photos"]="/archive/photos"
+  sources["videos"]="/archive/videos"
 fi
 
-targets["archive","b2"]="b2-crypt"
-targets["archive","gdrive"]="gdrive-crypt"
-targets["backups","b2"]="b2-crypt"
+targets["archives","gdrive"]="gdrive-crypt"
+targets["archives","b2"]="b2-crypt"
+
 targets["backups","gdrive"]="gdrive-crypt"
-targets["documents","b2"]="b2-crypt"
+targets["backups","b2"]="b2-crypt"
+
 targets["documents","gdrive"]="gdrive"
+targets["documents","b2"]="b2-crypt"
 targets["documents","polaris"]="smb-polaris"
-targets["photos","b2"]="b2-crypt"
+
+targets["literature","gdrive"]="gdrive"
+targets["literature","b2"]="b2-crypt"
+
 targets["photos","gdrive"]="gdrive"
-targets["videos","b2"]="b2-crypt"
+targets["photos","b2"]="b2-crypt"
+
 targets["videos","gdrive"]="gdrive-crypt"
+targets["videos","b2"]="b2-crypt"
 
 name=${1,,}
 
 for target in "${@:2}"; do
-  rclone sync --fast-list --progress --syslog --log-level INFO \
+  rclone sync \
+    --fast-list \
+    --progress \
+    --log-level INFO \
+    --log-file=/var/log/rclone/rclone.log \
     --exclude-from $excludelist ${sources[$name]} ${targets[$name,$target]}:$name
 done
