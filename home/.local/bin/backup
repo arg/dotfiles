@@ -27,30 +27,31 @@ else
   sources["videos"]="/archive/videos"
 fi
 
-targets["archives","gdrive"]="gdrive-crypt"
 targets["archives","b2"]="b2-crypt"
 targets["archives","hetzner"]="hetzner-crypt"
+targets["archives","gdrive"]="gdrive-crypt"
 
-targets["backups","gdrive"]="gdrive-crypt"
 targets["backups","b2"]="b2-crypt"
 targets["backups","hetzner"]="hetzner-crypt"
+targets["backups","gdrive"]="gdrive-crypt"
 
-targets["documents","gdrive"]="gdrive"
 targets["documents","b2"]="b2-crypt"
+targets["documents","hetzner"]="hetzner-crypt"
+targets["documents","gdrive"]="gdrive"
 targets["documents","polaris"]="smb-polaris"
 
-targets["literature","gdrive"]="gdrive"
 targets["literature","b2"]="b2-crypt"
 targets["literature","hetzner"]="hetzner-crypt"
+targets["literature","gdrive"]="gdrive"
 
-targets["photos","gdrive"]="gdrive"
 targets["photos","b2"]="b2-crypt"
-targets["photos","gphotos"]="gphotos"
 targets["photos","hetzner"]="hetzner-crypt"
+targets["photos","gdrive"]="gdrive"
+targets["photos","gphotos"]="gphotos"
 
-targets["videos","gdrive"]="gdrive-crypt"
 targets["videos","b2"]="b2-crypt"
 targets["videos","hetzner"]="hetzner-crypt"
+targets["videos","gdrive"]="gdrive-crypt"
 
 source_name=${1,,}
 target_name=${2,,}
