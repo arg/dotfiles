@@ -21,11 +21,19 @@ check system "Polaris"
   if cpu usage > 95% for 10 cycles then alert
   if memory usage > 75% then alert
 
-check process "SSH daemon" with pidfile /var/run/sshd.pid
+check process "SSH" with pidfile /var/run/sshd.pid
   start program = "/bin/systemctl start sshd"
   stop program = "/bin/systemctl stop sshd"
 
-check process "Docker daemon" with pidfile /var/run/docker.pid
+check process "Samba" with pidfile /run/samba/smbd.pid
+   start program = "/etc/init.d/samba start"
+   stop  program = "/etc/init.d/samba stop"
+
+check process "Avahi" with pidfile /run/avahi-daemon/pid
+   start program = "/etc/init.d/avahi-daemon start"
+   stop  program = "/etc/init.d/avahi-daemon stop"
+
+check process "Docker" with pidfile /var/run/docker.pid
   start program = "/bin/systemctl start docker"
   stop program = "/bin/systemctl stop docker"
 
