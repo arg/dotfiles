@@ -12,13 +12,13 @@ FreeBSD, i3, Fish, Alacritty, Tmux, Neovim, Dmenu, Polybar, Firefox, Thunderbird
 
 Run as `root` on a new environment:
 
-#### Ubuntu 20.04
+#### Ubuntu 22.04
 
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/ubuntu/bootstrap)
 ```
 
-#### FreeBSD 13.0
+#### FreeBSD 13.x
 
 ```bash
 bash <(curl -sLS https://raw.github.com/arg/dotfiles/master/freebsd/bootstrap)
