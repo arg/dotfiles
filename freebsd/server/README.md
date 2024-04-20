@@ -1,4 +1,4 @@
-# Ubuntu Server 22.04
+# FreeBSD 14.x
 
 ## Cron jobs
 
@@ -29,19 +29,6 @@
 ### root
 
 ```
-45 23 * * * zfs-auto-snapshot --quiet --syslog --label=daily --prefix=cron --skip-scrub --recursive --keep=30 archive
-```
-
-## ZFS tweaks
-
-### Disable frequent snapshots creation
-
-```sh
-zfs set com.sun:auto-snapshot:frequent=false <dataset>
-```
-
-### Disable `zfs-auto-snapshot` completely
-
-```sh
-zfs set com.sun:auto-snapshot=false <dataset>
+0 2 * * * acme /usr/bin/lockf -t 0 /tmp/.acme.sh.cronjob /usr/local/sbin/acme.sh --cron --home /var/db/acme/.acme.sh  >  /var/log/acme.sh.cronjob.log 2>&1
+0 1 * * * root /usr/local/bin/sanoid  --cron --verbose --configdir /usr/local/etc/sanoid
 ```

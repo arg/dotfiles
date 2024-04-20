@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/local/bin/bash
 
 print_error () {
   echo $1
@@ -23,4 +23,4 @@ for capacity in $capacities; do
   fi
 done
 
-printf "%s: %s (%s)\n" $pool_statuses | awk 'ORS=", "' | sed 's/,\s$/\n/'
+printf "%s: %s (%s)\n" $pool_statuses | awk 'ORS=", "' | sed 's/, $/\n/'

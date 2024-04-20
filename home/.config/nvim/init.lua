@@ -116,18 +116,11 @@ require("lazy").setup({
     }
   },
   -- }}}
-  -- telescope-fzf-native {{{
-  {
-    "nvim-telescope/telescope-fzf-native.nvim",
-    commit = "580b6c48651cabb63455e97d7e131ed557b8c7e2",
-    build = "make" -- this command may fail on M1, in this case run "make clean && make" manually from the plugin's dir
-  },
-  -- }}}
   -- telescope {{{
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter",
-                     "nvim-telescope/telescope-fzf-native.nvim", "nvim-telescope/telescope-ui-select.nvim",
+                     "nvim-telescope/telescope-ui-select.nvim",
                      "debugloop/telescope-undo.nvim" },
     config = function(_, opts)
       local telescope = require("telescope")
@@ -148,7 +141,6 @@ require("lazy").setup({
           },
         }
       })
-      telescope.load_extension("fzf")
       telescope.load_extension("ui-select")
       telescope.load_extension("undo")
     end
@@ -465,7 +457,7 @@ require("lazy").setup({
   -- NeoTest {{{
   {
   "nvim-neotest/neotest",
-    dependencies = { "olimorris/neotest-rspec" },
+    dependencies = { "olimorris/neotest-rspec", "nvim-neotest/nvim-nio" },
     config = function()
       require("neotest").setup({
         adapters = {

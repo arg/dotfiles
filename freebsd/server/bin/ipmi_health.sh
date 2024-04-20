@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+#!/usr/local/bin/bash
 
-sensors_data=$(ipmitool sensor list)
+sensors_data=$(/usr/local/bin/ipmitool sensor list)
 
 print_error () {
   echo $1
-  ipmitool sensor list
+  /usr/local/bin/ipmitool sensor list
   exit 1
 }
 
@@ -22,8 +22,8 @@ done
 cpu_temp=$(ipmi_value "CPU Temp")
 if test "$cpu_temp" = "na"; then
   # for some reason, sometimes IPMI reports CPU temperature as "na"
-  sleep 1
-  sensors_data=$(ipmitool sensor list)
+  sleep 2
+  sensors_data=$(/usr/local/bin/ipmitool sensor list)
   cpu_temp=$(ipmi_value "CPU Temp")
 fi
 if test $cpu_temp -ge 50; then
