@@ -1,0 +1,9 @@
+cluster.name: arg-network
+node.name: search-1
+path.data: /var/db/opensearch
+path.logs: /var/log/opensearch
+bootstrap.memory_lock: true
+network.host: 0.0.0.0
+http.port: 9200
+plugins.security.disabled: true
+discovery.type: single-node
