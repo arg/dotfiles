@@ -125,6 +125,15 @@ resource "cloudflare_record" "localhost_subdomains" {
   comment = "Localhost subdomains"
 }
 
+resource "cloudflare_record" "mira" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "mira"
+  value = "192.168.0.11"
+  proxied = false
+  comment = "Ubuntu VM on Polaris"
+}
+
 resource "cloudflare_record" "monica" {
   zone_id = var.cloudflare_zone_id
   type = "A"
