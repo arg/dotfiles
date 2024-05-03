@@ -16,9 +16,11 @@ declare -A targets
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   excludelist="/Users/arg/.config/rclone/excludelist.txt"
+  logfile="/Users/arg/Library/Logs/rclone.log"
   sources["documents"]="/Users/arg/Documents"
 else
   excludelist="/home/arg/.config/rclone/excludelist.txt"
+  logfile="/var/log/rclone/rclone.log"
   sources["archives"]="/archive/archives"
   sources["backups"]="/archive/backups"
   sources["documents"]="/archive/documents"
@@ -67,5 +69,5 @@ rclone sync \
   --fast-list \
   --progress \
   --log-level INFO \
-  --log-file=/var/log/rclone/rclone.log \
+  --log-file=$logfile \
   --exclude-from $excludelist $csource $ctarget:$source_name
