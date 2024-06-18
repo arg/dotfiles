@@ -80,6 +80,16 @@ resource "cloudflare_record" "antares" {
   comment = "5x86/133/16/2MB/2GB"
 }
 
+resource "cloudflare_record" "atlas" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "atlas"
+  value = "192.168.0.12"
+  proxied = false
+  comment = "Core i7/3050/32/4TB"
+}
+
+
 resource "cloudflare_record" "downloads" {
   zone_id = var.cloudflare_zone_id
   type = "A"
