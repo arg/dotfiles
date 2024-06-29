@@ -39,7 +39,7 @@ vim.opt.softtabstop = 2
 vim.opt.swapfile = false
 vim.opt.switchbuf:remove("split")
 vim.opt.tabstop = 2
-vim.opt.termencoding = "utf8"
+--vim.opt.termencoding = "utf8"
 vim.opt.termguicolors = true
 vim.opt.textwidth = 120
 vim.opt.undodir = vim.fn.stdpath("data") .. "undo"
@@ -183,6 +183,10 @@ require("lazy").setup({
         settings = {
           stylelintplus = { autoFixOnFormat = true }
         }
+      })
+      nvim_lsp.cucumber_language_server.setup({
+        capabilities = capabilities,
+        flags = { debounce_text_changes = 500 }
       })
       nvim_lsp.rust_analyzer.setup({
         capabilities = capabilities,
