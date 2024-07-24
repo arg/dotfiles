@@ -172,25 +172,43 @@ require("lazy").setup({
     dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
       local nvim_lsp = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      nvim_lsp.solargraph.setup({
+      local capabilities = vim.tbl_deep_extend(
+        "force",
+        vim.lsp.protocol.make_client_capabilities(),
+        require("cmp_nvim_lsp").default_capabilities()
+      )
+      local flags = { debounce_text_changes = 500 }
+      -- nvim_lsp.solargraph.setup({
+      --   capabilities = capabilities,
+      --   flags = flags
+      -- })
+      nvim_lsp.ruby_lsp.setup({
         capabilities = capabilities,
-        flags = { debounce_text_changes = 500 }
+        flags = flags,
+        settings = {
+          init_options = {
+            formatter = "rubocop",
+          }
+        },
+        on_init = function(client, _)
+          -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
+          client.server_capabilities.semanticTokensProvider = nil
+        end
       })
       nvim_lsp.stylelint_lsp.setup({
         capabilities = capabilities,
-        flags = { debounce_text_changes = 500 },
+        flags = flags,
         settings = {
           stylelintplus = { autoFixOnFormat = true }
         }
       })
       nvim_lsp.cucumber_language_server.setup({
         capabilities = capabilities,
-        flags = { debounce_text_changes = 500 }
+        flags = flags
       })
       nvim_lsp.rust_analyzer.setup({
         capabilities = capabilities,
-        flags = { debounce_text_changes = 500 },
+        flags = flags,
         settings = {
           ["rust-analyzer"] = {
             diagnostics = { enable = true },
@@ -521,6 +539,15 @@ vim.api.nvim_create_autocmd("CursorHold", {
     vim.diagnostic.open_float(0, { scope = "cursor", focus = false })
   end
 })
+
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--   desc = "Disable semantic highlight provided by LSP servers",
+--   pattern = { "ruby" },
+--   callback = function(event)
+--     local client = vim.lsp.get_client_by_id(event.data.client_id)
+--     client.server_capabilities.semanticTokensProvider = nil
+--   end
+-- })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Copy to clipboard/tmux/OSC52",
