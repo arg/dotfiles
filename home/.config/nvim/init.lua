@@ -185,16 +185,25 @@ require("lazy").setup({
       nvim_lsp.ruby_lsp.setup({
         capabilities = capabilities,
         flags = flags,
+        cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "ruby-lsp" },
         settings = {
           init_options = {
-            formatter = "rubocop",
+            formatter = "rubocop"
           }
         },
         on_init = function(client, _)
           -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
-          client.server_capabilities.semanticTokensProvider = nil
+          client.server_capabilities.semanticTokensProvider = false
+          -- Uncomment the following lines if you want to use standalone Rubocop for diagnostics and formatting
+          -- client.server_capabilities.diagnosticProvider = false
+          -- client.server_capabilities.documentFormattingProvider = false
         end
       })
+      -- nvim_lsp.rubocop.setup({
+      --   capabilities = capabilities,
+      --   flags = flags,
+      --   cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" }
+      -- })
       nvim_lsp.stylelint_lsp.setup({
         capabilities = capabilities,
         flags = flags,
