@@ -296,3 +296,12 @@ resource "cloudflare_record" "ups" {
   proxied = false
   comment = "APC Smart-UPS 750"
 }
+
+resource "cloudflare_record" "vaultwarden" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "vaultwarden"
+  value = "192.168.0.6"
+  proxied = false
+  comment = "Password manager"
+}
