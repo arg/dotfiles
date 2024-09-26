@@ -137,6 +137,19 @@ function tm -a session -d "Selects and attaches to tmux session"
   tmux new -A -s $session
 end
 
+function compress -a target -a directory -d "Compresses directory"
+  switch $target
+    case "*.tar"
+      tar -cvf $target --no-mac-metadata --no-xattrs $directory
+    case "*.tar.gz"
+      tar -czvf $target --no-mac-metadata --no-xattrs $directory
+    case "*.zip" "*.7z"
+      7z a $target $directory
+    case '*'
+      echo "Unknown archive type"
+  end
+end
+
 function extract -a filename -d "Extracts files from the archive"
   switch $filename
     case "*.tar"
