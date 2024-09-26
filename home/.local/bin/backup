@@ -7,7 +7,7 @@
 if [[ $# -ne 2 ]]; then
   echo "Use backup <source> <target>"
   echo "Where source is one of: archives, backups, documents, literature, photos, videos"
-  echo "and target is one of: gdrive, b2, gphotos, hetzner"
+  echo "and target is one of: b2, hetzner"
   exit 2
 fi
 
@@ -31,39 +31,27 @@ fi
 
 targets["archives","b2"]="b2-crypt"
 targets["archives","hetzner"]="hetzner-crypt"
-targets["archives","gdrive"]="gdrive-crypt"
 
 targets["backups","b2"]="b2-crypt"
 targets["backups","hetzner"]="hetzner-crypt"
-targets["backups","gdrive"]="gdrive-crypt"
 
 targets["documents","b2"]="b2-crypt"
 targets["documents","hetzner"]="hetzner-crypt"
-targets["documents","gdrive"]="gdrive"
-targets["documents","polaris"]="smb-polaris"
 
 targets["literature","b2"]="b2-crypt"
 targets["literature","hetzner"]="hetzner-crypt"
-targets["literature","gdrive"]="gdrive"
 
 targets["photos","b2"]="b2-crypt"
 targets["photos","hetzner"]="hetzner-crypt"
-targets["photos","gdrive"]="gdrive"
-targets["photos","gphotos"]="gphotos"
 
 targets["videos","b2"]="b2-crypt"
 targets["videos","hetzner"]="hetzner-crypt"
-targets["videos","gdrive"]="gdrive-crypt"
 
 source_name=${1,,}
 target_name=${2,,}
 
 csource=${sources[$source_name]}
 ctarget=${targets[$source_name,$target_name]}
-
-if test "$ctarget" = "gphotos"; then
-  source_name="album/"
-fi
 
 rclone sync \
   --fast-list \
