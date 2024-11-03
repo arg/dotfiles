@@ -17,19 +17,19 @@
   ip: '192.168.0.4'
 
 - name: 'Sirius'
-  description: 'Supermicro X11 (IPMI)'
+  description: 'IPMI host (SM X11)'
   url: 'https://sirius.arg.network'
   hostname: 'sirius.arg.network'
   ip: '192.168.0.5'
 
 - name: 'Polaris'
-  description: 'Supermicro X11 (server)'
+  description: 'TrueNAS Scale (SM X11)'
   url: 'https://polaris.arg.network'
   hostname: 'polaris.arg.network'
   ip: '192.168.0.6'
 
 - name: 'Altair'
-  description: 'Intel NUC 10'
+  description: 'Applications host (SM X11)'
   url: 'https://altair.arg.network'
   hostname: 'altair.arg.network'
   ip: '192.168.0.7'

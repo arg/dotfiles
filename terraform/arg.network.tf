@@ -57,7 +57,7 @@ resource "cloudflare_record" "adminer" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "adminer"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "MySQL web interface"
 }
@@ -68,7 +68,7 @@ resource "cloudflare_record" "altair" {
   name = "altair"
   value = "192.168.0.7"
   proxied = false
-  comment = "Intel NUC 10"
+  comment = "Applications host"
 }
 
 resource "cloudflare_record" "antares" {
@@ -93,7 +93,7 @@ resource "cloudflare_record" "downloads" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "downloads"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Content downloader"
 }
@@ -102,7 +102,7 @@ resource "cloudflare_record" "freshrss" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "freshrss"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "RSS reader"
 }
@@ -147,27 +147,27 @@ resource "cloudflare_record" "monica" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "monica"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Monica CRM"
-}
-
-resource "cloudflare_record" "monit" {
-  zone_id = var.cloudflare_zone_id
-  type = "A"
-  name = "monit"
-  value = "192.168.0.6"
-  proxied = false
-  comment = "Monitoring tool"
 }
 
 resource "cloudflare_record" "nextcloud" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "nextcloud"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Content collaboration platform"
+}
+
+resource "cloudflare_record" "npm" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "npm"
+  value = "192.168.0.7"
+  proxied = false
+  comment = "Nginx Proxy Manager"
 }
 
 resource "cloudflare_record" "numismat" {
@@ -183,7 +183,7 @@ resource "cloudflare_record" "plex" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "plex"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Plex Media Server"
 }
@@ -194,14 +194,14 @@ resource "cloudflare_record" "polaris" {
   name = "polaris"
   value = "192.168.0.6"
   proxied = false
-  comment = "Supermicro X11 (server)"
+  comment = "TrueNAS Scale"
 }
 
 resource "cloudflare_record" "portainer" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "portainer"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Container management tool"
 }
@@ -210,7 +210,7 @@ resource "cloudflare_record" "prowlarr" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "prowlarr"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Content search tool"
 }
@@ -219,7 +219,7 @@ resource "cloudflare_record" "radarr" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "radarr"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Movies organizer"
 }
@@ -264,7 +264,7 @@ resource "cloudflare_record" "sonarr" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "sonarr"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "TV shows organizer"
 }
@@ -282,7 +282,7 @@ resource "cloudflare_record" "tools" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "tools"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "IT Tools"
 }
@@ -300,7 +300,7 @@ resource "cloudflare_record" "vaultwarden" {
   zone_id = var.cloudflare_zone_id
   type = "A"
   name = "vaultwarden"
-  value = "192.168.0.6"
+  value = "192.168.0.7"
   proxied = false
   comment = "Password manager"
 }
