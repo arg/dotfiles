@@ -213,7 +213,8 @@ require("lazy").setup({
       })
       nvim_lsp.cucumber_language_server.setup({
         capabilities = capabilities,
-        flags = flags
+        flags = flags,
+        cmd = { "npx", "cucumber-language-server", "--stdio" }
       })
       nvim_lsp.rust_analyzer.setup({
         capabilities = capabilities,
