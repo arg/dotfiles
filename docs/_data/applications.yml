@@ -4,40 +4,16 @@
   hostname: 'ipmi.arg.network'
   location: 'Sirius'
 
-- name: 'NPM'
-  description: 'Proxy manager'
+- name: 'Nginx Proxy Manager'
+  description: 'Proxy server'
   url: 'https://npm.arg.network'
   hostname: 'npm.arg.network'
-  location: 'Altair'
-
-- name: 'Portainer'
-  description: 'Docker management'
-  url: 'https://portainer.arg.network'
-  hostname: 'portainer.arg.network'
-  location: 'Altair'
-
-- name: 'Adminer'
-  description: 'Database management'
-  url: 'https://adminer.arg.network'
-  hostname: 'adminer.arg.network'
   location: 'Altair'
 
 - name: 'IT-Tools'
   description: 'Tools for developers'
   url: 'https://tools.arg.network'
   hostname: 'tools.arg.network'
-  location: 'Altair'
-
-- name: 'FreshRSS'
-  description: 'RSS reader'
-  url: 'https://freshrss.arg.network'
-  hostname: 'freshrss.arg.network'
-  location: 'Altair'
-
-- name: 'Monica'
-  description: 'Contacts management'
-  url: 'https://monica.arg.network'
-  hostname: 'monica.arg.network'
   location: 'Altair'
 
 - name: 'Plex'
@@ -68,4 +44,10 @@
   description: 'BitTorrent client'
   url: 'https://downloads.arg.network'
   hostname: 'downloads.arg.network'
+  location: 'Altair'
+
+- name: 'Monica'
+  description: 'Contacts management'
+  url: 'https://monica.arg.network'
+  hostname: 'monica.arg.network'
   location: 'Altair'
