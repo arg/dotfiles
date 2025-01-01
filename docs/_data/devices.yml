@@ -5,7 +5,7 @@
   ip: '192.168.0.1'
 
 - name: 'Sun'
-  description: 'Mac mini M1 2020'
+  description: 'Mac mini M4 2024'
   url: 'https://sun.arg.network'
   hostname: 'sun.arg.network'
   ip: '192.168.0.3'
