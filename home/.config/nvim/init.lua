@@ -178,10 +178,6 @@ require("lazy").setup({
         require("cmp_nvim_lsp").default_capabilities()
       )
       local flags = { debounce_text_changes = 500 }
-      -- nvim_lsp.solargraph.setup({
-      --   capabilities = capabilities,
-      --   flags = flags
-      -- })
       nvim_lsp.ruby_lsp.setup({
         capabilities = capabilities,
         flags = flags,
@@ -211,10 +207,10 @@ require("lazy").setup({
           stylelintplus = { autoFixOnFormat = true }
         }
       })
+      -- to install: npm install -g @cucumber/language-server (Node.js v22 required)
       nvim_lsp.cucumber_language_server.setup({
         capabilities = capabilities,
-        flags = flags,
-        cmd = { "npx", "cucumber-language-server", "--stdio" }
+        flags = flags
       })
       nvim_lsp.rust_analyzer.setup({
         capabilities = capabilities,
@@ -233,7 +229,7 @@ require("lazy").setup({
           }
         }
       })
-      -- efm-langserver must be installed: brew install efm-langserver
+      -- to install: brew install efm-langserver
       nvim_lsp.efm.setup({
         capabilities = capabilities,
         init_options = { documentFormatting = true, formatting = true },
