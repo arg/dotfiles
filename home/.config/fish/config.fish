@@ -49,6 +49,11 @@ alias df="df -h"
 alias free="free -m"
 alias brakeman="brakeman -A -6 --summary -q --no-pager"
 
+# MacOS specific settings
+if test (uname) = "Darwin"
+  alias tar="gtar" # install GNU tar with "brew install gnu-tar"
+end
+
 function fish_user_key_bindings
   for mode in insert default visual
     bind -M $mode -k nul accept-autosuggestion
@@ -140,9 +145,9 @@ end
 function compress -a target -a directory -d "Compresses directory"
   switch $target
     case "*.tar"
-      tar -cv --disable-copyfile --no-mac-metadata --no-xattrs --exclude='.DS_Store' -f $target $directory
+      tar -cv --posix --no-xattrs --mode='a=r,u+w,a+X' --exclude='Thumbs.db' --exclude='.DS_Store' -f $target $directory
     case "*.tar.gz"
-      tar -czv --disable-copyfile --no-mac-metadata --no-xattrs --exclude='.DS_Store' -f $target $directory
+      tar -czv --posix --no-xattrs --mode='a=r,u+w,a+X' --exclude='Thumbs.db' --exclude='.DS_Store' -f $target $directory
     case "*.zip" "*.7z"
       7z a $target $directory
     case '*'
