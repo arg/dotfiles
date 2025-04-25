@@ -140,9 +140,9 @@ end
 function compress -a target -a directory -d "Compresses directory"
   switch $target
     case "*.tar"
-      tar -Cv --disable-copyfile --no-mac-metadata --no-xattrs --exclude='.DS_Store' -f $target $directory
+      tar -cv --disable-copyfile --no-mac-metadata --no-xattrs --exclude='.DS_Store' -f $target $directory
     case "*.tar.gz"
-      tar -Czv --disable-copyfile --no-mac-metadata --no-xattrs --exclude='.DS_Store' -f $target $directory
+      tar -czv --disable-copyfile --no-mac-metadata --no-xattrs --exclude='.DS_Store' -f $target $directory
     case "*.zip" "*.7z"
       7z a $target $directory
     case '*'
