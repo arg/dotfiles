@@ -1,0 +1,32 @@
+- name: "Setup Ubuntu Server"
+  hosts: "servers"
+  become: true
+
+  tasks:
+    - import_tasks: "setup/ssh.yml"
+      tags: ["ssh"]
+
+    - import_tasks: "setup/system.yml"
+      tags: ["system"]
+
+    - import_tasks: "setup/swap.yml"
+      tags: ["swap"]
+
+    - import_tasks: "setup/firewall.yml"
+      tags: ["firewall"]
+
+    - import_tasks: "setup/journal.yml"
+      tags: ["journal"]
+
+    - import_tasks: "setup/packages.yml"
+      tags: ["packages"]
+
+    - import_tasks: "setup/docker.yml"
+      tags: ["docker"]
+
+    - import_tasks: "setup/user.yml"
+      tags: ["user"]
+
+    - import_tasks: "setup/dotfiles.yml"
+      become: false
+      tags: ["dotfiles"]

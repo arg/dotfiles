@@ -1,0 +1,19 @@
+- name: "Add SSH public key for user"
+  ansible.posix.authorized_key:
+    user: "{{ ansible_user }}"
+    state: "present"
+    key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/network.pub') }}"
+
+- name: "Allow user to use sudo without password"
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ ansible_user }}"
+    content: "{{ ansible_user }} ALL=(ALL) NOPASSWD:ALL"
+    mode: "0600"
+
+- name: "Change user settings"
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    password: "*"
+    shell: "/usr/bin/fish"
+    groups: "docker"
+    append: true

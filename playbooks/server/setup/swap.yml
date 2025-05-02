@@ -1,0 +1,37 @@
+- name: "Remove swap entry from fstab"
+  ansible.posix.mount:
+    path: "/swap.img"
+    state: "absent"
+  register: "swap_mount"
+
+- name: "Turn off swap"
+  ansible.builtin.command:
+    cmd: "swapoff --all"
+  when: "swap_mount.changed"
+
+- name: "Remove swap file"
+  ansible.builtin.file:
+    path: "/swap.img"
+    state: "absent"
+
+- name: "Disable swap file service"
+  ansible.builtin.systemd_service:
+    name: "swap.img.swap"
+    state: "stopped"
+    enabled: false
+    masked: true
+
+- name: "Configure zramswap"
+  ansible.builtin.lineinfile:
+    path: "/etc/default/zramswap"
+    regexp: "^PERCENT="
+    line: "PERCENT={{ zswap_percent }}"
+    state: "present"
+  register: "zramswap_config"
+
+- name: "Enable zramswap"
+  ansible.builtin.systemd_service:
+    name: "zramswap"
+    enabled: true
+    state: "restarted"
+  when: "zramswap_config.changed"

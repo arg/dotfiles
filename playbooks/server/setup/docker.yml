@@ -1,0 +1,25 @@
+- name: "Configure Docker daemon"
+  ansible.builtin.copy:
+    src: "docker/daemon.json"
+    dest: "/etc/docker/daemon.json"
+    mode: "0644"
+
+- name: "Create Docker systemd directory"
+  ansible.builtin.file:
+    path: "{{ systemd_path }}/system/docker.service.d"
+    state: "directory"
+    recurse: true
+
+- name: "Override Docker service launch options"
+  ansible.builtin.copy:
+    src: "docker/override.conf"
+    dest: "{{ systemd_path }}/system/docker.service.d/override.conf"
+    mode: "0644"
+  register: "docker_override"
+
+- name: "Restart Docker service"
+  ansible.builtin.systemd_service:
+    name: "docker"
+    state: "restarted"
+    daemon_reload: true
+  when: "docker_override.changed"

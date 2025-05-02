@@ -1,9 +1,5 @@
 all:
-  vars:
-    ansible_user: arg
   hosts:
-    sun:
-      ansible_host: "192.168.0.3"
     sirius:
       ansible_host: "192.188.0.5"
     polaris:
@@ -12,9 +8,47 @@ all:
     servers:
       hosts:
         polaris:
+      vars:
+        ansible_user: "arg"
+        dotfiles_dir: "/home/arg/.dotfiles"
+        systemd_path: "/usr/lib/systemd"
+        zswap_percent: "15"
+        sysctl_vars:
+          - name: "vm.swappiness"
+            value: "10"
+        zfs_targets:
+          - "/home/arg/apps"
+          - "/home/arg/media"
+          - "/home/arg/archive"
+        apt_cache_valid_time: 86400 # 24 hours
+        packages_to_install:
+          - "fish"
+          - "fzf"
+          - "git"
+          - "neovim"
+          - "htop"
+          - "mc"
+          - "tmux"
+          - "build-essential"
+          - "rsyslog-gnutls"
+          - "rclone"
+          - "curl"
+          - "wget"
+          - "docker.io"
+          - "docker-compose"
+          - "vifm"
+          - "nvme-cli"
+          - "zfsutils-linux"
+          - "zram-tools"
+        packages_to_remove:
+          - "snapd"
     ipmi_hosts:
       hosts:
         sirius:
+      vars:
+        ansible_user: "ADMIN"
     docker_hosts:
       hosts:
         polaris:
+      vars:
+        ansible_user: "arg"

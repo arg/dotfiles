@@ -1,0 +1,18 @@
+- name: "Configure firewall"
+  community.general.ufw:
+    rule: "allow"
+    port: "{{ item.port }}"
+    proto: "tcp"
+    comment: "{{ item.comment }}"
+  loop:
+    - port: 80
+      comment: "HTTP access"
+    - port: 443
+      comment: "HTTPS access"
+    - port: 22
+      comment: "SSH access"
+
+- name: "Enable firewall"
+  community.general.ufw:
+    state: "enabled"
+    default: "deny"

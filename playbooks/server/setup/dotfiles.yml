@@ -1,0 +1,13 @@
+- name: "Clone dotfiles repository"
+  ansible.builtin.git:
+    repo: "https://github.com/arg/dotfiles.git"
+    dest: "{{ dotfiles_dir }}"
+    clone: true
+    update: true
+  register: "dotfiles_repo"
+
+- name: "Install dotfiles"
+  ansible.builtin.make:
+    chdir: "{{ dotfiles_dir }}"
+    target: "configs"
+  when: "dotfiles_repo.changed"

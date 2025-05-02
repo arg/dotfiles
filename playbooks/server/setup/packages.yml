@@ -1,0 +1,30 @@
+- name: "Update packages cache"
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+
+- name: "Upgrade all packages"
+  ansible.builtin.apt:
+    upgrade: "full"
+
+- name: "Remove unneeded packages"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: "absent"
+    autoremove: true
+    purge: true
+  loop: "{{ packages_to_remove }}"
+  register: "removed_packages"
+
+- name: "Prevent unneeded packages from being installed again"
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: "hold"
+  loop: "{{ removed_packages.results | map(attribute='item') | list }}"
+  when: "removed_packages.changed"
+
+- name: "Install packages"
+  ansible.builtin.apt:
+    name: "{{ packages_to_install }}"
+    state: "present"
+    install_recommends: false
