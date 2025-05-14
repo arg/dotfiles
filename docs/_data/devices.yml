@@ -23,16 +23,10 @@
   ip: '192.168.0.5'
 
 - name: 'Polaris'
-  description: 'TrueNAS Scale (SM X11)'
+  description: 'Ubuntu Server (SM X11)'
   url: 'https://polaris.arg.network'
   hostname: 'polaris.arg.network'
   ip: '192.168.0.6'
-
-- name: 'Altair'
-  description: 'Applications host (SM X11)'
-  url: 'https://altair.arg.network'
-  hostname: 'altair.arg.network'
-  ip: '192.168.0.7'
 
 - name: 'Printer'
   description: 'Brother HL-L2350DW'
@@ -51,3 +45,9 @@
   url: 'http://ups.arg.network'
   hostname: 'ups.arg.network'
   ip: '192.168.0.10'
+
+- name: 'Atlas'
+  description: 'Gaming PC'
+  url: 'https://atlas.arg.network'
+  hostname: 'atlas.arg.network'
+  ip: '192.168.0.12'
