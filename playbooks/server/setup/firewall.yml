@@ -4,13 +4,7 @@
     port: "{{ item.port }}"
     proto: "tcp"
     comment: "{{ item.comment }}"
-  loop:
-    - port: 80
-      comment: "HTTP access"
-    - port: 443
-      comment: "HTTPS access"
-    - port: 22
-      comment: "SSH access"
+  loop: "{{ ufw_ports }}"
 
 - name: "Enable firewall"
   community.general.ufw:

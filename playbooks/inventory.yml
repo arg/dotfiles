@@ -42,6 +42,13 @@ all:
           - "zram-tools"
         packages_to_remove:
           - "snapd"
+        ufw_ports:
+          - port: 22
+            comment: "SSH access"
+          - port: 80
+            comment: "HTTP access"
+          - port: 443
+            comment: "HTTPS access"
     ipmi_hosts:
       hosts:
         sirius:
