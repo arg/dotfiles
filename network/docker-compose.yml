@@ -1,50 +1,62 @@
 services:
+  # {{{ Traefik
   traefik:
-    image: "traefik:v2.10"
+    image: "traefik:v3.4"
     command:
       - "--ping=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
-      - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
-      - "--entrypoints.websecure.http.tls.domains[0].main=arg.network"
-      - "--entrypoints.websecure.http.tls.domains[0].sans=*.arg.network"
+      - "--certificatesresolvers.letsencrypt.acme.email=arg@arg.zone"
+      - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesresolvers.letsencrypt.acme.email=arg@arg.zone"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=8.8.8.8:53"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.disablechecks=true"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delaybeforechecks=60s"
       - "--serverstransport.insecureskipverify=true"
     ports:
       - "80:80"
       - "443:443"
     env_file:
-      - "network.env"
+      - "secrets.env"
     volumes:
       - "/home/arg/network/letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "1G"
     healthcheck:
       test: "traefik healthcheck --ping"
+  # }}}
 
-  monit:
-    image: "caddy:latest"
-    restart: "no"
-    command: "caddy reverse-proxy --from http://monit.arg.network --to http://host.docker.internal:2812"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    labels:
-      traefik.enable: true
-      traefik.http.services.monit.loadbalancer.server.port: 80
-      traefik.http.routers.monit.rule: "Host(`monit.arg.network`)"
-      traefik.http.routers.monit.entrypoints: "websecure"
-      traefik.http.routers.monit.tls.certresolver: "letsencrypt"
+  # {{{ Monit (disabled)
+  # monit:
+  #   image: "caddy:latest"
+  #   restart: "no"
+  #   command: "caddy reverse-proxy --from http://monit.arg.network --to http://host.docker.internal:2812"
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #   labels:
+  #     traefik.enable: true
+  #     traefik.http.services.monit.loadbalancer.server.port: 80
+  #     traefik.http.routers.monit.rule: "Host(`monit.arg.network`)"
+  #     traefik.http.routers.monit.entrypoints: "websecure"
+  #     traefik.http.routers.monit.tls.certresolver: "letsencrypt"
+  # }}}
 
+  # {{{ Portainer
   portainer:
-    image: "portainer/portainer-ce:2.19.3-alpine"
+    image: "portainer/portainer-ce:alpine"
     restart: "no"
     security_opt:
       - "no-new-privileges:true"
@@ -52,6 +64,11 @@ services:
       - "/home/arg/network/portainer:/data"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
     labels:
       traefik.enable: true
       traefik.http.services.portainer.loadbalancer.server.port: 9000
@@ -60,36 +77,190 @@ services:
       traefik.http.routers.portainer.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "wget -q --spider 'http://localhost:9000'"
+  # }}}
 
+  # {{{ MariaDB
   mariadb:
-    image: "mariadb:11.2-jammy"
+    image: "mariadb:11.7-noble"
+    command: >
+      --transaction-isolation=READ-COMMITTED
+      --log-bin=mysqld-bin
+      --binlog-format=ROW
+      --innodb-file-per-table=1
+      --skip-innodb-read-only-compressed
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_bin
     restart: "no"
     env_file:
-      - "network.env"
+      - "secrets.env"
     volumes:
       - "/home/arg/network/mariadb:/var/lib/mysql"
-      - "${PWD}/init.sql:/docker-entrypoint-initdb.d/init.sql:ro"
+      - "${PWD}/mariadb.sql:/docker-entrypoint-initdb.d/init.sql:ro"
       - "/etc/localtime:/etc/localtime:ro"
-    command: "--transaction-isolation=READ-COMMITTED --log-bin=mysqld-bin --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
     healthcheck:
       test: "healthcheck.sh --su-mysql --connect --innodb_initialized"
+  # }}}
 
-  adminer:
-    image: "adminer:4-standalone"
-    depends_on:
-      mariadb:
-        condition: service_healthy
+  # {{{ Redis
+  redis:
+    image: "redis:8-alpine"
     restart: "no"
+    volumes:
+      - "/home/arg/network/redis:/data"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1G"
+    healthcheck:
+      test: "redis-cli ping || exit 1"
+  # }}}
+
+  # {{{ Immich
+  immich:
+    image: "ghcr.io/immich-app/immich-server:release"
+    depends_on:
+      immichdb:
+        condition: "service_healthy"
+      redis:
+        condition: "service_healthy"
+    restart: "no"
+    volumes:
+      - "/home/arg/network/immich:/usr/src/app/upload"
+      - "/home/arg/archive/photos:/photos:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    env_file:
+      - "linuxserver.env"
+      - "immich.env"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
+    labels:
+      traefik.enable: true
+      traefik.http.services.immich.loadbalancer.server.port: 2283
+      traefik.http.routers.immich.rule: "Host(`photos.arg.network`)"
+      traefik.http.routers.immich.entrypoints: "websecure"
+      traefik.http.routers.immich.tls.certresolver: "letsencrypt"
+  # }}}
+
+  # {{{ Immich DB
+  immichdb:
+    image: "ghcr.io/tensorchord/vchord-postgres:pg17-v0.3.0"
+    restart: "no"
+    environment:
+      POSTGRES_USER: "immich"
+      POSTGRES_PASSWORD: "immich"
+      POSTGRES_DB: "immich"
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+    volumes:
+      - "/home/arg/network/immichdb:/var/lib/postgresql/data"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "8G"
+    healthcheck:
+      test: "pg_isready"
+  # }}}
+
+  # {{{ Adminer
+  adminer:
+    image: "adminer:5-standalone"
+    restart: "no"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "1G"
     labels:
       traefik.enable: true
       traefik.http.services.adminer.loadbalancer.server.port: 8080
       traefik.http.routers.adminer.rule: "Host(`adminer.arg.network`)"
       traefik.http.routers.adminer.entrypoints: "websecure"
       traefik.http.routers.adminer.tls.certresolver: "letsencrypt"
-    # disabled as there is nether curl nor wget installed
-    # healthcheck:
-    #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
+  # }}}
 
+  # {{{ TimescaleDB
+  timescaledb:
+    image: "timescale/timescaledb:2.19.3-pg17"
+    restart: "no"
+    env_file:
+      - "zabbix.env"
+    volumes:
+      - "/home/arg/network/timescaledb:/var/lib/postgresql/data"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "8G"
+    healthcheck:
+      test: "pg_isready"
+  # }}}
+
+  # {{{ Zabbix (server)
+  zabbix_server:
+    image: "zabbix/zabbix-server-pgsql:7.2-alpine-latest"
+    depends_on:
+      timescaledb:
+        condition: "service_healthy"
+    restart: "no"
+    cap_add:
+      - "NET_RAW"
+    env_file:
+      - "zabbix.env"
+    volumes:
+      - "zabbix_server_data:/var/lib/zabbix"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "8G"
+    healthcheck:
+      test: "grep -qr 'zabbix_server' /proc/*/status || exit 1"
+  # }}}
+
+  # {{{ Zabbix (web)
+  zabbix_web:
+    image: "zabbix/zabbix-web-nginx-pgsql:7.2-alpine-latest"
+    depends_on:
+      timescaledb:
+        condition: "service_healthy"
+      zabbix_server:
+        condition: "service_healthy"
+    restart: "no"
+    env_file:
+      - "zabbix.env"
+    volumes:
+      - "zabbix_web_data:/usr/share/zabbix"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "2G"
+    labels:
+      traefik.enable: true
+      traefik.http.services.zabbix.loadbalancer.server.port: 8080
+      traefik.http.routers.zabbix.rule: "Host(`zabbix.arg.network`)"
+      traefik.http.routers.zabbix.entrypoints: "websecure"
+      traefik.http.routers.zabbix.tls.certresolver: "letsencrypt"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080/ping' || exit 1"
+  # }}}
+
+  # {{{ Monica
   monica:
     image: "linuxserver/monica:latest"
     restart: "no"
@@ -98,7 +269,7 @@ services:
         condition: service_healthy
     env_file:
       - "linuxserver.env"
-      - "network.env"
+      - "secrets.env"
     environment:
       DB_HOST: "mariadb"
       DB_USERNAME: "monica"
@@ -111,6 +282,11 @@ services:
     volumes:
       - "/home/arg/network/monica:/config"
       - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "2G"
     labels:
       traefik.enable: true
       traefik.http.services.monica.loadbalancer.server.port: 80
@@ -119,31 +295,19 @@ services:
       traefik.http.routers.monica.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
+  # }}}
 
-  freshrss:
-    image: "linuxserver/freshrss:latest"
-    restart: "no"
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    env_file:
-      - "linuxserver.env"
-      - "network.env"
-    volumes:
-      - "/home/arg/network/freshrss:/config"
-      - "/etc/localtime:/etc/localtime:ro"
-    labels:
-      traefik.enable: true
-      traefik.http.services.freshrss.loadbalancer.server.port: 80
-      traefik.http.routers.freshrss.rule: "Host(`freshrss.arg.network`)"
-      traefik.http.routers.freshrss.entrypoints: "websecure"
-      traefik.http.routers.freshrss.tls.certresolver: "letsencrypt"
-    healthcheck:
-      test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
-
+  # {{{ IT Tools
   it_tools:
     image: "corentinth/it-tools:latest"
     restart: "no"
+    environment:
+      NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE: 1
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "128M"
     labels:
       traefik.enable: true
       traefik.http.services.it_tools.loadbalancer.server.port: 80
@@ -152,20 +316,59 @@ services:
       traefik.http.routers.it_tools.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
+  # }}}
 
+  # {{{ Home Assistant
+  homeassistant:
+    image: "linuxserver/homeassistant:latest"
+    restart: "no"
+    privileged: true
+    cap_add:
+      - "NET_ADMIN"
+      - "NET_RAW"
+    env_file:
+      - "linuxserver.env"
+    volumes:
+      - "/home/arg/network/homeassistant:/config"
+      - "${PWD}/homeassistant.yml:/config/configuration.yaml"
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/run/dbus:/run/dbus:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "512M"
+    labels:
+      traefik.enable: true
+      traefik.http.services.homeassistant.loadbalancer.server.port: 8123
+      traefik.http.routers.homeassistant.rule: "Host(`ha.arg.network`)"
+      traefik.http.routers.homeassistant.entrypoints: "websecure"
+      traefik.http.routers.homeassistant.tls.certresolver: "letsencrypt"
+    # healthcheck:
+    #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:80' || exit 1"
+  # }}}
+
+  # {{{ Plex
   plex:
     image: "linuxserver/plex:latest"
     restart: "no"
-    volumes:
-      - "/home/arg/network/plex:/config"
-      - "/home/arg/videos:/videos"
-      - "/etc/localtime:/etc/localtime:ro"
+    env_file:
+      - "linuxserver.env"
+      - "secrets.env"
+    environment:
+      VERSION: "docker"
     devices:
       - "/dev/dri/card1:/dev/dri/card0"
       - "/dev/dri/renderD128:/dev/dri/renderD128"
-    env_file:
-      - "linuxserver.env"
-      - "network.env"
+    volumes:
+      - "/home/arg/network/plex:/config"
+      - "/home/arg/media/videos:/videos"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "8"
+          memory: "8G"
     labels:
       traefik.enable: true
       traefik.http.services.plex.loadbalancer.server.port: 32400
@@ -174,18 +377,25 @@ services:
       traefik.http.routers.plex.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:32400/identity' || exit 1"
+  # }}}
 
+  # {{{ qBittorrent
   qbittorrent:
     image: "linuxserver/qbittorrent:latest"
     restart: "no"
     volumes:
       - "/home/arg/network/qbittorrent:/config"
-      - "/home/arg/downloads:/downloads"
+      - "/home/arg/media/downloads:/downloads"
       - "/etc/localtime:/etc/localtime:ro"
-    environment:
-      WEBUI_PORT: 8080
     env_file:
       - "linuxserver.env"
+    environment:
+      WEBUI_PORT: 8080
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
     labels:
       traefik.enable: true
       traefik.http.services.qbittorrent.loadbalancer.server.port: 8080
@@ -194,68 +404,92 @@ services:
       traefik.http.routers.qbittorrent.tls.certresolver: "letsencrypt"
     healthcheck:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
+  # }}}
 
+  # {{{ Radarr
   radarr:
     image: "linuxserver/radarr:latest"
     restart: "no"
     depends_on:
-      - prowlarr
-      - qbittorrent
-    volumes:
-      - "/home/arg/network/radarr:/config"
-      - "/home/arg/videos/movies:/movies"
-      - "/home/arg/downloads:/downloads"
-      - "/etc/localtime:/etc/localtime:ro"
+      - "prowlarr"
+      - "qbittorrent"
     env_file:
       - "linuxserver.env"
+    volumes:
+      - "/home/arg/network/radarr:/config"
+      - "/home/arg/media/videos/movies:/movies"
+      - "/home/arg/media/downloads:/downloads"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
     labels:
       traefik.enable: true
       traefik.http.services.radarr.loadbalancer.server.port: 7878
       traefik.http.routers.radarr.rule: "Host(`radarr.arg.network`)"
       traefik.http.routers.radarr.entrypoints: "websecure"
       traefik.http.routers.radarr.tls.certresolver: "letsencrypt"
-    # disabled due to API error after upgrading Radarr to v4
-    # despite having https://github.com/Radarr/Radarr/issues/6785 
-    # healthcheck:
-      # test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878/ping' || exit 1"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:7878/ping' || exit 1"
+  # }}}
 
+  # {{{ Sonarr
   sonarr:
     image: "linuxserver/sonarr:latest"
     restart: "no"
     depends_on:
-      - prowlarr
-      - qbittorrent
-    volumes:
-      - "/home/arg/network/sonarr:/config"
-      - "/home/arg/videos/tv_shows:/tv"
-      - "/home/arg/downloads:/downloads"
-      - "/etc/localtime:/etc/localtime:ro"
+      - "prowlarr"
+      - "qbittorrent"
     env_file:
       - "linuxserver.env"
+    volumes:
+      - "/home/arg/network/sonarr:/config"
+      - "/home/arg/media/videos/tv_shows:/tv"
+      - "/home/arg/media/downloads:/downloads"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
     labels:
       traefik.enable: true
       traefik.http.services.sonarr.loadbalancer.server.port: 8989
       traefik.http.routers.sonarr.rule: "Host(`sonarr.arg.network`)"
       traefik.http.routers.sonarr.entrypoints: "websecure"
       traefik.http.routers.sonarr.tls.certresolver: "letsencrypt"
-    # disabled as it returns 401
-    # healthcheck:
-    #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
+  # }}}
 
+  # {{{ Prowlarr
   prowlarr:
     image: "linuxserver/prowlarr:latest"
     restart: "no"
+    env_file:
+      - "linuxserver.env"
     volumes:
       - "/home/arg/network/prowlarr:/config"
       - "/etc/localtime:/etc/localtime:ro"
-    env_file:
-      - "linuxserver.env"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "4G"
     labels:
       traefik.enable: true
       traefik.http.services.prowlarr.loadbalancer.server.port: 9696
       traefik.http.routers.prowlarr.rule: "Host(`prowlarr.arg.network`)"
       traefik.http.routers.prowlarr.entrypoints: "websecure"
       traefik.http.routers.prowlarr.tls.certresolver: "letsencrypt"
-    # disabled as it returns 401
-    # healthcheck:
-    #   test: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"
+    healthcheck:
+      test: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"
+  # }}}
+
+volumes:
+  zabbix_server_data:
+  zabbix_web_data:
+
+# vim:foldmethod=marker:foldlevel=0

@@ -1,4 +1,4 @@
-network/network.env
+network/secrets.env
 freebsd/etc/dma/auth.conf
 home/.config/rclone/rclone.conf
 .DS_Store

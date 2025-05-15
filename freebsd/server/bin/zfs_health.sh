@@ -1,15 +1,15 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 
 print_error () {
   echo $1
   echo "Status: *******************************************************************************"
-  /sbin/zpool status
+  /usr/sbin/zpool status
   echo "List: *********************************************************************************"
-  /sbin/zpool list
+  /usr/sbin/zpool list
   exit 1
 }
 
-pool_statuses=$(/sbin/zpool list -H -o name,health,capacity)
+pool_statuses=$(/usr/sbin/zpool list -H -o name,health,capacity)
 
 error_statuses=$(grep -v 'ONLINE' <<< $pool_statuses)
 if test -n "$error_statuses"; then
