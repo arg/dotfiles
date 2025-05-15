@@ -35,7 +35,7 @@ all:
           - "curl"
           - "wget"
           - "docker.io"
-          - "docker-compose"
+          - "docker-compose-v2"
           - "vifm"
           - "nvme-cli"
           - "zfsutils-linux"
