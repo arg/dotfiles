@@ -40,6 +40,7 @@ all:
           - "nvme-cli"
           - "zfsutils-linux"
           - "zram-tools"
+          - "drm-info"
         packages_to_remove:
           - "snapd"
         ufw_ports:

@@ -1,3 +1,9 @@
+# - name: "Add Neovim PPA"
+#   ansible.builtin.apt_repository:
+#     repo: "ppa:neovim-ppa/unstable"
+#     state: "present"
+#     update_cache: false
+#
 - name: "Update packages cache"
   ansible.builtin.apt:
     update_cache: true
