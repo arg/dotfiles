@@ -9,12 +9,3 @@
     state: "present"
     reload: true
   loop: "{{ sysctl_vars }}"
-
-- name: "Create ZFS mount targets"
-  ansible.builtin.file:
-    path: "{{ item }}"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: "0700"
-    state: "directory"
-  loop: "{{ zfs_targets }}"

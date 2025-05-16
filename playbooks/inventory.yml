@@ -18,34 +18,47 @@ all:
         sysctl_vars:
           - name: "vm.swappiness"
             value: "10"
-        zfs_targets:
-          - "/home/arg/apps"
-          - "/home/arg/media"
-          - "/home/arg/archive"
+        zfs:
+          targets:
+            - "/home/arg/apps"
+            - "/home/arg/media"
+            - "/home/arg/archive"
+          snapshots:
+            hourly: 0
+            daily: 15
+            monthly: 12
+          snapshot_datasets:
+            - "archive/archives"
+            - "archive/backups"
+            - "archive/photos"
+            - "archive/veronika"
+            - "archive/videos"
         apt_cache_valid_time: 86400 # 24 hours
-        packages_to_install:
-          - "fish"
-          - "fzf"
-          - "git"
-          - "neovim"
-          - "htop"
-          - "mc"
-          - "tmux"
-          - "build-essential"
-          - "rsyslog-gnutls"
-          - "samba"
-          - "rclone"
-          - "curl"
-          - "wget"
-          - "docker.io"
-          - "docker-compose-v2"
-          - "vifm"
-          - "nvme-cli"
-          - "zfsutils-linux"
-          - "zram-tools"
-          - "drm-info"
-        packages_to_remove:
-          - "snapd"
+        packages:
+          install:
+            - "fish"
+            - "fzf"
+            - "git"
+            - "neovim"
+            - "htop"
+            - "mc"
+            - "tmux"
+            - "build-essential"
+            - "rsyslog-gnutls"
+            - "samba"
+            - "rclone"
+            - "curl"
+            - "wget"
+            - "docker.io"
+            - "docker-compose-v2"
+            - "vifm"
+            - "nvme-cli"
+            - "zfsutils-linux"
+            - "sanoid"
+            - "zram-tools"
+            - "drm-info"
+          remove:
+            - "snapd"
         ufw:
           ports:
             - 80

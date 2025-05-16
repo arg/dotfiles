@@ -21,6 +21,9 @@
     - import_tasks: "setup/packages.yml"
       tags: ["packages"]
 
+    - import_tasks: "setup/zfs.yml"
+      tags: ["zfs"]
+
     - import_tasks: "setup/samba.yml"
       tags: ["samba"]
 

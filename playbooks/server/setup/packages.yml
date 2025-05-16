@@ -19,18 +19,18 @@
     state: "absent"
     autoremove: true
     purge: true
-  loop: "{{ packages_to_remove }}"
+  loop: "{{ packages.remove }}"
   register: "removed_packages"
 
 - name: "Prevent unneeded packages from being installed again"
   ansible.builtin.dpkg_selections:
     name: "{{ item }}"
     selection: "hold"
-  loop: "{{ removed_packages.results | map(attribute='item') | list }}"
+  loop: "{{ packages.remove }}"
   when: "removed_packages.changed"
 
 - name: "Install packages"
   ansible.builtin.apt:
-    name: "{{ packages_to_install }}"
+    name: "{{ packages.install }}"
     state: "present"
     install_recommends: false
