@@ -1,4 +1,4 @@
-- name: "Setup Samba"
+- name: "Configure Samba"
   ansible.builtin.template:
     src: "samba/smb.conf.j2"
     dest: "/etc/samba/smb.conf"

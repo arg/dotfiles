@@ -17,3 +17,13 @@
     shell: "/usr/bin/fish"
     groups: "docker"
     append: true
+
+- name: "Create additional users"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    password: "*"
+    shell: /sbin/nologin
+    groups: "users"
+    append: true
+    create_home: false
+  loop: "{{ additional_users }}"

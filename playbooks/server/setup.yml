@@ -27,8 +27,8 @@
     - import_tasks: "setup/docker.yml"
       tags: ["docker"]
 
-    - import_tasks: "setup/user.yml"
-      tags: ["user"]
+    - import_tasks: "setup/users.yml"
+      tags: ["users"]
 
     - import_tasks: "setup/dotfiles.yml"
       become: false

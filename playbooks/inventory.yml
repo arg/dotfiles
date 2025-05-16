@@ -10,6 +10,8 @@ all:
         polaris:
       vars:
         ansible_user: "arg"
+        additional_users:
+          - "veronika"
         dotfiles_dir: "/home/arg/.dotfiles"
         systemd_path: "/usr/lib/systemd"
         zswap_percent: "15"
@@ -76,6 +78,7 @@ all:
               path: "/home/arg/media/software"
               guest: true # unauthenticated users should be able to access software directory
               read_only: false
+              user: "arg, veronika"
             - name: "videos"
               path: "/home/arg/media/videos"
               guest: false
@@ -92,6 +95,7 @@ all:
               path: "/home/arg/archive/photos"
               guest: false
               read_only: true
+              user: "arg, veronika"
             - name: "veronika"
               path: "/home/arg/archive/veronika"
               guest: false

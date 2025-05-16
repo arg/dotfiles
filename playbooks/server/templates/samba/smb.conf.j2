@@ -9,8 +9,10 @@
   interfaces = {{ ansible_host }}/24
   bind interfaces only = yes
   server role = standalone server
+  access based share enum = yes
   printable = no
-  map to guest = Bad User
+  map to guest = bad user
+  guest account = nobody
   usershare max shares = 0
   usershare allow guests = no
   security = user
