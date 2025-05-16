@@ -21,5 +21,6 @@
   ansible.builtin.systemd_service:
     name: "docker"
     state: "restarted"
+    enabled: true
     daemon_reload: true
   when: "docker_override.changed"

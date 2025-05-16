@@ -31,6 +31,7 @@ all:
           - "tmux"
           - "build-essential"
           - "rsyslog-gnutls"
+          - "samba"
           - "rclone"
           - "curl"
           - "wget"
@@ -43,13 +44,59 @@ all:
           - "drm-info"
         packages_to_remove:
           - "snapd"
-        ufw_ports:
-          - port: 22
-            comment: "SSH access"
-          - port: 80
-            comment: "HTTP access"
-          - port: 443
-            comment: "HTTPS access"
+        ufw:
+          ports:
+            - 80
+            - 443
+          services:
+            - "OpenSSH"
+            - "Samba"
+        samba:
+          veto_files:
+            - "._*"
+            - ".DS_Store"
+            - "Thumbs.db"
+            - "*.icloud"
+            - ".metadata"
+            - ".localized"
+            - ".Spotlight-V100"
+            - ".Trashes"
+            - ".fseventsd"
+            - ".DocumentRevisions-V100"
+          shares:
+            - name: "downloads"
+              path: "/home/arg/media/downloads"
+              guest: false
+              read_only: false
+            - name: "literature"
+              path: "/home/arg/archive/literature"
+              guest: false
+              read_only: false
+            - name: "software"
+              path: "/home/arg/media/software"
+              guest: true # unauthenticated users should be able to access software directory
+              read_only: false
+            - name: "videos"
+              path: "/home/arg/media/videos"
+              guest: false
+              read_only: false
+            - name: "archives"
+              path: "/home/arg/archive/archives"
+              guest: false
+              read_only: true
+            - name: "backups"
+              path: "/home/arg/archive/backups"
+              guest: false
+              read_only: true
+            - name: "photos"
+              path: "/home/arg/archive/photos"
+              guest: false
+              read_only: true
+            - name: "veronika"
+              path: "/home/arg/archive/veronika"
+              guest: false
+              read_only: true
+              user: "veronika"
     ipmi_hosts:
       hosts:
         sirius:

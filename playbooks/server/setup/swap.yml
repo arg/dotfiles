@@ -32,6 +32,6 @@
 - name: "Enable zramswap"
   ansible.builtin.systemd_service:
     name: "zramswap"
-    enabled: true
     state: "restarted"
+    enabled: true
   when: "zramswap_config.changed"

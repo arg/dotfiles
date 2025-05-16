@@ -1,0 +1,66 @@
+[global]
+  workgroup = WORKGROUP
+  server string = Polaris
+  # Append syslog@1 if you want important messages to be sent to syslog too.
+  logging = file systemd
+  log file = /var/log/samba/log.%m
+  log level = 0 auth:2
+  max log size = 1000
+  interfaces = {{ ansible_host }}/24
+  bind interfaces only = yes
+  server role = standalone server
+  printable = no
+  map to guest = Bad User
+  usershare max shares = 0
+  usershare allow guests = no
+  security = user
+  passdb backend = tdbsam
+  server smb encrypt = required
+  client smb encrypt = required
+  server signing = required
+  client signing = required
+  server min protocol = SMB3
+  client min protocol = SMB3
+  server max protocol = SMB3
+  client max protocol = SMB3
+  hosts allow = {{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.netmask }}
+  veto files = {{ '/' + samba.veto_files | join('/') + '/' }}
+  delete veto files = yes
+
+  # MacOS compatibility
+  # https://knowledgebase.45drives.com/kb/macos-samba-optimization/
+  # https://wiki.samba.org/index.php/Configure_Samba_to_Work_Better_with_Mac_OS_X
+  ea support = yes
+  vfs objects = catia fruit streams_xattr
+  fruit:nfs_aces = no
+  fruit:zero_file_id = yes
+  fruit:metadata = stream
+  fruit:encoding = native
+  fruit:model = MacSamba
+  fruit:posix_rename = yes
+  fruit:veto_appledouble = no
+  fruit:wipe_intentionally_left_blank_rfork = yes
+  fruit:delete_empty_adfiles = yes
+
+{% for share in samba.shares %}
+[{{ share.name }}]
+  path = {{ share.path }}
+  browsable = yes
+  create mask = 0644
+  directory mask = 0755
+  {% if share.read_only == true -%}
+  writable = no
+  {% else -%}
+  writable = yes
+  {% endif -%}
+  {% if share.guest == true -%}
+  guest ok = yes
+  {% else -%}
+  guest ok = no
+  {% endif -%}
+  valid users = {{ share.user | default(ansible_user) }}
+  force user = {{ ansible_user }}
+  force group = {{ ansible_user }}
+
+{% endfor %}
+# vi: ft=samba
