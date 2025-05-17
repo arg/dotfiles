@@ -13,7 +13,7 @@ python3 -m pip install --user ansible pyghmi
 ## Usage
 
 ```sh
-ansible-playbook <name>
+ansible-playbook <name> [--tags <tag>]
 ```
 
 ## Vault
@@ -21,5 +21,5 @@ ansible-playbook <name>
 * GPG key is required to decrypt vault's key
 
 ```sh
-ansible-vault edit secrets.yml
+EDITOR=nano ansible-vault edit secrets.yml
 ```

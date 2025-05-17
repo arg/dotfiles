@@ -1,0 +1,11 @@
+- name: "Create journal systemd directory"
+  ansible.builtin.file:
+    path: "{{ systemd_path }}/journald.conf.d"
+    state: "directory"
+    recurse: true
+
+- name: "Configure journal"
+  ansible.builtin.copy:
+    src: "journal/journal-size.conf"
+    dest: "{{ systemd_path }}/journald.conf.d/journal-size.conf"
+    mode: "0644"

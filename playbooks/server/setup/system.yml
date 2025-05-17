@@ -1,0 +1,11 @@
+- name: "Set timezone"
+  ansible.builtin.timezone:
+    name: "Europe/Madrid"
+
+- name: "Set sysctl variables"
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: "present"
+    reload: true
+  loop: "{{ sysctl_vars }}"

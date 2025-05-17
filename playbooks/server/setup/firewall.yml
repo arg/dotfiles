@@ -1,0 +1,20 @@
+- name: "Configure firewall (ports)"
+  community.general.ufw:
+    rule: "allow"
+    port: "{{ item }}"
+    proto: "tcp"
+  loop: "{{ ufw.ports }}"
+  register: "ufw_ports"
+
+- name: "Configure firewall (services)"
+  community.general.ufw:
+    rule: "allow"
+    name: "{{ item }}"
+  loop: "{{ ufw.services }}"
+  register: "ufw_services"
+
+- name: "Enable firewall"
+  community.general.ufw:
+    state: "enabled"
+    default: "deny"
+  when: "ufw_ports.changed or ufw_services.changed"

@@ -1,0 +1,37 @@
+- name: "Create ZFS mount targets"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0700"
+    state: "directory"
+  loop: "{{ zfs.targets }}"
+
+- name: "Schedule ZFS scrubs"
+  ansible.builtin.systemd_service:
+    name: "zfs-scrub-monthly@{{ item }}.timer"
+    state: "started"
+    enabled: true
+  loop: "{{ zfs.pools }}"
+
+- name: "Create Sanoid configuration directory"
+  ansible.builtin.file:
+    path: "/etc/sanoid"
+    state: "directory"
+    recurse: true
+
+- name: "Configure Sanoid"
+  ansible.builtin.template:
+    src: "sanoid/sanoid.conf.j2"
+    dest: "/etc/sanoid/sanoid.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "sanoid_config"
+
+- name: "Restart Sanoid service"
+  ansible.builtin.systemd_service:
+    name: "sanoid"
+    state: "restarted"
+    enabled: true
+  when: "sanoid_config.changed"
