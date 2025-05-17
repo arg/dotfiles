@@ -19,6 +19,10 @@ all:
           - name: "vm.swappiness"
             value: "10"
         zfs:
+          pools:
+            - "archive"
+            - "apps"
+            - "media"
           targets:
             - "/home/arg/apps"
             - "/home/arg/media"

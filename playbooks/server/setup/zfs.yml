@@ -7,6 +7,13 @@
     state: "directory"
   loop: "{{ zfs.targets }}"
 
+- name: "Schedule ZFS scrubs"
+  ansible.builtin.systemd_service:
+    name: "zfs-scrub-monthly@{{ item }}.timer"
+    state: "started"
+    enabled: true
+  loop: "{{ zfs.pools }}"
+
 - name: "Create Sanoid configuration directory"
   ansible.builtin.file:
     path: "/etc/sanoid"
