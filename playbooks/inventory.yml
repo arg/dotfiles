@@ -13,7 +13,9 @@ all:
         additional_users:
           - "veronika"
         dotfiles_dir: "/home/arg/.dotfiles"
-        systemd_path: "/usr/lib/systemd"
+        systemd:
+          path: "/usr/lib/systemd"
+          journal_size: "2G"
         zswap_percent: "15"
         sysctl_vars:
           - name: "vm.swappiness"

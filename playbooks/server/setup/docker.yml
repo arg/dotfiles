@@ -6,14 +6,14 @@
 
 - name: "Create Docker systemd directory"
   ansible.builtin.file:
-    path: "{{ systemd_path }}/system/docker.service.d"
+    path: "{{ systemd.path }}/system/docker.service.d"
     state: "directory"
     recurse: true
 
 - name: "Override Docker service launch options"
   ansible.builtin.copy:
     src: "docker/override.conf"
-    dest: "{{ systemd_path }}/system/docker.service.d/override.conf"
+    dest: "{{ systemd.path }}/system/docker.service.d/override.conf"
     mode: "0644"
   register: "docker_override"
 
