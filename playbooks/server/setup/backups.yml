@@ -29,7 +29,7 @@
       {{ item.path }} b2-crypt:{{ item.path | basename }}
     minute: "0"
     hour: "{{ item.hour }}"
-    user: "arg"
+    user: "{{ ansible_user }}"
     state: "present"
     cron_file: "backups"
   loop: "{{ backup.sources }}"
