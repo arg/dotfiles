@@ -30,6 +30,9 @@
     - import_tasks: "setup/docker.yml"
       tags: ["docker"]
 
+    - import_tasks: "setup/backups.yml"
+      tags: ["backups"]
+
     - import_tasks: "setup/users.yml"
       tags: ["users"]
 

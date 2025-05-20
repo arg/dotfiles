@@ -120,6 +120,19 @@ all:
               guest: false
               read_only: true
               user: "veronika"
+        backup:
+          logs_path: "/var/log/rclone"
+          sources:
+            - path: "/home/arg/archive/archives"
+              hour: "1"
+            - path: "/home/arg/archive/backups"
+              hour: "3"
+            - path: "/home/arg/archive/photos"
+              hour: "5" 
+            - path: "/home/arg/archive/veronika"
+              hour: "7"
+            - path: "/home/arg/archive/videos"
+              hour: "9"
     ipmi_hosts:
       hosts:
         sirius:
