@@ -6,6 +6,8 @@
 
 ## Installation
 
+Install Ansible either via Homebrew (MacOS) or with:
+
 ```sh
 python3 -m pip install --user ansible pyghmi
 ```
