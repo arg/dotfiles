@@ -1,21 +1,15 @@
-- name: "Change SSH configuration"
-  ansible.builtin.lineinfile:
-    path: "/etc/ssh/sshd_config"
-    state: "present"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  loop:
-    - regexp: "^#?PermitRootLogin"
-      line: "PermitRootLogin no"
-    - regexp: "^#?StrictModes"
-      line: "StrictModes yes"
-    - regexp: "^#?PubkeyAuthentication"
-      line: "PubkeyAuthentication yes"
-    - regexp: "^#?HostbasedAuthentication"
-      line: "HostbasedAuthentication no"
-    - regexp: "^#?PasswordAuthentication"
-      line: "PasswordAuthentication no"
-    - regexp: "^#?KbdInteractiveAuthentication"
-      line: "KbdInteractiveAuthentication no"
-    - regexp: "^#?AllowUsers"
-      line: "AllowUsers {{ ansible_user }}"
+- name: "Configure SSH server"
+  ansible.builtin.template:
+    src: "sshd/custom.conf.j2"
+    dest: "/etc/ssh/sshd_config.d/10-custom.conf"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  register: "sshd_config"
+
+- name: "Restart SSH server"
+  ansible.builtin.systemd_service:
+    name: "sshd"
+    state: "restarted"
+    enabled: true
+  when: "sshd_config.changed"
