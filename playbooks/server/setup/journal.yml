@@ -1,0 +1,22 @@
+- name: "Create journal systemd directory"
+  ansible.builtin.file:
+    path: "{{ systemd.path }}/journald.conf.d"
+    state: "directory"
+    recurse: true
+
+- name: "Configure journal"
+  ansible.builtin.template:
+    src: "journal/journal-size.conf.j2"
+    dest: "{{ systemd.path }}/journald.conf.d/journal-size.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "journal_config"
+
+- name: "Restart systemd-journald service"
+  ansible.builtin.systemd_service:
+    name: "systemd-journald"
+    state: "restarted"
+    enabled: true
+    daemon_reload: true
+  when: "journal_config.changed"

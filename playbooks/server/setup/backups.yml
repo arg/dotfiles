@@ -1,0 +1,35 @@
+- name: "Check if Rclone is installed"
+  stat:
+    path: "/usr/bin/rclone"
+  register: "rclone"
+
+- name: "Install Rclone"
+  ansible.builtin.shell:
+    cmd: "curl https://rclone.org/install.sh | bash"
+  when: "not rclone.stat.exists"
+
+- name: "Create Rclone logs directory"
+  ansible.builtin.file:
+    path: "{{ backup.logs_path }}"
+    state: "directory"
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: "Configure periodic backups"
+  ansible.builtin.cron:
+    name: "Backup {{ item.path | basename }} directory"
+    job: >-
+      rclone sync
+      --fast-list
+      --progress
+      --log-level INFO
+      --log-file {{ backup.logs_path }}/{{ item.path | basename }}.log
+      --exclude-from /home/{{ ansible_user }}/.config/rclone/excludelist.txt
+      {{ item.path }} b2-crypt:{{ item.path | basename }}
+    minute: "0"
+    hour: "{{ item.hour }}"
+    user: "{{ ansible_user }}"
+    state: "present"
+    cron_file: "backups"
+  loop: "{{ backup.sources }}"

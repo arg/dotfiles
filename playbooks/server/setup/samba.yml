@@ -1,0 +1,15 @@
+- name: "Configure Samba"
+  ansible.builtin.template:
+    src: "samba/smb.conf.j2"
+    dest: "/etc/samba/smb.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "samba_config"
+
+- name: "Restart Samba"
+  ansible.builtin.systemd_service:
+    name: "smbd"
+    state: "restarted"
+    enabled: true
+  when: "samba_config.changed"

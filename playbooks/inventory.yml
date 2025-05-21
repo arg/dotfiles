@@ -1,9 +1,5 @@
 all:
-  vars:
-    ansible_user: arg
   hosts:
-    sun:
-      ansible_host: "192.168.0.3"
     sirius:
       ansible_host: "192.188.0.5"
     polaris:
@@ -12,9 +8,138 @@ all:
     servers:
       hosts:
         polaris:
+      vars:
+        ansible_user: "arg"
+        additional_users:
+          - "veronika"
+        dotfiles_dir: "/home/arg/.dotfiles"
+        systemd:
+          path: "/usr/lib/systemd"
+          journal_size: "2G"
+        zswap_percent: "15"
+        sysctl_vars:
+          - name: "vm.swappiness"
+            value: "10"
+        zfs:
+          pools:
+            - "archive"
+            - "apps"
+            - "media"
+          targets:
+            - "/home/arg/apps"
+            - "/home/arg/media"
+            - "/home/arg/archive"
+          snapshots:
+            hourly: 0
+            daily: 15
+            monthly: 12
+          snapshot_datasets:
+            - "archive/archives"
+            - "archive/backups"
+            - "archive/photos"
+            - "archive/veronika"
+            - "archive/videos"
+        apt_cache_valid_time: 86400 # 24 hours
+        packages:
+          install:
+            - "fish"
+            - "fzf"
+            - "git"
+            - "neovim"
+            - "htop"
+            - "mc"
+            - "tmux"
+            - "build-essential"
+            - "rsyslog-gnutls"
+            - "samba"
+            - "rclone"
+            - "curl"
+            - "wget"
+            - "docker.io"
+            - "docker-compose-v2"
+            - "vifm"
+            - "nvme-cli"
+            - "zfsutils-linux"
+            - "sanoid"
+            - "zram-tools"
+            - "drm-info"
+          remove:
+            - "snapd"
+        ufw:
+          ports:
+            - 80
+            - 443
+          services:
+            - "OpenSSH"
+            - "Samba"
+        samba:
+          veto_files:
+            - "._*"
+            - ".DS_Store"
+            - "Thumbs.db"
+            - "*.icloud"
+            - ".metadata"
+            - ".localized"
+            - ".Spotlight-V100"
+            - ".Trashes"
+            - ".fseventsd"
+            - ".DocumentRevisions-V100"
+          shares:
+            - name: "downloads"
+              path: "/home/arg/media/downloads"
+              guest: false
+              read_only: false
+            - name: "literature"
+              path: "/home/arg/archive/literature"
+              guest: false
+              read_only: false
+            - name: "software"
+              path: "/home/arg/media/software"
+              guest: true # unauthenticated users should be able to access software directory
+              read_only: false
+              user: "arg, veronika"
+            - name: "videos"
+              path: "/home/arg/media/videos"
+              guest: false
+              read_only: false
+            - name: "archives"
+              path: "/home/arg/archive/archives"
+              guest: false
+              read_only: true
+            - name: "backups"
+              path: "/home/arg/archive/backups"
+              guest: false
+              read_only: true
+            - name: "photos"
+              path: "/home/arg/archive/photos"
+              guest: false
+              read_only: true
+              user: "arg, veronika"
+            - name: "veronika"
+              path: "/home/arg/archive/veronika"
+              guest: false
+              read_only: true
+              user: "veronika"
+        backup:
+          logs_path: "/var/log/rclone"
+          sources:
+            - path: "/home/arg/archive/archives"
+              hour: "1"
+            - path: "/home/arg/archive/backups"
+              hour: "3"
+            - path: "/home/arg/archive/photos"
+              hour: "5" 
+            - path: "/home/arg/archive/veronika"
+              hour: "7"
+            - path: "/home/arg/archive/videos"
+              hour: "9"
     ipmi_hosts:
       hosts:
         sirius:
+      vars:
+        ansible_user: "ADMIN"
     docker_hosts:
       hosts:
         polaris:
+      vars:
+        ansible_user: "arg"

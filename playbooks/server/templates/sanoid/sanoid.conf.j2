@@ -1,0 +1,12 @@
+{% for dataset in zfs.snapshot_datasets %}
+[{{ dataset }}]
+use_template = backup
+
+{% endfor %}
+[template_backup]
+autosnap = yes
+autoprune = yes
+hourly = {{ zfs.snapshots.hourly }}
+daily = {{ zfs.snapshots.daily }}
+monthly = {{ zfs.snapshots.monthly }}
+#vi: ft=toml
