@@ -9,6 +9,7 @@
     dest: "/etc/sudoers.d/{{ ansible_user }}"
     content: "{{ ansible_user }} ALL=(ALL) NOPASSWD:ALL"
     mode: "0600"
+    validate: "visudo -cf %s"
 
 - name: "Change user settings"
   ansible.builtin.user:
