@@ -63,6 +63,7 @@ all:
             - "sanoid"
             - "zram-tools"
             - "drm-info"
+            - "ipmitool"
           remove:
             - "snapd"
         ufw:
