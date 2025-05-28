@@ -89,15 +89,6 @@ resource "cloudflare_record" "atlas" {
   comment = "Core i7/3050/32/4TB"
 }
 
-resource "cloudflare_record" "checkmk" {
-  zone_id = var.cloudflare_zone_id
-  type = "A"
-  name = "checkmk"
-  value = "192.168.0.6"
-  proxied = false
-  comment = "Network monitoring"
-}
-
 resource "cloudflare_record" "downloads" {
   zone_id = var.cloudflare_zone_id
   type = "A"
