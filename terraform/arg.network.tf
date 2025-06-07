@@ -143,6 +143,15 @@ resource "cloudflare_record" "numismat" {
   comment = "Project"
 }
 
+resource "cloudflare_record" "photos" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "photos"
+  value = "192.168.0.6"
+  proxied = false
+  comment = "Photo gallery"
+}
+
 resource "cloudflare_record" "plex" {
   zone_id = var.cloudflare_zone_id
   type = "A"
