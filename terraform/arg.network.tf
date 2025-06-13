@@ -98,6 +98,15 @@ resource "cloudflare_record" "downloads" {
   comment = "Content downloader"
 }
 
+resource "cloudflare_record" "ha" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "ha"
+  value = "192.168.0.6"
+  proxied = false
+  comment = "Home Assistant"
+}
+
 resource "cloudflare_record" "ipmi" {
   zone_id = var.cloudflare_zone_id
   type = "A"
