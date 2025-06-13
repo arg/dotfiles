@@ -47,3 +47,8 @@
   description: 'Contacts management'
   url: 'https://monica.arg.network'
   hostname: 'monica.arg.network'
+
+- name: 'Immich'
+  description: 'Photo gallery'
+  url: 'https://photos.arg.network'
+  hostname: 'photos.arg.network'
