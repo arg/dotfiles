@@ -21,6 +21,9 @@
     - import_tasks: "setup/packages.yml"
       tags: ["packages"]
 
+    - import_tasks: "setup/dbus.yml"
+      tags: ["dbus"]
+
     - import_tasks: "setup/zfs.yml"
       tags: ["zfs"]
 

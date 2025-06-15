@@ -1,0 +1,5 @@
+- name: "Enable D-Bus Message Broker"
+  ansible.builtin.systemd_service:
+    name: "dbus-broker"
+    state: "started"
+    enabled: true
