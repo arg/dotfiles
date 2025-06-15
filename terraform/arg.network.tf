@@ -251,6 +251,24 @@ resource "cloudflare_record" "sonarr" {
   comment = "TV shows organizer"
 }
 
+resource "cloudflare_record" "sovabook" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "sovabook"
+  value = "192.168.0.3"
+  proxied = false
+  comment = "Project"
+}
+
+resource "cloudflare_record" "sovabook_subdomains" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "*.sovabook"
+  value = "192.168.0.3"
+  proxied = false
+  comment = "Project"
+}
+
 resource "cloudflare_record" "sun" {
   zone_id = var.cloudflare_zone_id
   type = "A"
