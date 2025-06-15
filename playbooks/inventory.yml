@@ -64,6 +64,8 @@ all:
             - "zram-tools"
             - "drm-info"
             - "ipmitool"
+            - "bluez"
+            - "dbus-broker"
           remove:
             - "snapd"
         ufw:
