@@ -126,7 +126,7 @@ require("lazy").setup({
       local telescope = require("telescope")
       telescope.setup({
         defaults = {
-          file_ignore_patterns = { "^.git/", ".lock", ".keep", ".enc", "db/schema.rb" }
+          file_ignore_patterns = { "^.git/", ".lock$", ".keep$", ".enc$", "^coverage/", "^tmp/", "^log/" },
         },
         pickers = {
           find_files = { hidden = true }
@@ -313,7 +313,7 @@ require("lazy").setup({
         }
       },
       filters = {
-        custom = { "^.git$" }
+        custom = { "^.git$", "^node_modules$", "^tmp$", "^log$", "^coverage$" }
       },
       actions = {
         change_dir = { enable = false },
