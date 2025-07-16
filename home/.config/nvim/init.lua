@@ -439,6 +439,70 @@ require("lazy").setup({
     end
   },
   -- }}}
+  -- codecompanion {{{
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
+    opts = {
+      display = {
+        action_palette = {
+          width = 95,
+          height = 10,
+          prompt = "Prompt ",
+          provider = "telescope",
+          opts = {
+            show_default_actions = true, -- Show the default actions in the action palette?
+            show_default_prompt_library = true, -- Show the default prompt library in the action palette?
+          }
+        },
+        chat = {
+          window = {
+            layout = "vertical", -- float|vertical|horizontal|buffer
+            position = "right", -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
+            border = "single",
+            -- height = 0.8,
+            width = 0.25,
+            relative = "editor",
+            full_height = true,
+            opts = {
+              breakindent = true,
+              cursorcolumn = false,
+              cursorline = false,
+              foldcolumn = "0",
+              linebreak = true,
+              list = false,
+              numberwidth = 1,
+              signcolumn = "no",
+              spell = false,
+              wrap = true
+            }
+          }
+        }
+      },
+      strategies = {
+        chat = {
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4-20250514"
+          },
+          keymaps = {
+            send = {
+              modes = { n = "<C-s>", i = "<C-s>" },
+              opts = {},
+            },
+            close = {
+              modes = { n = "<C-c>", i = "<C-c>" },
+              opts = {},
+            },
+          }
+        },
+        inline = {
+          adapter = "copilot"
+        }
+      }
+    }
+  },
+  -- }}}
   -- nvim-lastplace {{{
   {
     "ethanholz/nvim-lastplace",
@@ -515,6 +579,7 @@ vim.keymap.set("n", "<C-g>", ":Telescope live_grep<CR>", { silent = true, desc =
 vim.keymap.set("n", "<C-f>", ":Telescope lsp_document_symbols<CR>", { silent = true, desc = "List LSP symbols from current file" })
 vim.keymap.set("n", "<C-t>", ":Telescope lsp_workspace_symbols<CR>", { silent = true, desc = "List LSP symbols from all files" })
 vim.keymap.set("n", "<C-u>", ":Telescope undo<CR>", { silent = true, desc = "Show undo tree" })
+vim.keymap.set("n", "<C-q>", ":CodeCompanionChat Toggle<CR>", { silent = true, desc = "Open CodeCompanion action palette" })
 vim.keymap.set({ "n", "v" }, "<Leader>c", ":CommentToggle<CR>", { silent = true, desc = "Toggle line comment" })
 vim.keymap.set("n", "<C-s>", function() vim.lsp.buf.format({ async = true }) end, { silent = true, desc = "Format code" })
 vim.keymap.set("n", "<C-]>", function() vim.lsp.buf.definition() end, { silent = true, desc = "Go to definition" })
