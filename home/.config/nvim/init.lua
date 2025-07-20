@@ -62,6 +62,45 @@ for _, plugin in pairs(disabled_builtin_plugins) do
 end
 -- }}}
 
+-- LSP {{{
+vim.lsp.config('*', {
+  capabilities = {
+    textDocument = {
+      semanticTokens = {
+        multilineTokenSupport = true,
+      }
+    },
+    offsetEncoding =  { 'utf-8' }
+  },
+})
+
+vim.lsp.config('ruby-lsp', {
+  cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "ruby-lsp" },
+  filetypes = { "ruby" },
+  init_options = {
+    formatter = "none"
+  }
+})
+
+vim.lsp.config('rubocop', {
+  cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" },
+  filetypes = { "ruby" }
+})
+
+-- Install language servers:
+-- npm install -g @cucumber/language-server (Node.js v22 required)
+vim.lsp.enable('rubocop', 'cucumber_language_server')
+vim.lsp.enable('ruby-lsp', {
+  on_init = function(client, _)
+    -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
+    client.server_capabilities.semanticTokensProvider = false
+    -- Uncomment the following lines if you want to use standalone Rubocop for diagnostics and formatting
+    client.server_capabilities.diagnosticProvider = false
+    client.server_capabilities.documentFormattingProvider = false
+  end
+})
+-- }}}
+
 -- Plugins {{{
 require("lazy").setup({
   -- gruvbox.nvim {{{
@@ -166,94 +205,65 @@ require("lazy").setup({
     end
   },
   -- }}}
-  -- nvim-lspconfig {{{
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = { "hrsh7th/cmp-nvim-lsp" },
-    config = function()
-      local nvim_lsp = require("lspconfig")
-      local capabilities = vim.tbl_deep_extend(
-        "force",
-        vim.lsp.protocol.make_client_capabilities(),
-        require("cmp_nvim_lsp").default_capabilities()
-      )
-      local flags = { debounce_text_changes = 500 }
-      nvim_lsp.ruby_lsp.setup({
-        capabilities = capabilities,
-        flags = flags,
-        cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "ruby-lsp" },
-        settings = {
-          init_options = {
-            formatter = "rubocop"
-          }
-        },
-        on_init = function(client, _)
-          -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
-          client.server_capabilities.semanticTokensProvider = false
-          -- Uncomment the following lines if you want to use standalone Rubocop for diagnostics and formatting
-          -- client.server_capabilities.diagnosticProvider = false
-          -- client.server_capabilities.documentFormattingProvider = false
-        end
-      })
-      -- nvim_lsp.rubocop.setup({
-      --   capabilities = capabilities,
-      --   flags = flags,
-      --   cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" }
-      -- })
-      nvim_lsp.stylelint_lsp.setup({
-        capabilities = capabilities,
-        flags = flags,
-        settings = {
-          stylelintplus = { autoFixOnFormat = true }
-        }
-      })
-      -- to install: npm install -g @cucumber/language-server (Node.js v22 required)
-      nvim_lsp.cucumber_language_server.setup({
-        capabilities = capabilities,
-        flags = flags
-      })
-      nvim_lsp.rust_analyzer.setup({
-        capabilities = capabilities,
-        flags = flags,
-        settings = {
-          ["rust-analyzer"] = {
-            diagnostics = { enable = true },
-            imports = {
-              granularity = { group = "module" },
-              prefix = "self",
-            },
-            cargo = {
-              buildScripts = { enable = true }
-            },
-            procMacro = { enable = true }
-          }
-        }
-      })
-      -- to install: brew install efm-langserver
-      nvim_lsp.efm.setup({
-        capabilities = capabilities,
-        init_options = { documentFormatting = true, formatting = true },
-        filetypes = { "pascal" },
-        settings = {
-          rootMarkers = { ".git/" },
-          languages = {
-            pascal = {
-              -- the dumbest way to format Pascal code
-              { formatCommand = "ptop ${FILENAME} ptop.tmp; cat ptop.tmp; rm ptop.tmp", formatStdin = false }
-            }
-          }
-        }
-      })
-      vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-        vim.lsp.diagnostic.on_publish_diagnostics,
-        {
-          virtual_text = false,
-          signs = true,
-          update_in_insert = false
-        }
-      )
-    end
-  },
+  -- nvim-lspconfig (disabled) {{{
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   dependencies = { "hrsh7th/cmp-nvim-lsp" },
+  --   config = function()
+  --     local nvim_lsp = require("lspconfig")
+  --     local capabilities = vim.tbl_deep_extend(
+  --       "force",
+  --       vim.lsp.protocol.make_client_capabilities(),
+  --       require("cmp_nvim_lsp").default_capabilities()
+  --     )
+  --     local flags = { debounce_text_changes = 500 }
+  --     nvim_lsp.ruby_lsp.setup({
+  --       capabilities = capabilities,
+  --       flags = flags,
+  --       cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "ruby-lsp" },
+  --       settings = {
+  --         init_options = {
+  --           formatter = "rubocop"
+  --         }
+  --       },
+  --       on_init = function(client, _)
+  --         -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
+  --         client.server_capabilities.semanticTokensProvider = false
+  --         -- Uncomment the following lines if you want to use standalone Rubocop for diagnostics and formatting
+  --         -- client.server_capabilities.diagnosticProvider = false
+  --         -- client.server_capabilities.documentFormattingProvider = false
+  --       end
+  --     })
+  --     -- nvim_lsp.rubocop.setup({
+  --     --   capabilities = capabilities,
+  --     --   flags = flags,
+  --     --   cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" }
+  --     -- })
+  --     -- nvim_lsp.stylelint_lsp.setup({
+  --     --   capabilities = capabilities,
+  --     --   flags = flags,
+  --     --   cmd = { "npx", "stylelint-lsp", "--stdio" },
+  --     --   filetypes = { "css", "less", "postcss", "sass", "scss" },
+  --     --   settings = {
+  --     --     stylelintplus = { autoFixOnFormat = true }
+  --     --   }
+  --     -- })
+  --     -- nvim_lsp.tailwindcss.setup({
+  --     --   capabilities = capabilities,
+  --     --   flags = flags,
+  --     --   cmd = { "npx", "tailwindcss-language-server", "--stdio" },
+  --     --   filetypes = { "css", "less", "postcss", "sass", "scss" }
+  --     -- })
+  --     vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  --       vim.lsp.diagnostic.on_publish_diagnostics,
+  --       {
+  --         virtual_text = false,
+  --         signs = true,
+  --         update_in_insert = false
+  --       }
+  --     )
+  --   end
+  -- },
   -- }}}
   -- bufferline {{{
   {
