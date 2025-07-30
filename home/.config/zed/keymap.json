@@ -1,0 +1,15 @@
+[
+  {
+    "context": "Editor && vim_mode == insert && !menu",
+    "bindings": {
+      "escape": ["workspace::SendKeystrokes", "ctrl-c ctrl-s"]
+    }
+  },
+  {
+    "context": "VimControl && !menu",
+    "bindings": {
+      "tab": "pane::ActivateNextItem",
+      "shift-tab": "pane::ActivatePreviousItem"
+    }
+  }
+]
