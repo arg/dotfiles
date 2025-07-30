@@ -63,34 +63,31 @@ end
 -- }}}
 
 -- LSP {{{
-vim.lsp.config('*', {
+vim.lsp.config("*", {
   capabilities = {
     textDocument = {
       semanticTokens = {
         multilineTokenSupport = true,
       }
     },
-    offsetEncoding =  { 'utf-8' }
+    offsetEncoding =  { "utf-8" }
   },
 })
 
-vim.lsp.config('ruby-lsp', {
+-- install LSP with:
+-- gem install ruby-lsp
+-- gem install rubocop
+-- npm install -g @cucumber/language-server (Node.js v22 required)
+
+  -- ruby-lsp {{{
+vim.lsp.config("ruby-lsp", {
   cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "ruby-lsp" },
   filetypes = { "ruby" },
   init_options = {
     formatter = "none"
   }
 })
-
-vim.lsp.config('rubocop', {
-  cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" },
-  filetypes = { "ruby" }
-})
-
--- Install language servers:
--- npm install -g @cucumber/language-server (Node.js v22 required)
-vim.lsp.enable('rubocop', 'cucumber_language_server')
-vim.lsp.enable('ruby-lsp', {
+vim.lsp.enable("ruby-lsp", {
   on_init = function(client, _)
     -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
     client.server_capabilities.semanticTokensProvider = false
@@ -99,6 +96,24 @@ vim.lsp.enable('ruby-lsp', {
     client.server_capabilities.documentFormattingProvider = false
   end
 })
+  -- }}}
+
+  -- rubocop {{{
+vim.lsp.config("rubocop", {
+  cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" },
+  filetypes = { "ruby" }
+})
+vim.lsp.enable("rubocop")
+-- }}}
+
+  -- cucumber-language-server {{{
+vim.lsp.config("cucumber_language_server", {
+  cmd = { "npx", "cucumber-language-server", "--stdio" },
+  filetypes = { "cucumber" }
+})
+vim.lsp.enable("cucumber_language_server")
+  -- }}}
+
 -- }}}
 
 -- Plugins {{{
