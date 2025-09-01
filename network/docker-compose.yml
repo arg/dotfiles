@@ -488,6 +488,24 @@ services:
       test: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"
   # }}}
 
+  # {{{ Minecraft
+  minecraft:
+    image: "itzg/minecraft-server:java24-graalvm"
+    restart: "no"
+    ports:
+      - "25565:25565"
+    env_file:
+      - "linuxserver.env"
+      - "minecraft.env"
+    volumes:
+      - "/home/arg/network/minecraft:/data"
+      - "/etc/localtime:/etc/localtime:ro"
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: "6G"
+  # }}}
 volumes:
   zabbix_server_data:
   zabbix_web_data:
