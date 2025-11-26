@@ -12,7 +12,6 @@ set -gx MANPAGER "nvim +Man!"
 set -gx RUBYOPT "-W0"
 set -gx GPG_TTY (tty)
 
-fish_add_path -mP ~/.npm/bin
 fish_add_path -mP ~/.local/bin
 
 set fish_greeting ""
