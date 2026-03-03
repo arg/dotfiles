@@ -1,6 +1,6 @@
 set $mod Mod4
 
-font pango:Hack Nerd Font 14
+font pango:Hack Nerd Font 12
 
 default_border pixel 2
 hide_edge_borders both
@@ -16,7 +16,7 @@ bindsym $mod+Shift+q "kill"
 bindsym $mod+Shift+r "restart"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Do you want to exit i3?' -B 'Yes, exit i3' 'i3-msg exit'"
 bindsym $mod+Return exec "alacritty"
-bindsym $mod+d exec "dmenu_run -b -nb '#282828' -nf '#ebdbb2' -sb '#98971a' -sf '#ebdbb2' -fn 'Hack Nerd Font-14'"
+bindsym $mod+d exec "dmenu_run -b -nb '#282828' -nf '#ebdbb2' -sb '#98971a' -sf '#ebdbb2' -fn 'Hack Nerd Font-12'"
 bindsym $mod+0 exec --no-startup-id "i3lock -e -i ~/documents/lock.png"
 bindsym $mod+p exec "flameshot gui"
 
@@ -86,11 +86,12 @@ assign [class="^Slack$"] $ws6
 assign [class="^zoom$"] $ws6
 assign [class="^Steam$"] $ws8
 
-# exec_always --no-startup-id "xset -dpms"
-# exec_always --no-startup-id "xset s off"
+exec_always --no-startup-id "xset -dpms"
+exec_always --no-startup-id "xset s off"
 exec_always --no-startup-id "setxkbmap -model hhk -layout us,ua -option grp:alt_shift_toggle"
 exec_always --no-startup-id "xrdb -merge ~/.Xresources"
 exec_always --no-startup-id "xmodmap ~/.Xmodmap"
+exec_always --no-startup-id "xsettingsd"
 exec_always --no-startup-id "$HOME/.config/polybar/launch.sh"
 exec_always --no-startup-id "killall dunst; dunst"
 
