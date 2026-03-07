@@ -1,0 +1,122 @@
+output DP-1 {
+  mode 3840x2160@120Hz
+  position 0 0
+  scale 2
+  adaptive_sync on
+}
+
+focus output DP-1
+
+input "1278:33:HHKB-Hybrid_3_Keyboard" {
+  xkb_model "hhk"
+  xkb_layout "us,ua"
+  xkb_options "grp:alt_shift_toggle"
+  repeat_delay 300
+  repeat_rate 25
+}
+
+set $mod Mod4
+
+font pango:Hack Nerd Font 12
+
+default_border pixel 2
+hide_edge_borders both
+focus_follows_mouse no
+workspace_auto_back_and_forth yes
+floating_minimum_size 75 x 50
+floating_maximum_size 2000 x 1000
+floating_modifier $mod
+
+client.focused #4c7899 #285577 #ffffff #2e9ef4 #98971a
+
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+r reload
+bindsym $mod+Return exec "alacritty"
+bindsym $mod+d exec "wofi --show drun"
+bindsym $mod+0 exec --no-startup-id "swaylock -f -c 1d2021"
+bindsym Print exec "grimshot save screen ~/pictures/screenshots/$(date +%F-%T).png"
+bindsym Shift+Print exec "grimshot save area ~/pictures/screenshots/$(date +%F-%T).png"
+
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Tab workspace back_and_forth
+
+bindsym $mod+c split h
+bindsym $mod+v split v
+
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f floating toggle
+
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+
+mode "resize" {
+    bindsym h resize shrink width 5 px or 5 ppt
+    bindsym j resize grow height 5 px or 5 ppt
+    bindsym k resize shrink height 5 px or 5 ppt
+    bindsym l resize grow width 5 px or 5 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [window_role="About"] floating enable
+for_window [urgent=latest] focus
+for_window [shell="xwayland"] title_format "[XWayland] %title"
+
+assign [class="org.mozilla.firefox"] -> 3
+assign [class="^Thunderbird$"] -> 4
+assign [class="^TelegramDesktop$"] -> 5
+assign [class="Slack"] -> 6
+assign [class="^Steam$"] -> 8
+
+exec --no-startup-id "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway"
+exec --no-startup-id "/usr/lib/xdg-desktop-portal -r"
+exec_always --no-startup-id "killall dunst; dunst"
+exec_always --no-startup-id "$HOME/.config/waybar/launch.sh"
+exec_always --no-startup-id swayidle -w \
+  timeout 300 'swaylock -f -c 1d2021' \
+  timeout 600 'swaymsg "output * dpms off"' \
+  resume 'swaymsg "output * dpms on"' \
+  before-sleep 'swaylock -f -c 1d2021'
+
+# workarounds for window title bug
+# https://github.com/i3/i3/issues/5149
+for_window [class="Alacritty"] border pixel 2
+for_window [class="KeePassXC"] border pixel 2
+for_window [title="^DOSBox"] border pixel 2
+for_window [title="^DOSBox"] floating disable

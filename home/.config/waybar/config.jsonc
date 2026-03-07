@@ -1,0 +1,87 @@
+{
+  "layer": "top",
+  "output": "DP-1",
+  "position": "top",
+  "height": 32,
+
+  "modules-left": [
+    "sway/workspaces"
+  ],
+
+  "modules-center": [
+    "sway/window"
+  ],
+
+  "modules-right": [
+    "sway/mode",
+    "sway/language",
+    "wireplumber",
+    "cpu",
+    "memory",
+    "temperature",
+    "bluetooth",
+    "clock"
+  ],
+
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "format": "{index}:{icon}",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "6": "",
+      "7": "",
+      "8": "",
+      "9": ""
+    }
+  },
+
+  "sway/window": {
+    "format": "{title}",
+    "max-length": 70
+  },
+
+  "sway/language": {
+    "format": "{short}",
+    "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
+    "tooltip": false
+  },
+
+  "wireplumber": {
+    "format": "{icon}  {volume}%",
+    "format-muted": "",
+    "format-icons": ["", "", ""],
+    "tooltip": false
+  },
+
+  "cpu": {
+    "format": "  {usage}%"
+  },
+
+  "memory": {
+    "format": "  {percentage}%"
+  },
+
+  "temperature": {
+    "thermal-zone": 3,
+    "critical-threshold": 80,
+    "format": " {temperatureC}°C",
+    "tooltip": false
+  },
+
+  "bluetooth": {
+    "format": " {status}",
+    "controller": "HHKB Hybrid",
+    "format-connected-battery": " {device_battery_percentage}%",
+    "tooltip-format-connected": "{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
+  },
+
+  "clock": {
+    "format": "{:%H:%M %d.%m.%Y, %a}",
+    "tooltip": false
+  }
+}

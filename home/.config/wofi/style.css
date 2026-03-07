@@ -1,0 +1,46 @@
+* {
+  font-family: monospace;
+  font-size: 14px;
+}
+
+window {
+  background-color: #282828;
+  color: #ebdbb2;
+  border: 2px solid #504945;
+}
+
+#input {
+  background-color: #3c3836;
+  color: #ebdbb2;
+  border: none;
+  padding: 6px;
+  margin: 6px;
+}
+
+#inner-box {
+  margin: 6px;
+}
+
+#outer-box {
+  margin: 6px;
+}
+
+#scroll {
+  margin: 4px;
+}
+
+#entry {
+  padding: 6px;
+}
+
+#entry:selected {
+  background-color: #fabd2f;
+}
+
+#text {
+  margin-left: 4px;
+}
+
+#text:selected {
+  color: #282828;
+}
