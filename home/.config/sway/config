@@ -98,21 +98,18 @@ for_window [window_role="About"] floating enable
 for_window [urgent=latest] focus
 for_window [shell="xwayland"] title_format "[XWayland] %title"
 
-assign [class="org.mozilla.firefox"] -> 3
-assign [class="^Thunderbird$"] -> 4
-assign [class="^TelegramDesktop$"] -> 5
-assign [class="Slack"] -> 6
-assign [class="^Steam$"] -> 8
+# Wayland apps
+assign [app_id="org.mozilla.firefox"] workspace number 3
+assign [app_id="Slack"] workspace number 5
+
+# XWayland apps
+# assign [class="^Steam$"] workspace number 8
 
 exec --no-startup-id "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway"
 exec --no-startup-id "/usr/lib/xdg-desktop-portal -r"
-exec_always --no-startup-id "killall dunst; dunst"
-exec_always --no-startup-id "$HOME/.config/waybar/launch.sh"
-exec_always --no-startup-id swayidle -w \
-  timeout 300 'swaylock -f -c 1d2021' \
-  timeout 600 'swaymsg "output * dpms off"' \
-  resume 'swaymsg "output * dpms on"' \
-  before-sleep 'swaylock -f -c 1d2021'
+exec --no-startup-id "$HOME/.local/bin/idle"
+exec --no-startup-id "killall dunst; dunst"
+exec --no-startup-id "$HOME/.config/waybar/launch.sh"
 
 # workarounds for window title bug
 # https://github.com/i3/i3/issues/5149
