@@ -1,0 +1,6 @@
+show=drun
+prompt=Run:
+width=600
+lines=10
+allow_images=true
+term=alacritty

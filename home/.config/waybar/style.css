@@ -1,0 +1,94 @@
+@define-color bg0 #282828;
+@define-color bg1 #3c3836;
+@define-color bg2 #504945;
+
+@define-color fg0 #fbf1c7;
+@define-color fg1 #ebdbb2;
+
+@define-color red #fb4934;
+@define-color green #b8bb26;
+@define-color yellow #fabd2f;
+@define-color blue #83a598;
+@define-color purple #d3869b;
+@define-color aqua #8ec07c;
+@define-color orange #fe8019;
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "Hack Nerd Font";
+  font-size: 14px;
+  min-height: 0;
+  transition: none;
+}
+
+window#waybar {
+  background: @bg0;
+  color: @fg1;
+  border-bottom: 1px solid @bg1;
+}
+
+#language, #wireplumber, #cpu, #memory, #temperature, #bluetooth, #clock {
+  padding: 0 14px;
+  border-left: 1px solid @bg1;
+  color: @fg1;
+}
+
+#workspaces {
+  /* padding: 0 14px; */
+}
+
+#workspaces button {
+  color: @fg1;
+  text-shadow: none;
+}
+
+#workspaces button:hover {
+  color: @fg1;
+  background: @bg2;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+#workspaces button.focused {
+  color: @bg0;
+  background: @yellow;
+  text-shadow: none;
+}
+
+#workspaces button.focused:hover {
+  color: @bg0;
+  background: @yellow;
+  text-shadow: none;
+  box-shadow: none;
+}
+
+#workspaces button.urgent {
+  background: @red;
+  color: @bg0;
+}
+
+#window {
+  color: @fg1;
+}
+
+#mode {
+  padding: 0 14px;
+  background: @orange;
+  color: @bg0;
+}
+
+#language.ua {
+  color: @orange;
+}
+
+tooltip {
+  background: @bg1;
+  color: @fg0;
+  border: 1px solid @bg2;
+  opacity: 1;
+}
+
+tooltip label {
+  color: @fg1;
+}
