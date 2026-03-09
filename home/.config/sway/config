@@ -99,6 +99,7 @@ for_window [urgent=latest] focus
 for_window [shell="xwayland"] title_format "[XWayland] %title"
 
 # Wayland apps
+assign [app_id="dev.zed.Zed"] workspace number 2
 assign [app_id="org.mozilla.firefox"] workspace number 3
 assign [app_id="Slack"] workspace number 5
 
