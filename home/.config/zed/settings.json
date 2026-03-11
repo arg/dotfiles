@@ -3,9 +3,9 @@
   "theme": "Gruvbox Dark",
   "ui_font_family": "Hack Nerd Font",
   "relative_line_numbers": "enabled",
-  "ui_font_size": 18,
+  "ui_font_size": 17,
   "buffer_font_family": "Hack Nerd Font",
-  "buffer_font_size": 16,
+  "buffer_font_size": 17,
   "buffer_line_height": { "custom": 1.9 },
   "wrap_guides": [120],
   "outline_panel": { "dock": "right" },
@@ -97,14 +97,19 @@
     "favorite_models": [
       {
         "provider": "copilot_chat",
-        "model": "claude-opus-4.6",
-        "enable_thinking": false,
+        "model": "gpt-5.2",
+        "enable_thinking": false
       },
       {
         "provider": "copilot_chat",
-        "model": "gpt-5.2",
-        "enable_thinking": false,
+        "model": "claude-opus-4.6",
+        "enable_thinking": false
       },
+      {
+        "provider": "copilot_chat",
+        "model": "gpt-5.4",
+        "enable_thinking": false
+      }
     ],
     "enable_feedback": false,
     "default_model": {
