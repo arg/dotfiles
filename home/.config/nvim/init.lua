@@ -146,7 +146,7 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    main = "nvim-treesitter.configs",
+--    main = "nvim-treesitter.configs",
     opts = {
       ensure_installed = { "ruby", "dockerfile", "fish", "json", "yaml", "html", "javascript", "scss", "rust",
                            "terraform", "toml", "lua", "pascal", "go" },
@@ -485,8 +485,7 @@ require("lazy").setup({
             layout = "vertical", -- float|vertical|horizontal|buffer
             position = "right", -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
             border = "single",
-            -- height = 0.8,
-            width = 0.25,
+            width = 0.79,
             relative = "editor",
             full_height = true,
             opts = {
