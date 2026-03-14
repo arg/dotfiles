@@ -20,7 +20,8 @@
     "memory",
     "temperature",
     "bluetooth",
-    "clock"
+    "clock#date",
+    "clock#time"
   ],
 
   "sway/workspaces": {
@@ -80,8 +81,13 @@
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
   },
 
-  "clock": {
-    "format": "{:%H:%M %d.%m.%Y, %a}",
+  "clock#date": {
+    "format": "{:%d.%m.%Y}",
+    "tooltip": false
+  },
+
+  "clock#time": {
+    "format": "{:%H:%M}",
     "tooltip": false
   }
 }
