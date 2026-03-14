@@ -8,7 +8,7 @@ output DP-1 {
 output DP-3 {
   mode 3840x2160@120Hz
   position 1920 0
-  scale 2
+  scale 2.5
   adaptive_sync on
   transform 90
 }
@@ -113,6 +113,7 @@ for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 for_window [window_role="task_dialog"] floating enable
 for_window [window_role="Preferences"] floating enable
+for_window [window_role="Settings"] floating enable
 for_window [window_type="dialog"] floating enable
 for_window [window_type="menu"] floating enable
 for_window [window_role="About"] floating enable
