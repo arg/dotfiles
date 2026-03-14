@@ -56,10 +56,35 @@ vim.g.loaded_node_provider = 0
 
 vim.g.editorconfig_enable = false
 
+-- vim.g.clipboard = 'osc52'
+
 local disabled_builtin_plugins = { "netrw", "netrwPlugin", "netrwSettings", "netrwFileHandlers", "tutor" }
 for _, plugin in pairs(disabled_builtin_plugins) do
    vim.g["loaded_" .. plugin] = 1
 end
+-- }}}
+
+-- {{{ Clipboard
+local function paste()
+  return {
+    vim.fn.split(vim.fn.getreg(""), "\n"),
+    vim.fn.getregtype(""),
+  }
+end
+
+local osc52 = require("vim.ui.clipboard.osc52")
+
+vim.g.clipboard = {
+  name = "OSC 52",
+  copy = {
+    ["+"] = osc52.copy("+"),
+    ["*"] = osc52.copy("*")
+  },
+  paste = {
+    ["+"] = paste,
+    ["*"] = paste
+  }
+}
 -- }}}
 
 -- LSP {{{
@@ -565,11 +590,6 @@ require("lazy").setup({
     end
   },
   -- }}}
-  -- nvim-osc52 {{{
-  {
-    "ojroques/nvim-osc52"
-  },
-  -- }}}
   -- NeoTest {{{
   {
   "nvim-neotest/neotest",
@@ -643,17 +663,6 @@ vim.api.nvim_create_autocmd("CursorHold", {
 --     client.server_capabilities.semanticTokensProvider = nil
 --   end
 -- })
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Copy to clipboard/tmux/OSC52",
-  pattern = "",
-  callback = function()
-    if vim.v.event.operator == "y" and vim.v.event.regname == "" then
-      require("osc52").copy_register(vim.v.event.regname)
-    end
-    vim.highlight.on_yank({ timeout = 250 })
-  end
-})
 -- }}}
 
 -- Functions {{{
