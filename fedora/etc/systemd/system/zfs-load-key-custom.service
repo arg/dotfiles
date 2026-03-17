@@ -1,0 +1,15 @@
+# added by arg
+[Unit]
+Description=Load ZFS encryption key for home directory
+DefaultDependencies=no
+After=zfs-import.target
+Before=zfs-mount.service
+Requires=zfs-import.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'systemd-ask-password "Enter your HOME password " | /sbin/zfs load-key zroot/home'
+
+[Install]
+WantedBy=zfs-mount.service
