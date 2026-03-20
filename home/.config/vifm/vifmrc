@@ -13,7 +13,6 @@ set norunexec
 set timefmt=%Y-%m-%d\ %H:%M
 set wildmenu
 set wildstyle=popup
-set suggestoptions=normal,visual,view,otherpane,keys,marks,registers
 set ignorecase
 set smartcase
 set nohlsearch
@@ -21,113 +20,39 @@ set incsearch
 set scrolloff=4
 set statusline=" %t %= | %u:%g | %A | %8E | %d "
 
-mark b ~/bin/
 mark h ~/
 
-" :com[mand][!] command_name action
-" The following macros can be used in a command
-" %a is replaced with the user arguments.
-" %c the current file under the cursor.
-" %C the current file under the cursor in the other directory.
-" %f the current selected file, or files.
-" %F the current selected file, or files in the other directory.
-" %b same as %f %F.
-" %d the current directory name.
-" %D the other window directory name.
-" %m run the command in a menu window
+filextype *.mp4,*.mkv,*.webm,*.avi,*.mov,*.flv,*.wmv mpv --no-terminal -- %c >/dev/null 2>&1 &
+filextype *.mp3,*.flac,*.ogg,*.opus,*.wav mpv --no-terminal -- %c >/dev/null 2>&1 &
+filextype *.mid,*.midi fluidsynth -a pipewire ~/soundfonts/default.sf2 %c >/dev/null 2>&1 &
+filextype *.jpg,*.jpeg,*.png,*.bmp,*.gif,*.tiff,*.tif swayimg %c >/dev/null 2>&1 &
+filextype *.dng,*.rwl,*.nef,*.cr2,*.arw,*.orf swayimg %c >/dev/null 2>&1 &
+filextype *.pdf zathura -- %c &
+filextype *.md nvim %c
+filextype *.tar,*.tar.gz,*.tgz,*.tar.bz2,*.tbz2,*.tar.xz,*.txz,*.zip,*.7z,*.rar :!bsdtar -tf %c | less
+filextype *.html,*.htm firefox %c &
+" don't just open random files
+" filextype * xdg-open %c &
 
-command! zip zip -r %f.zip %f
-
-filextype *.html,*.htm firefox %c %i &
-filextype *.pdf zathura %c
-filextype *.jpg,*.jpeg,*.png feh %c
-" filetype *.[1-8] man ./%c
-filextype *.md nvim
-filextype * xdg-open
+" toggle preview with the current file
+nnoremap p :view<cr>
+" open shell in current directory
+nnoremap S :shell<cr>
+" edit file
+nnoremap e :edit<cr>
+" rename file
+nnoremap R :rename<cr>
+" create directory
+nnoremap md :mkdir<space>
+" delete file
+nnoremap dd :delete<cr>
+" copy file
+nnoremap yy :copy<cr>
+" move file
+nnoremap mv :move<cr>
+" copy path of current file
+nnoremap yp :!printf "%c:p" | wl-copy<cr>
+" copy current directory path
+nnoremap yd :!printf "%d" | wl-copy<cr>
 
 set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dirstack,registers,bookmarks,bmarks
-
-" ------------------------------------------------------------------------------
-
-" Examples of configuring both panels
-
-" Customize view columns a bit (enable ellipsis for truncated file names)
-"
-" set viewcolumns=-{name}..,6{}.
-
-" Filter-out build and temporary files
-"
-" filter! /^.*\.(lo|o|d|class|py[co])$|.*~$/
-
-" ------------------------------------------------------------------------------
-
-" Sample mappings
-
-" Start shell in current directory
-nnoremap s :shell<cr>
-
-" Display sorting dialog
-nnoremap S :sort<cr>
-
-" Toggle visibility of preview window
-nnoremap w :view<cr>
-
-" Open file in existing instance of gvim
-nnoremap o :!gvim --remote-tab-silent %f<cr>
-" Open file in new instance of gvim
-nnoremap O :!gvim %f<cr>
-
-" Yank current directory path into the clipboard
-nnoremap yd :!echo %d | xclip %i<cr>
-
-" Yank current file path into the clipboard
-nnoremap yf :!echo %c:p | xclip %i<cr>
-
-" Mappings for faster renaming
-nnoremap I cw<c-a>
-nnoremap cc cw<c-u>
-nnoremap A cw
-
-" Open console in current directory
-nnoremap ,t :!xterm &<cr>
-
-" Open editor to edit vifmrc and apply settings after returning to vifm
-nnoremap ,c :write | edit $MYVIFMRC | restart<cr>
-" Open gvim to edit vifmrc
-nnoremap ,C :!gvim --remote-tab-silent $MYVIFMRC &<cr>
-
-" Toggle wrap setting on ,w key
-nnoremap ,w :set wrap!<cr>
-
-" Example of standard two-panel file managers mappings
-nnoremap <f3> :!less %f<cr>
-nnoremap <f4> :edit<cr>
-nnoremap <f5> :copy<cr>
-nnoremap <f6> :move<cr>
-nnoremap <f7> :mkdir<space>
-nnoremap <f8> :delete<cr>
-
-" ------------------------------------------------------------------------------
-
-" Various customization examples
-
-" Use ag (the silver searcher) instead of grep
-"
-" set grepprg='ag --line-numbers %i %a %s'
-
-" Add additional place to look for executables
-"
-" let $PATH = $HOME.'/bin/fuse:'.$PATH
-
-" Block particular shortcut
-"
-" nnoremap <left> <nop>
-
-" Export IPC name of current instance as environment variable and use it to
-" communicate with the instance later.
-"
-" It can be used in some shell script that gets run from inside vifm, for
-" example, like this:
-"     vifm --server-name "$VIFM_SERVER_NAME" --remote +"cd '$PWD'"
-"
-" let $VIFM_SERVER_NAME = v:servername
