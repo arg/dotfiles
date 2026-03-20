@@ -56,6 +56,9 @@ bindsym $mod+Ctrl+q exec --no-startup-id "swaylock -f -c 1d2021"
 bindsym Print exec "grimshot save screen ~/pictures/screenshots/$(date +%F-%T).png"
 bindsym Shift+Print exec "grimshot save area ~/pictures/screenshots/$(date +%F-%T).png"
 
+bindsym $mod+q move scratchpad
+bindsym $mod+Shift+w scratchpad show
+
 bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
@@ -123,6 +126,7 @@ for_window [shell="xwayland"] title_format "[XWayland] %title"
 # Wayland apps
 assign [app_id="dev.zed.Zed"] workspace number 2
 assign [app_id="org.mozilla.firefox"] workspace number 3
+assign [app_id="net.thunderbird.Thunderbird"] workspace number 4
 assign [app_id="Slack"] workspace number 0
 
 # XWayland apps
