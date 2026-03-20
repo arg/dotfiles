@@ -1,0 +1,6 @@
+#unifiedToolbar {
+  visibility: collapse !important;
+  height: 0px !important;
+  overflow: clip !important;
+  display: none !important;
+}
