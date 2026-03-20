@@ -1,0 +1,21 @@
+[general]
+mode = viewer
+
+[viewer]
+scale = optimal
+antialiasing = mks13
+preload = 1
+
+[info]
+show = no
+
+[keys.viewer]
+i = info
+f = fullscreen
+l = zoom +10
+h = zoom -10
+j = next_file
+k = prev_file
+space = animation
+
+# vim:ft=dosini
