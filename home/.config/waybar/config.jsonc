@@ -19,7 +19,7 @@
     "cpu",
     "memory",
     "temperature",
-    "bluetooth",
+    /*"bluetooth",*/
     "clock#date",
     "clock#time"
   ],
@@ -73,6 +73,7 @@
     "tooltip": false
   },
 
+  /*
   "bluetooth": {
     "format": " {status}",
     "controller": "HHKB Hybrid",
@@ -80,6 +81,7 @@
     "tooltip-format-connected": "{num_connections} connected\n\n{device_enumerate}",
     "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%"
   },
+  */
 
   "clock#date": {
     "format": "{:%d.%m.%Y}",
