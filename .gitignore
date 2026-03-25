@@ -5,3 +5,4 @@ home/.config/rclone/rclone.conf
 .terraform
 *.tfstate
 *.tfstate.backup
+todo.txt
