@@ -127,6 +127,7 @@ for_window [shell="xwayland"] title_format "[XWayland] %title"
 assign [app_id="dev.zed.Zed"] workspace number 2
 assign [app_id="org.mozilla.firefox"] workspace number 3
 assign [app_id="net.thunderbird.Thunderbird"] workspace number 4
+assign [app_id="^org.telegram.desktop"] workspace number 5
 assign [app_id="Slack"] workspace number 0
 
 # XWayland apps
