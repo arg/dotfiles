@@ -6,6 +6,7 @@ set font "PT Sans 12"
 set recolor-keephue false
 set render-loading true
 set guioptions "sv"
+set adjust-open width
 
 map ] zoom in
 map [ zoom out
