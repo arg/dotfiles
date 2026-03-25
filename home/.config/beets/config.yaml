@@ -1,0 +1,103 @@
+directory: /home/arg/music
+library: /home/arg/music/beets.db
+asciify_paths: yes
+path_sep_replace: '-'
+per_disc_numbering: yes
+
+replace:
+  '[\x00-\x1f\x7f]': ''
+  '[ ]+': ' '
+  '^\s+|\s+$': ''
+  '…': '...'
+  '–': '-'
+  '—': '-'
+  '’': "'"
+  '‘': "'"
+  '“': '"'
+  '”': '"'
+
+ui:
+  color: yes
+
+import:
+  copy: yes
+  write: yes
+  autotag: yes
+  log: /home/arg/music/beets.log
+  languages: en,ru
+  from_scratch: yes
+
+plugins:
+  - scrub
+  - musicbrainz
+  # - discogs
+  - inline
+  - fetchart
+  - embedart
+  - lyrics
+  - zero
+
+paths:
+  default: $albumartist/$album ($year)/%if{$multidisc,Disc $disc/}$track. $title
+
+item_fields:
+  multidisc: 1 if disctotal > 1 else 0
+
+fetchart:
+  auto: yes
+  cover_names:
+    - cover
+  minwidth: 500
+  maxwidth: 1024
+  quality: 95
+  enforce_ratio: 10px
+  store_source: yes
+  sources:
+    - '*'
+    # - discogs
+  high_resolution: yes
+
+embedart:
+  auto: yes
+  ifempty: no
+  remove_art_file: no
+  maxwidth: 1024
+  quality: 95
+
+lyrics:
+  auto: yes
+  force: yes
+  synced: no
+  print: yes
+  fallback: ''
+  sources:
+    - lrclib
+    - genius
+
+musicbrainz:
+  genres: yes
+  # external_ids:
+  #   discogs: yes
+
+# discogs:
+#   user_token: <token>
+
+scrub:
+  auto: yes
+
+zero:
+  auto: yes
+  keep_fields:
+    - title
+    - artist
+    - albumartist
+    - album
+    - year
+    - track
+    - tracktotal
+    - disc
+    - genre
+    - lyrics
+    - language
+    - isrc
+    - images
