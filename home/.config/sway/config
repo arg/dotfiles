@@ -15,7 +15,8 @@ output DP-3 {
 
 focus output DP-1
 
-input "2131:256:Topre_Corporation_HHKB_Professional" {
+# input "2131:256:Topre_Corporation_HHKB_Professional" {
+input "1367:8723:ATEN_Advance_Tech_Inc._VGA_COMBO_KVM_V1.2.112" {
   xkb_model "hhk"
   xkb_layout "us,ua"
   xkb_options "grp:alt_shift_toggle"
