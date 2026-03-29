@@ -34,11 +34,13 @@ plugins:
   - inline
   - fetchart
   - embedart
+  - replaygain
   - lyrics
   - zero
+  # - mpd
 
 paths:
-  default: $albumartist/$album ($year)/%if{$multidisc,Disc $disc/}$track. $title
+  default: $albumartist/$year - $album/%if{$multidisc,Disc $disc/}$track - $title
 
 item_fields:
   multidisc: 1 if disctotal > 1 else 0
@@ -85,6 +87,13 @@ musicbrainz:
 scrub:
   auto: yes
 
+replaygain:
+  auto: yes
+  overwrite: yes
+  backend: ffmpeg
+  per_disc: yes
+  noclip: yes
+
 zero:
   auto: yes
   keep_fields:
@@ -101,3 +110,13 @@ zero:
     - language
     - isrc
     - images
+    - r128_album_gain
+    - r128_track_gain
+    - rg_album_gain
+    - rg_album_peak
+    - rg_track_gain
+    - rg_track_peak
+
+mpd:
+  host: localhost
+  port: 6600
