@@ -28,7 +28,8 @@ window#waybar {
   border-bottom: 1px solid @bg1;
 }
 
-#language, #wireplumber, #cpu, #memory, #temperature, #bluetooth, #clock.date, #clock.time {
+#keyboard-state, #language, #mpd, #wireplumber, #privacy, #cpu, #memory, #temperature,
+#bluetooth, #clock.date, #clock.time {
   padding: 0 14px;
   border-left: 1px solid @bg1;
   color: @fg1;
@@ -80,8 +81,25 @@ window#waybar {
   padding: 0 14px;
 }
 
-#language.ua {
-  color: @orange;
+#keyboard-state {
+  padding: 0;
+  border-left: none;
+}
+
+#keyboard-state label.locked {
+  padding: 0 14px;
+  border-left: 1px solid @bg1;
+  color: @bg0;
+  background: @red;
+}
+
+#language {
+  font-family: "Noto Color Emoji";
+  font-size: 14px;
+}
+
+#privacy-item {
+  color: @red;
 }
 
 tooltip {

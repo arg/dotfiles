@@ -14,8 +14,11 @@
 
   "modules-right": [
     "sway/mode",
+    "keyboard-state",
     "sway/language",
+    "mpd",
     "wireplumber",
+    "privacy",
     "cpu",
     "memory",
     "temperature",
@@ -42,13 +45,36 @@
 
   "sway/window": {
     "format": "{title}",
-    "max-length": 70
+    "max-length": 65
+  },
+
+  "keyboard-state": {
+    "capslock": true,
+    "format": "{icon}",
+    "format-icons": {
+        "locked": "CAPS",
+        "unlocked": ""
+    }
   },
 
   "sway/language": {
-    "format": "{short}",
+    "format": "{flag}",
     "on-click": "swaymsg input type:keyboard xkb_switch_layout next",
     "tooltip": false
+  },
+
+  "mpd": {
+    "format": "{stateIcon} {elapsedTime:%M:%S}/{totalTime:%M:%S}",
+    "format-disconnected": "",
+    "format-stopped": "",
+    "state-icons": {
+      "paused": "",
+      "playing": ""
+    },
+    "interval": 10,
+    "tooltip-format": "{title}\n{artist} - {album}",
+    "tooltip-format-disconnected": "MPD (disconnected)",
+    "on-click": "mpc toggle"
   },
 
   "wireplumber": {
@@ -56,6 +82,31 @@
     "format-muted": "",
     "format-icons": ["", "", ""],
     "tooltip": false
+  },
+
+  "privacy": {
+    "icon-spacing": 8,
+    "icon-size": 0,
+    "transition-duration": 250,
+    "modules": [
+      {
+        "type": "screenshare",
+        "tooltip": true,
+        "tooltip-icon-size": 24
+      },
+      {
+        "type": "audio-in",
+        "tooltip": true,
+        "tooltip-icon-size": 24
+      }
+    ],
+    /*"ignore-monitor": true,*/
+    "ignore": [
+      {
+        "type": "screenshare",
+        "name": "obs"
+      }
+    ]
   },
 
   "cpu": {
@@ -85,11 +136,29 @@
 
   "clock#date": {
     "format": "{:%d.%m.%Y}",
-    "tooltip": false
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 0,
+      "format": {
+        "months": "<span color='#fbf1c7'>{}</span>",
+        "days": "<span color='#ebdbb2'>{}</span>",
+        "weeks": "<span color='#fabd2f'>W{:%W}</span>",
+        "weekdays": "<span color='#fabd2f'>{}</span>",
+        "today": "<span color='#fe8019'>{}</span>"
+      }
+    }
   },
 
   "clock#time": {
     "format": "{:%H:%M}",
-    "tooltip": false
+    "tooltip-format": "{tz_list}",
+    "timezones": [
+      "Europe/Madrid",
+      "America/Toronto",
+      "Europe/Kyiv"
+    ]
   }
 }
