@@ -94,6 +94,7 @@
 
   // AI
   "agent": {
+    "use_modifier_to_send": true,
     "favorite_models": [
       {
         "provider": "copilot_chat",
@@ -113,6 +114,8 @@
     ],
     "enable_feedback": false,
     "default_model": {
+      "effort": "high",
+      "enable_thinking": true,
       "provider": "copilot_chat",
       "model": "claude-opus-4.6",
     },
