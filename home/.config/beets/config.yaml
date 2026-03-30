@@ -25,7 +25,7 @@ import:
   autotag: yes
   log: /home/arg/music/beets.log
   languages: en,ru
-  from_scratch: yes
+  # from_scratch: yes
 
 plugins:
   - scrub
@@ -37,7 +37,7 @@ plugins:
   - replaygain
   - lyrics
   - zero
-  # - mpd
+  - mpdupdate
 
 paths:
   default: $albumartist/$year - $album/%if{$multidisc,Disc $disc/}$track - $title
@@ -63,14 +63,12 @@ embedart:
   auto: yes
   ifempty: no
   remove_art_file: no
-  maxwidth: 1024
-  quality: 95
 
 lyrics:
   auto: yes
   force: yes
   synced: no
-  print: yes
+  print: no
   fallback: ''
   sources:
     - lrclib
@@ -105,7 +103,9 @@ zero:
     - track
     - tracktotal
     - disc
-    - genre
+    - disctotal
+    - disctitle
+    - genres
     - lyrics
     - language
     - isrc
