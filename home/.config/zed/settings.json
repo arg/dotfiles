@@ -98,24 +98,23 @@
     "favorite_models": [
       {
         "provider": "copilot_chat",
-        "model": "gpt-5.2",
-        "enable_thinking": false
-      },
-      {
-        "provider": "copilot_chat",
         "model": "claude-opus-4.6",
-        "enable_thinking": false
+        "enable_thinking": true,
       },
       {
         "provider": "copilot_chat",
         "model": "gpt-5.4",
-        "enable_thinking": false
-      }
+        "enable_thinking": true,
+      },
     ],
     "enable_feedback": false,
     "default_model": {
       "effort": "high",
       "enable_thinking": true,
+      "provider": "copilot_chat",
+      "model": "claude-opus-4.6",
+    },
+    "thread_summary_model": {
       "provider": "copilot_chat",
       "model": "claude-opus-4.6",
     },
