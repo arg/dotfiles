@@ -1,5 +1,12 @@
 {
   // theme and UI settings
+  "context_servers": {
+    "datadog": {
+      "settings": {},
+      "enabled": true,
+      "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"
+    }
+  },
   "theme": "Gruvbox Dark",
   "ui_font_family": "Hack Nerd Font",
   "relative_line_numbers": "enabled",
@@ -99,13 +106,18 @@
       {
         "provider": "copilot_chat",
         "model": "claude-opus-4.6",
-        "enable_thinking": true,
+        "enable_thinking": true
       },
       {
         "provider": "copilot_chat",
         "model": "gpt-5.4",
-        "enable_thinking": true,
+        "enable_thinking": true
       },
+      {
+        "provider": "copilot_chat",
+        "model": "gemini-3.1-pro-preview",
+        "enable_thinking": true
+      }
     ],
     "enable_feedback": false,
     "default_model": {
