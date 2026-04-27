@@ -2,22 +2,17 @@ set selection-clipboard clipboard
 set window-title-home-tilde true
 set statusbar-home-tilde true
 set font "PT Sans 12"
-#set recolor true
 set recolor-keephue false
 set render-loading true
 set guioptions "sv"
 set adjust-open width
+set scroll-page-aware true
+set scroll-full-overlap 0.01
+set scroll-step 100
 
-map ] zoom in
-map [ zoom out
-map 0 zoom default
+map 0 adjust_window width
 map h navigate previous
-map j scroll down
-map k scroll up
 map l navigate next
-map x toggle_page_mode
-map c recolor
-map r rotate
 
 set notification-error-bg "#282828"
 set notification-error-fg "#fb4934"
@@ -31,10 +26,6 @@ set completion-group-bg "#3c3836"
 set completion-group-fg "#928374"
 set completion-highlight-bg "#83a598"
 set completion-highlight-fg "#504945"
-set index-bg "#504945"
-set index-fg "#ebdbb2"
-set index-active-bg "#83a598"
-set index-active-fg "#504945"
 set inputbar-bg "#282828"
 set inputbar-fg "#ebdbb2"
 set statusbar-bg "#504945"
