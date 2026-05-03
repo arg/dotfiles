@@ -1,5 +1,8 @@
 {
   // theme and UI settings
+  "git_panel": {
+    "dock": "left"
+  },
   "context_servers": {
     "datadog": {
       "settings": {},
@@ -17,6 +20,7 @@
   "wrap_guides": [120],
   "outline_panel": { "dock": "right" },
   "project_panel": {
+    "dock": "left",
     "folder_icons": false,
     "file_icons": false,
     "git_status": false,
@@ -76,7 +80,8 @@
 
   // disable crap
   "minimap": { "show": "never" },
-  "collaboration_panel": { "button": false },
+  "collaboration_panel": { "dock": "left",
+                           "button": false },
   "indent_guides": { "enabled": false },
   "debugger": { "button": false },
   // "search": { "button": false },
@@ -101,6 +106,8 @@
 
   // AI
   "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
     "use_modifier_to_send": true,
     "favorite_models": [
       {
@@ -117,14 +124,26 @@
         "provider": "copilot_chat",
         "model": "gemini-3.1-pro-preview",
         "enable_thinking": true
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "claude-opus-4.7",
+        "enable_thinking": true,
+        "effort": "medium"
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "gpt-5.5",
+        "enable_thinking": false,
+        "effort": "high"
       }
     ],
     "enable_feedback": false,
     "default_model": {
-      "effort": "high",
+      "effort": "medium",
       "enable_thinking": true,
       "provider": "copilot_chat",
-      "model": "claude-opus-4.6",
+      "model": "claude-opus-4.7",
     },
     "thread_summary_model": {
       "provider": "copilot_chat",
