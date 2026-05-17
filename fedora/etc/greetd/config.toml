@@ -1,0 +1,6 @@
+[terminal]
+vt = 1
+
+[default_session]
+user = "greetd"
+command = "tuigreet --cmd sway --sessions /usr/share/wayland-sessions"
