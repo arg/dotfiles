@@ -1,14 +1,14 @@
 {
   // theme and UI settings
   "git_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "context_servers": {
     "datadog": {
       "settings": {},
       "enabled": true,
-      "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"
-    }
+      "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp",
+    },
   },
   "theme": "Gruvbox Dark",
   "ui_font_family": "Hack Nerd Font",
@@ -80,8 +80,7 @@
 
   // disable crap
   "minimap": { "show": "never" },
-  "collaboration_panel": { "dock": "left",
-                           "button": false },
+  "collaboration_panel": { "dock": "left", "button": false },
   "indent_guides": { "enabled": false },
   "debugger": { "button": false },
   // "search": { "button": false },
@@ -119,23 +118,6 @@
         "provider": "copilot_chat",
         "model": "gpt-5.4",
         "enable_thinking": true
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gemini-3.1-pro-preview",
-        "enable_thinking": true
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-opus-4.7",
-        "enable_thinking": true,
-        "effort": "medium"
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.5",
-        "enable_thinking": false,
-        "effort": "high"
       }
     ],
     "enable_feedback": false,
@@ -151,7 +133,9 @@
     },
   },
   "edit_predictions": {
+    "allow_data_collection": "no",
     "provider": "copilot",
+    "mode": "eager",
     "disabled_globs": ["**/node_modules/**", "**/vendor/**", "**/tmp/**", "**/log/**"],
   },
 
