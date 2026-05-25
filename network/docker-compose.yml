@@ -494,6 +494,7 @@ services:
     restart: "no"
     ports:
       - "25565:25565"
+      - "19132:19132/udp"
     env_file:
       - "linuxserver.env"
       - "minecraft.env"
@@ -504,8 +505,9 @@ services:
       resources:
         limits:
           cpus: "4"
-          memory: "6G"
+          memory: "8G"
   # }}}
+
 volumes:
   zabbix_server_data:
   zabbix_web_data:
