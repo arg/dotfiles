@@ -1,18 +1,22 @@
 - name: "Remove swap entry from fstab"
   ansible.posix.mount:
-    path: "/swap.img"
-    state: "absent"
+    src: "/swap.img"
+    path: "none"
+    fstype: "swap"
+    state: "absent_from_fstab"
   register: "swap_mount"
 
 - name: "Turn off swap"
   ansible.builtin.command:
     cmd: "swapoff --all"
   when: "swap_mount.changed"
+  register: "swap_off"
 
 - name: "Remove swap file"
   ansible.builtin.file:
     path: "/swap.img"
     state: "absent"
+  when: "swap_off.changed"
 
 - name: "Disable swap file service"
   ansible.builtin.systemd_service:

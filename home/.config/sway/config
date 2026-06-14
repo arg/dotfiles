@@ -3,6 +3,7 @@ output DP-1 {
   position 0 0
   scale 2
   adaptive_sync on
+  transform 90
 }
 
 output DP-3 {

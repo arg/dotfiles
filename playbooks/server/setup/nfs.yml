@@ -1,0 +1,19 @@
+- name: "Configure NFS"
+  ansible.builtin.block:
+    - name: "Install NFS packages"
+      ansible.builtin.package:
+        name: "nfs-kernel-server"
+        state: "present"
+
+    - name: "Configure NFS exports"
+      ansible.builtin.copy:
+        dest: "/etc/exports"
+        content: |
+          {{ nfs.exports | map('regex_replace', '^', '/srv/nfs/') | join('\n') }}
+      notify: "Restart NFS server"
+
+  handlers:
+    - name: "Restart NFS server"
+      ansible.builtin.service:
+        name: "nfs-kernel-server"
+        state: "restarted"
