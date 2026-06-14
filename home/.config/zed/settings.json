@@ -1,11 +1,16 @@
 {
   // theme and UI settings
+  "diff_view_style": "split",
   "git_panel": {
     "dock": "left",
   },
   "context_servers": {
+    "github": {
+      "enabled": true,
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer <token>" },
+    },
     "datadog": {
-      "settings": {},
       "enabled": true,
       "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp",
     },
@@ -105,6 +110,20 @@
 
   // AI
   "agent": {
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "always_allow": [
+            {
+              "pattern": "^grep\\b"
+            },
+            {
+              "pattern": "^head\\b"
+            }
+          ]
+        }
+      }
+    },
     "sidebar_side": "right",
     "dock": "right",
     "use_modifier_to_send": true,
@@ -117,7 +136,8 @@
       {
         "provider": "copilot_chat",
         "model": "gpt-5.4",
-        "enable_thinking": true
+        "enable_thinking": true,
+        "effort": "high"
       }
     ],
     "enable_feedback": false,
@@ -133,6 +153,9 @@
     },
   },
   "edit_predictions": {
+    "copilot": {
+      "enable_next_edit_suggestions": true
+    },
     "allow_data_collection": "no",
     "provider": "copilot",
     "mode": "eager",
