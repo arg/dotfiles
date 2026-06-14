@@ -1,0 +1,11 @@
+[Unit]
+Description=Fix annoying fan behavior on NUC 14
+After=multi-user.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/fan-fix.sh
+
+[Install]
+WantedBy=multi-user.target
