@@ -1,7 +1,9 @@
 {
   // theme and UI settings
-  "diff_view_style": "split",
+  "cli_default_open_behavior": "existing_window",
+  "diff_view_style": "unified",
   "git_panel": {
+    "tree_view": true,
     "dock": "left",
   },
   "context_servers": {
@@ -79,7 +81,7 @@
     "font_family": "Hack Nerd Font",
     "working_directory": "current_project_directory",
     "line_height": { "custom": 2 },
-    "shell": { "program": "/usr/bin/fish" },
+    "shell": { "program": "/opt/homebrew/bin/fish" },
     "toolbar": { "breadcrumbs": false },
   },
 
@@ -119,6 +121,15 @@
             },
             {
               "pattern": "^head\\b"
+            },
+            {
+              "pattern": "^sort\\b"
+            },
+            {
+              "pattern": "^uniq\\b"
+            },
+            {
+              "pattern": "^echo\\b"
             }
           ]
         }
@@ -145,7 +156,7 @@
       "effort": "high",
       "enable_thinking": true,
       "provider": "copilot_chat",
-      "model": "claude-opus-4.6",
+      "model": "claude-opus-4.8",
     },
     "thread_summary_model": {
       "provider": "copilot_chat",
