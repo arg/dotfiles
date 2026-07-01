@@ -7,7 +7,7 @@
 - name: "Allow user to use sudo without password"
   ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ ansible_user }}"
-    content: "{{ ansible_user }} ALL=(ALL) NOPASSWD:ALL"
+    content: "{{ ansible_user }} ALL=(ALL) NOPASSWD:ALL\n"
     mode: "0600"
     validate: "visudo -cf %s"
 

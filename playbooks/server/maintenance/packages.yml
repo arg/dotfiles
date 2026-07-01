@@ -1,0 +1,48 @@
+- name: "Update apt cache"
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: "List upgradable packages"
+  ansible.builtin.command:
+    cmd: "apt list --upgradable"
+  environment:
+    LANG: "C"
+  register: "apt_list"
+  changed_when: false
+
+- name: "Extract upgradable package names"
+  ansible.builtin.set_fact:
+    apt_upgradable: >-
+      {{ apt_list.stdout_lines
+         | select('search', '/')
+         | map('regex_replace', '^([^/]+)/.*$', '\1')
+         | list }}
+
+- name: "Report upgradable packages"
+  ansible.builtin.debug:
+    msg: >-
+      {{ apt_upgradable | length }}
+      {{ 'package(s) can be upgraded (dry-run)' if (apt_dry_run | bool) else 'package(s) to upgrade' }}:
+      {{ apt_upgradable | default(['none'], true) }}
+
+- name: "Upgrade packages"
+  ansible.builtin.apt:
+    upgrade: "safe"
+  when: "not (apt_dry_run | bool)"
+
+- name: "Autoremove orphaned packages"
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
+  when: "not (apt_dry_run | bool)"
+
+- name: "Check if reboot is required"
+  ansible.builtin.stat:
+    path: "/var/run/reboot-required"
+  register: "reboot_required"
+  changed_when: false
+
+- name: "Report reboot requirement"
+  ansible.builtin.debug:
+    msg: "{{ 'Reboot required' if reboot_required.stat.exists else 'No reboot required' }}"
+  when: "not (apt_dry_run | bool)"

@@ -1,8 +1,16 @@
-- name: "Restart Network services"
+- name: "Recreate and restart network services"
   hosts: "docker_hosts"
   tasks:
-    - name: "Run `docker-compose restart`"
+    - name: "docker compose up (force-recreate)"
       community.docker.docker_compose_v2:
-        project_src: "~/.dotfiles/network"
-        state: "restarted"
-        recreate: "never"
+        project_src: "{{ project_directory }}"
+        state: "present"
+        recreate: "always"
+        pull: "never"
+        wait: true
+        wait_timeout: 120
+      register: "compose_restart"
+
+    - name: "Show containers health"
+      ansible.builtin.debug:
+        msg: "{{ compose_restart.containers | items2dict(key_name='Service', value_name='Health') }}"

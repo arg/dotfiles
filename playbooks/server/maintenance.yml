@@ -1,0 +1,8 @@
+- name: "Maintain Ubuntu Server"
+  hosts: "servers"
+
+  tasks:
+    - import_tasks: "maintenance/packages.yml"
+      vars:
+        apt_dry_run: false
+      tags: ["packages"]

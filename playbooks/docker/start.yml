@@ -1,8 +1,16 @@
-- name: "Start Network services"
+- name: "Start network services"
   hosts: "docker_hosts"
   tasks:
-    - name: "Run `docker-compose up`"
+    - name: "docker compose up"
       community.docker.docker_compose_v2:
-        project_src: "~/.dotfiles/network"
+        project_src: "{{ project_directory }}"
         state: "present"
         recreate: "never"
+        pull: "missing"
+        wait: true
+        wait_timeout: 120
+      register: "compose_up"
+
+    - name: "Show containers health"
+      ansible.builtin.debug:
+        msg: "{{ compose_up.containers | items2dict(key_name='Service', value_name='Health') }}"

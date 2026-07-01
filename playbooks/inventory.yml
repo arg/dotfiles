@@ -1,7 +1,7 @@
 all:
+  vars:
+    ansible_ssh_common_args: '-o "SetEnv TERM=dumb"'
   hosts:
-    sirius:
-      ansible_host: "192.188.0.5"
     polaris:
       ansible_host: "192.168.0.6"
   children:
@@ -10,17 +10,29 @@ all:
         polaris:
       vars:
         ansible_user: "arg"
+        ansible_become: true
+        ansible_become_user: "root"
+        ansible_become_method: "su"
+        ansible_become_exe: "sudo su -"
         additional_users:
           - "veronika"
         dotfiles_dir: "/home/arg/.dotfiles"
         systemd:
           path: "/usr/lib/systemd"
           journal_size: "2G"
-        zswap_percent: "15"
+        zramswap:
+          - name: "PERCENT"
+            value: "15"
+          - name: "ALGO"
+            value: "lz4"
         sysctl_vars:
           - name: "vm.swappiness"
             value: "10"
+        grub:
+          custom_cmdline: "fbcon=rotate:1 video=1920x1080 consoleblank=300"
         zfs:
+          encrypted_credentials_directory: "/etc/credstore.encrypted"
+          encrypted_dataset: "zroot/home"
           pools:
             - "archive"
             - "apps"
@@ -39,7 +51,6 @@ all:
             - "archive/photos"
             - "archive/veronika"
             - "archive/videos"
-        apt_cache_valid_time: 86400 # 24 hours
         packages:
           install:
             - "fish"
@@ -60,12 +71,11 @@ all:
             - "vifm"
             - "nvme-cli"
             - "zfsutils-linux"
-            - "sanoid"
-            - "zram-tools"
-            - "drm-info"
-            - "ipmitool"
-            - "bluez"
-            - "dbus-broker"
+            - "sanoid" # ZFS snapshot management
+            - "zram-tools" # ZRAM support
+            - "drm-info" # GPU information
+            - "libtss2-rc0t64" # TPM2 support
+            - "monit"
           remove:
             - "snapd"
         ufw:
@@ -131,18 +141,16 @@ all:
             - path: "/home/arg/archive/backups"
               hour: "3"
             - path: "/home/arg/archive/photos"
-              hour: "5" 
+              hour: "5"
             - path: "/home/arg/archive/veronika"
               hour: "7"
             - path: "/home/arg/archive/videos"
               hour: "9"
-    ipmi_hosts:
-      hosts:
-        sirius:
-      vars:
-        ansible_user: "ADMIN"
+        docker:
+          directory: "/docker"
     docker_hosts:
       hosts:
         polaris:
       vars:
         ansible_user: "arg"
+        project_directory: "/docker"

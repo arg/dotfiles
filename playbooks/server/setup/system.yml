@@ -7,5 +7,66 @@
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     state: "present"
+    sysctl_set: true
     reload: true
   loop: "{{ sysctl_vars }}"
+
+- name: "Create journal systemd directory"
+  ansible.builtin.file:
+    path: "{{ systemd.path }}/journald.conf.d"
+    state: "directory"
+    recurse: true
+
+- name: "Configure journal"
+  ansible.builtin.template:
+    src: "journal/journal-size.conf.j2"
+    dest: "{{ systemd.path }}/journald.conf.d/journal-size.conf"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "journal_config"
+
+- name: "Restart systemd-journald service"
+  ansible.builtin.systemd_service:
+    name: "systemd-journald"
+    state: "restarted"
+    enabled: true
+    daemon_reload: true
+  when: "journal_config.changed"
+
+- name: "Enable fstrim timer"
+  ansible.builtin.systemd_service:
+    name: "fstrim.timer"
+    state: "started"
+    enabled: true
+
+- name: "Configure GRUB"
+  ansible.builtin.template:
+    src: "grub/custom.cfg.j2"
+    dest: "/etc/default/grub.d/99-custom.cfg"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "grub_config"
+
+- name: "Generate GRUB configuration"
+  ansible.builtin.command:
+    cmd: "update-grub"
+  when: "grub_config.changed"
+
+- name: "Install console powerdown service"
+  ansible.builtin.copy:
+    src: "systemd/console-powerdown.service"
+    dest: "{{ systemd.path }}/system/console-powerdown.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "console_powerdown_service"
+
+- name: "Enable console powerdown service"
+  ansible.builtin.systemd_service:
+    name: "console-powerdown.service"
+    state: "started"
+    enabled: true
+    daemon_reload: true
+  when: "console_powerdown_service.changed"

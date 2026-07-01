@@ -1,8 +1,7 @@
-- name: "Stop Network services"
+- name: "Stop network services"
   hosts: "docker_hosts"
   tasks:
-    - name: "Run `docker-compose stop`"
+    - name: "docker compose stop"
       community.docker.docker_compose_v2:
-        project_src: "~/.dotfiles/network"
+        project_src: "{{ project_directory }}"
         state: "stopped"
-        recreate: "never"

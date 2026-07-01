@@ -1,0 +1,12 @@
+[Unit]
+Description=Force console DPMS power-off
+After=getty.target
+
+[Service]
+Type=oneshot
+StandardOutput=tty
+TTYPath=/dev/tty1
+ExecStart=/usr/bin/setterm --blank 5 --powersave powerdown --powerdown 5 --term linux
+
+[Install]
+WantedBy=multi-user.target

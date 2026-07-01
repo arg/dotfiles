@@ -1,0 +1,16 @@
+[Unit]
+Description=Unlock vault ZFS dataset
+DefaultDependencies=no
+After=zfs-import.target
+Before=zfs-mount.service
+Requires=zfs-import.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+LoadCredentialEncrypted={{ encrypted_credential_file }}:{{ encrypted_credential_full_path }}
+ExecStart=/usr/local/bin/zfs-unlock-vault.sh
+
+[Install]
+WantedBy=zfs-mount.service
+# vi: ft=systemd

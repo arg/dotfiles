@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -eu
+exec /usr/sbin/zfs load-key {{ zfs.encrypted_dataset }} < "$CREDENTIALS_DIRECTORY/{{ encrypted_credential_file }}"
+# vi: ft=sh

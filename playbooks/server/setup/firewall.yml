@@ -3,6 +3,7 @@
     rule: "allow"
     port: "{{ item }}"
     proto: "tcp"
+    from_ip: "192.168.0.0/24"
   loop: "{{ ufw.ports }}"
   register: "ufw_ports"
 
@@ -10,6 +11,7 @@
   community.general.ufw:
     rule: "allow"
     name: "{{ item }}"
+    from_ip: "192.168.0.0/24"
   loop: "{{ ufw.services }}"
   register: "ufw_services"
 

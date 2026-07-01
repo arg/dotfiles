@@ -1,37 +1,101 @@
-- name: "Create ZFS mount targets"
+- name: "Check for a usable TPM2"
+  ansible.builtin.command: "systemd-analyze has-tpm2"
+  register: "tpm2_check"
+  changed_when: false
+  failed_when: "'yes' not in tpm2_check.stdout"
+
+- name: "Ensure the encrypted credstore directory exists"
   ansible.builtin.file:
-    path: "{{ item }}"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
+    path: "{{ zfs.encrypted_credentials_directory }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
     mode: "0700"
-    state: "directory"
-  loop: "{{ zfs.targets }}"
 
-- name: "Schedule ZFS scrubs"
-  ansible.builtin.systemd_service:
-    name: "zfs-scrub-monthly@{{ item }}.timer"
-    state: "started"
-    enabled: true
-  loop: "{{ zfs.pools }}"
+- name: "Check whether the credential is already sealed"
+  ansible.builtin.stat:
+    path: "{{ encrypted_credential_full_path }}"
+  register: "zfs_vault_credential"
 
-- name: "Create Sanoid configuration directory"
+- name: "Prompt for the ZFS vault passphrase"
+  ansible.builtin.pause:
+    prompt: "ZFS vault passphrase"
+    echo: false
+  register: "zfs_vault_prompt"
+  no_log: true
+  when: "not zfs_vault_credential.stat.exists"
+
+- name: "Seal the passphrase with TPM2"
+  ansible.builtin.command:
+    cmd: "systemd-creds encrypt --name={{ encrypted_credential_file }} --with-key=host+tpm2 - {{ encrypted_credential_full_path }}"
+    stdin: "{{ zfs_vault_prompt.user_input }}"
+    stdin_add_newline: false
+  no_log: true
+  when: "not zfs_vault_credential.stat.exists"
+
+- name: "Set permissions for the sealed credential"
   ansible.builtin.file:
-    path: "/etc/sanoid"
-    state: "directory"
-    recurse: true
+    path: "{{ encrypted_credential_full_path }}"
+    owner: "root"
+    group: "root"
+    mode: "0600"
 
-- name: "Configure Sanoid"
+- name: "Install unlock script"
   ansible.builtin.template:
-    src: "sanoid/sanoid.conf.j2"
-    dest: "/etc/sanoid/sanoid.conf"
+    src: "zfs/zfs-unlock-vault.sh.j2"
+    dest: "/usr/local/bin/zfs-unlock-vault.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: "Install systemd service"
+  ansible.builtin.template:
+    src: "zfs/zfs-unlock-vault.service.j2"
+    dest: "/etc/systemd/system/zfs-unlock-vault.service"
     owner: "root"
     group: "root"
     mode: "0644"
-  register: "sanoid_config"
 
-- name: "Restart Sanoid service"
+- name: "Enable systemd service"
   ansible.builtin.systemd_service:
-    name: "sanoid"
-    state: "restarted"
+    name: "zfs-unlock-vault.service"
     enabled: true
-  when: "sanoid_config.changed"
+    daemon_reload: true
+
+    # - name: "Create ZFS mount targets"
+#   ansible.builtin.file:
+#     path: "{{ item }}"
+#     owner: "{{ ansible_user }}"
+#     group: "{{ ansible_user }}"
+#     mode: "0700"
+#     state: "directory"
+#   loop: "{{ zfs.targets }}"
+
+# - name: "Schedule ZFS scrubs"
+#   ansible.builtin.systemd_service:
+#     name: "zfs-scrub-monthly@{{ item }}.timer"
+#     state: "started"
+#     enabled: true
+#   loop: "{{ zfs.pools }}"
+
+# - name: "Create Sanoid configuration directory"
+#   ansible.builtin.file:
+#     path: "/etc/sanoid"
+#     state: "directory"
+#     recurse: true
+
+# - name: "Configure Sanoid"
+#   ansible.builtin.template:
+#     src: "sanoid/sanoid.conf.j2"
+#     dest: "/etc/sanoid/sanoid.conf"
+#     owner: "root"
+#     group: "root"
+#     mode: "0644"
+#   register: "sanoid_config"
+
+# - name: "Restart Sanoid service"
+#   ansible.builtin.systemd_service:
+#     name: "sanoid"
+#     state: "restarted"
+#     enabled: true
+#   when: "sanoid_config.changed"

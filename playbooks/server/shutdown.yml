@@ -1,13 +1,9 @@
-- name: "Shutdown servers"
-  gather_facts: false
-  vars_files:
-    - "../secrets.yml"
-  hosts: "localhost"
+- name: "Shutdown Ubuntu Server"
+  hosts: "servers"
+
   tasks:
-   - name: "Shutdown via IPMI"
-     community.general.ipmi_power:
-       name: "192.168.0.5"
-       user: "{{ ipmi.username }}"
-       password: "{{ ipmi.password }}"
-       state: "shutdown"
-     delegate_to: "localhost"
+    - name: "Shutdown the server"
+      ansible.builtin.command:
+        cmd: "systemctl poweroff"
+      async: 1
+      poll: 0

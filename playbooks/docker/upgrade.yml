@@ -1,0 +1,16 @@
+- name: "Upgrade network services"
+  hosts: "docker_hosts"
+  tasks:
+    - name: "docker compose up (upgrade)"
+      community.docker.docker_compose_v2:
+        project_src: "{{ project_directory }}"
+        state: "present"
+        recreate: "auto"
+        pull: "always"
+        wait: true
+        wait_timeout: 120
+      register: "compose_upgrade"
+
+    - name: "Show containers health"
+      ansible.builtin.debug:
+        msg: "{{ compose_upgrade.containers | items2dict(key_name='Service', value_name='Health') }}"

@@ -1,13 +1,9 @@
-- name: "Reboot servers"
-  gather_facts: false
-  vars_files:
-    - "../secrets.yml"
-  hosts: "localhost"
+- name: "Reboot Ubuntu Server"
+  hosts: "servers"
+
   tasks:
-   - name: "Reboot via IPMI"
-     community.general.ipmi_power:
-       name: "192.168.0.5"
-       user: "{{ ipmi.username }}"
-       password: "{{ ipmi.password }}"
-       state: "reset"
-     delegate_to: "localhost"
+    - name: "Reboot the server"
+      ansible.builtin.command:
+        cmd: "systemctl reboot"
+      async: 1
+      poll: 0

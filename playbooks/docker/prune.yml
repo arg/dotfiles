@@ -1,0 +1,18 @@
+- name: "Prune old images and containers"
+  hosts: "docker_hosts"
+  tasks:
+    - name: "docker prune"
+      community.docker.docker_prune:
+        containers: true
+        images: true
+        networks: true
+        volumes: true
+        builder_cache: true
+      register: "prune_result"
+
+    - name: "Show reclaimed space"
+      ansible.builtin.debug:
+        msg:
+          images: "{{ prune_result.images_space_reclaimed | default(0) }}"
+          volumes: "{{ prune_result.volumes_space_reclaimed | default(0) }}"
+          builder_cache: "{{ prune_result.builder_cache_space_reclaimed | default(0) }}"
