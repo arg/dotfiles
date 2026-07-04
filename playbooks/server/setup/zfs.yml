@@ -43,7 +43,7 @@
 - name: "Install unlock script"
   ansible.builtin.template:
     src: "zfs/zfs-unlock-vault.sh.j2"
-    dest: "/usr/local/bin/zfs-unlock-vault.sh"
+    dest: "{{ scripts_directory }}/zfs-unlock-vault.sh"
     owner: "root"
     group: "root"
     mode: "0755"

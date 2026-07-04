@@ -1,0 +1,39 @@
+monit:
+  poll: 60
+  load:
+    cpu: 95
+    memory: 75
+    average: 2
+  temperature_sensors:
+    - name: "CPU temperature"
+      sensor: "coretemp"
+      maximum: 80
+    - name: "Motherboard temperature" # Not really correct, but close enough for now
+      sensor: "acpitz"
+      maximum: 70
+    - name: "NVMe temperature"
+      sensor: "nvme"
+      maximum: 50
+  fan_sensors:
+    - name: "CPU fan"
+      sensor: "asus"
+      minimum: 300
+  services:
+    - name: "Samba"
+      service: "smbd"
+      pidfile: "/var/run/samba/smbd.pid"
+    - name: "Docker"
+      service: "docker"
+      pidfile: "/var/run/docker.pid"
+    - name: "SSH"
+      service: "ssh"
+      pidfile: "/var/run/sshd.pid"
+  timeouts:
+    program: 10
+    start: 10
+    stop: 10
+    restart: 20
+  scripts:
+    check_docker: "check-docker.sh"
+    check_temperature: "check-temperature.sh"
+    check_fan: "check-fan.sh"

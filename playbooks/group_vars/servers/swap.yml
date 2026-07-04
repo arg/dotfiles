@@ -1,0 +1,5 @@
+zramswap:
+  - name: "PERCENT"
+    value: "15"
+  - name: "ALGO"
+    value: "lz4"

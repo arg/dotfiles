@@ -27,8 +27,37 @@
 
 - name: "Create Docker compose directory"
   ansible.builtin.file:
-    path: "{{ docker.directory }}"
+    path: "{{ docker_directory }}"
     state: "directory"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0750"
+
+- name: "Generate variables.env file for Docker Compose"
+  ansible.builtin.template:
+    src: "docker/variables.env.j2"
+    dest: "{{ docker_directory }}/variables.env"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"
+  vars:
+    variables: "{{ docker.variables }}"
+
+- name: "Generate secrets.env file for Docker Compose"
+  ansible.builtin.template:
+    src: "docker/variables.env.j2"
+    dest: "{{ docker_directory }}/secrets.env"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+  vars:
+    variables: "{{ secrets.docker }}"
+  no_log: true
+
+- name: "Generate Docker Compose stack definition"
+  ansible.builtin.template:
+    src: "docker/compose.yml.j2"
+    dest: "{{ docker_directory }}/docker-compose.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0644"

@@ -1,0 +1,28 @@
+packages:
+  install:
+    - "fish"
+    - "fzf"
+    - "git"
+    - "neovim"
+    - "htop"
+    - "mc"
+    - "tmux"
+    - "build-essential"
+    - "rsyslog-gnutls"
+    - "samba"
+    - "rclone"
+    - "curl"
+    - "wget"
+    - "docker.io"
+    - "docker-compose-v2"
+    - "vifm"
+    - "nvme-cli"
+    - "zfsutils-linux"
+    - "sanoid" # ZFS snapshot management
+    - "zram-tools" # ZRAM support
+    - "drm-info" # GPU information
+    - "libtss2-rc0t64" # TPM2 support
+    - "monit"
+    - "lm-sensors"
+  remove:
+    - "snapd"

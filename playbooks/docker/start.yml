@@ -3,7 +3,7 @@
   tasks:
     - name: "docker compose up"
       community.docker.docker_compose_v2:
-        project_src: "{{ project_directory }}"
+        project_src: "{{ docker_directory }}"
         state: "present"
         recreate: "never"
         pull: "missing"

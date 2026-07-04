@@ -3,7 +3,7 @@
   tasks:
     - name: "docker compose up (upgrade)"
       community.docker.docker_compose_v2:
-        project_src: "{{ project_directory }}"
+        project_src: "{{ docker_directory }}"
         state: "present"
         recreate: "auto"
         pull: "always"

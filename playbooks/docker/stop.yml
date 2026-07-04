@@ -3,5 +3,5 @@
   tasks:
     - name: "docker compose stop"
       community.docker.docker_compose_v2:
-        project_src: "{{ project_directory }}"
+        project_src: "{{ docker_directory }}"
         state: "stopped"

@@ -1,0 +1,54 @@
+set daemon {{ monit.poll }}
+
+set log /var/log/monit.log
+set pidfile /var/run/monit.pid
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+
+set eventqueue
+  basedir /var/lib/monit/events
+  slots 100
+
+set limits {
+  programTimeout: {{ monit.timeouts.program }} seconds
+  startTimeout: {{ monit.timeouts.start }} seconds
+  restartTimeout: {{ monit.timeouts.restart }} seconds
+  stopTimeout: {{ monit.timeouts.stop }} seconds
+}
+
+set httpd
+  unixsocket /var/run/monit/httpd.sock uid root gid root permission 0600
+  allow localhost
+
+check system "{{ ansible_facts["hostname"] | capitalize }}"
+  if loadavg (1min) per core > {{ monit.load.average }} for 5 cycles then alert
+  if cpu usage > {{ monit.load.cpu }}% for 3 cycles then alert
+  if memory usage > {{ monit.load.memory }}% then alert
+
+{% for service in monit.services %}
+check process "{{ service.name }}" with pidfile {{ service.pidfile }}
+  start program = "/usr/bin/systemctl start {{ service.service }}"
+  stop program = "/usr/bin/systemctl stop {{ service.service }}"
+{% endfor %}
+
+{% for sensor in monit.temperature_sensors %}
+check program "Sensor: {{ sensor.name }}" with path "{{ scripts_directory }}/{{ monit.scripts.check_temperature }} {{ sensor.sensor }} {{ sensor.maximum }}"
+  group "Temperature"
+  every 2 cycles
+  if status != 0 then alert
+{% endfor %}
+
+{% for sensor in monit.fan_sensors %}
+check program "Fan: {{ sensor.name }}" with path "{{ scripts_directory }}/{{ monit.scripts.check_fan }} {{ sensor.sensor }} {{ sensor.minimum }}"
+  group "Fans"
+  every 2 cycles
+  if status != 0 then alert
+{% endfor %}
+
+{% for name, _ in docker.compose.items() %}
+check program "Docker: {{ name | capitalize }}" with path "{{ scripts_directory }}/{{ monit.scripts.check_docker }} {{ name }}"
+  group "Docker"
+  every 5 cycles
+  depends on "Docker"
+  if status != 0 then ignore
+{% endfor %}

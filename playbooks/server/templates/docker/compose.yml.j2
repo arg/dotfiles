@@ -1,0 +1,82 @@
+services:
+{% for name, service in docker.compose.items() %}
+{% if not loop.first %}
+
+{% endif %}
+  {{ name }}:
+    image: "{{ service.image }}"
+{% if service.depends_on is defined %}
+    depends_on:
+{% for dependency in service.depends_on %}
+      - "{{ dependency }}"
+{% endfor %}
+{% endif %}
+    restart: "no"
+{% if service.command is defined %}
+{% if service.command is string %}
+    command: "{{ service.command }}"
+{% else %}
+    command:
+{% for arg in service.command %}
+      - "{{ arg }}"
+{% endfor %}
+{% endif %}
+{% endif %}
+{% if service.external_ports is defined %}
+    ports:
+{% for port in service.external_ports %}
+      - "{{ port }}"
+{% endfor %}
+{% endif %}
+    env_file:
+      - "variables.env"
+{% if service.secrets | default(false) %}
+      - "secrets.env"
+{% endif %}
+{% if service.environment is defined %}
+    environment:
+{% for key, value in service.environment.items() %}
+      {{ key }}: "{{ value }}"
+{% endfor %}
+{% endif %}
+{% if service.extra_hosts is defined %}
+    extra_hosts:
+{% for host in service.extra_hosts %}
+      - "{{ host }}"
+{% endfor %}
+{% endif %}
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+{% if service.volumes is defined %}
+{% for volume in service.volumes %}
+      - "{{ volume }}"
+{% endfor %}
+{% endif %}
+{% if service.devices is defined %}
+    devices:
+{% for device in service.devices %}
+      - "{{ device }}"
+{% endfor %}
+{% endif %}
+    deploy:
+      resources:
+        limits:
+          cpus: "{{ service.cpus }}"
+          memory: "{{ service.memory }}"
+{% if service.host is defined and service.port is defined %}
+    labels:
+      traefik.enable: true
+      traefik.http.services.{{ name }}.loadbalancer.server.port: {{ service.port }}
+      traefik.http.routers.{{ name }}.rule: "Host(`{{ service.host }}`)"
+      traefik.http.routers.{{ name }}.entrypoints: "websecure"
+      traefik.http.routers.{{ name }}.tls.certresolver: "letsencrypt"
+{% endif %}
+{% if service.healthcheck is defined %}
+    healthcheck:
+      interval: "10s"
+      timeout: "5s"
+      retries: 3
+      start_period: "10s"
+      test: "{{ service.healthcheck }}"
+{% endif %}
+{% endfor %}

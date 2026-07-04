@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# {{ monit.scripts.check_fan }} <hwmon-chip-name> <minimum-rpm>
+#
+# Exit 1 if any fan*_input for the hwmon chip named <chip> is below <minimum-rpm>.
+# Exit 0 if all fans RPM above the minimum.
+
+set -eu
+
+name="${1:?usage: {{ monit.scripts.check_fan }} <hwmon-chip-name> <minimum-rpm>}"
+minimum="${2:?usage: {{ monit.scripts.check_fan }} <hwmon-chip-name> <minimum-rpm>}"
+
+found=0
+lowest=-1
+for chip in /sys/class/hwmon/hwmon*; do
+  [ -r "${chip}/name" ] || continue
+  if [ "$(cat "${chip}/name")" != "$name" ]; then
+    continue
+  fi
+  for input in "${chip}"/fan*_input; do
+    [ -r "$input" ] || continue
+    found=1
+    rpm="$(cat "$input")"
+    if [ "$lowest" -lt 0 ] || [ "$rpm" -lt "$lowest" ]; then
+      lowest="$rpm"
+    fi
+  done
+done
+
+if [ "$found" -eq 0 ]; then
+  echo "no fan data for '${name}'" >&2
+  exit 1
+fi
+
+echo "${name}: lowest fan ${lowest} RPM (minimum ${minimum})"
+if [ "$lowest" -lt "$minimum" ]; then
+  exit 1
+fi
+exit 0

@@ -1,0 +1,5 @@
+ansible_ssh_common_args: '-o "SetEnv TERM=dumb"'
+ansible_user: "arg"
+
+scripts_directory: "/usr/local/bin"
+docker_directory: "/docker"

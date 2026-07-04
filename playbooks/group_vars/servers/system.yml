@@ -1,0 +1,8 @@
+systemd:
+  path: "/usr/lib/systemd"
+  journal_size: "2G"
+sysctl_vars:
+  - name: "vm.swappiness"
+    value: "10"
+grub:
+  custom_cmdline: "fbcon=rotate:1 video=1920x1080 consoleblank=300"

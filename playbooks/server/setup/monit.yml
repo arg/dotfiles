@@ -1,0 +1,38 @@
+- name: "Copy Monit check scripts"
+  ansible.builtin.template:
+    src: "monit/{{ item.value }}.j2"
+    dest: "{{ scripts_directory }}/{{ item.value }}"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  loop: "{{ monit.scripts | dict2items }}"
+
+- name: "Create Monit systemd directory"
+  ansible.builtin.file:
+    path: "{{ systemd.path }}/system/monit.service.d"
+    state: "directory"
+    recurse: true
+
+- name: "Override Monit service launch options"
+  ansible.builtin.copy:
+    src: "monit/override.conf"
+    dest: "{{ systemd.path }}/system/monit.service.d/override.conf"
+    mode: "0644"
+  register: "monit_override"
+
+- name: "Copy Monit configuration"
+  ansible.builtin.template:
+    src: "monit/monitrc.j2"
+    dest: "/etc/monit/monitrc"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  register: "monit_config"
+
+- name: "Restart Monit service"
+  ansible.builtin.systemd_service:
+    name: "monit"
+    state: "restarted"
+    enabled: true
+    daemon_reload: true
+  when: "monit_config.changed or monit_override.changed"

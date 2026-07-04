@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# {{ monit.scripts.check_docker }} <compose-service>
+#
+# Exits 0 if the compose service's container is running and — when it defines a healthcheck — reports "healthy".
+# Exits 1 otherwise.
+#
+# Containers are resolved by compose label, so their runtime names and the compose project name don't matter.
+
+set -eu
+
+readonly PROJECT_DIR="{{ docker_directory }}"
+service="${1:?usage: {{ monit.scripts.check_docker }} <compose-service>}"
+
+cid="$(/usr/bin/docker ps --quiet \
+  --filter "label=com.docker.compose.project.working_dir=${PROJECT_DIR}" \
+  --filter "label=com.docker.compose.service=${service}" 2>/dev/null || true)"
+cid="${cid%%$'\n'*}"
+
+if [ -z "$cid" ]; then
+  echo "service '${service}': no running container" >&2
+  exit 1
+fi
+
+{% raw %}
+status="$(/usr/bin/docker inspect \
+  --format '{{.State.Status}}/{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' \
+  "$cid" 2>/dev/null || echo "unknown/none")"
+{% endraw %}
+
+echo "service '${service}': ${status}"
+case "$status" in
+  running/healthy|running/none) exit 0 ;;
+  *) exit 1 ;;
+esac

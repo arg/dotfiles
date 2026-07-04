@@ -10,7 +10,7 @@
 
 - name: "Create Rclone logs directory"
   ansible.builtin.file:
-    path: "{{ backup.logs_path }}"
+    path: "{{ backups.logs_path }}"
     state: "directory"
     mode: "0755"
     owner: "{{ ansible_user }}"
@@ -24,7 +24,7 @@
       --fast-list
       --progress
       --log-level INFO
-      --log-file {{ backup.logs_path }}/{{ item.path | basename }}.log
+      --log-file {{ backups.logs_path }}/{{ item.path | basename }}.log
       --exclude-from /home/{{ ansible_user }}/.config/rclone/excludelist.txt
       {{ item.path }} b2-crypt:{{ item.path | basename }}
     minute: "0"
@@ -32,4 +32,4 @@
     user: "{{ ansible_user }}"
     state: "present"
     cron_file: "backups"
-  loop: "{{ backup.sources }}"
+  loop: "{{ backups.sources }}"

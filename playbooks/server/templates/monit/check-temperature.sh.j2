@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# {{ monit.scripts.check_temperature }} <hwmon-chip-name> <maximum-temperature-celsius>
+#
+# Exits 1 if the hottest temp*_input for the hwmon chip named <chip> exceeds <maximum-temperature-celsius>.
+# Exits 0 if within limit.
+#
+# Discover chip names with:  grep -H . /sys/class/hwmon/hwmon*/name
+
+set -eu
+
+name="${1:?usage: {{ monit.scripts.check_temperature }} <hwmon-chip-name> <maximum-temperature-celsius>}"
+maximum="${2:?usage: {{ monit.scripts.check_temperature }} <hwmon-chip-name> <maximum-temperature-celsius>}"
+
+hottest=-1
+for chip in /sys/class/hwmon/hwmon*; do
+  [ -r "${chip}/name" ] || continue
+  if [ "$(cat "${chip}/name")" != "$name" ]; then
+    continue
+  fi
+  for input in "${chip}"/temp*_input; do
+    [ -r "$input" ] || continue
+    c=$(( $(cat "$input") / 1000 ))
+    if [ "$c" -gt "$hottest" ]; then
+      hottest="$c"
+    fi
+  done
+done
+
+if [ "$hottest" -lt 0 ]; then
+  echo "no temperature data for '${name}'" >&2
+  exit 1
+fi
+
+echo "${name}: ${hottest}C (limit ${maximum}C)"
+if [ "$hottest" -gt "$maximum" ]; then
+  exit 1
+fi
+exit 0

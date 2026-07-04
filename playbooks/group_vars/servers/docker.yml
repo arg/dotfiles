@@ -1,0 +1,120 @@
+docker:
+  variables:
+    puid: 1000
+    pgid: 1000
+    tz: "Europe/Madrid"
+  compose:
+    traefik:
+      image: "traefik:v3"
+      command:
+        - "--ping=true"
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+        - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+        - "--entrypoints.web.address=:80"
+        - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+        - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+        - "--entrypoints.websecure.address=:443"
+        - "--entrypoints.websecure.http.tls=true"
+        - "--certificatesresolvers.letsencrypt.acme.email=arg@arg.zone"
+        - "--certificatesresolvers.letsencrypt.acme.keytype=EC256"
+        - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+        - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
+        - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+        - "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=8.8.8.8:53"
+        - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.disablechecks=true"
+        - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delaybeforechecks=60s"
+        - "--serverstransport.insecureskipverify=true"
+      secrets: true
+      external_ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - "/docker/letsencrypt:/letsencrypt"
+        - "/var/run/docker.sock:/var/run/docker.sock"
+      cpus: 2
+      memory: "1G"
+      healthcheck: "traefik healthcheck --ping"
+
+    monit:
+      image: "caddy:latest"
+      command: "caddy reverse-proxy --from http://polaris.arg.network --to unix//run/monit/httpd.sock"
+      volumes:
+        - "/run/monit:/run/monit"
+      host: "polaris.arg.network"
+      port: 80
+      cpus: 1
+      memory: "512M"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost' || exit 1"
+
+    plex:
+      image: "linuxserver/plex:latest"
+      secrets: true
+      environment:
+        VERSION: "docker"
+      volumes:
+        - "/docker/plex:/config"
+        - "/media/videos:/videos"
+      devices:
+        - "/dev/dri/card1:/dev/dri/card0"
+        - "/dev/dri/renderD128:/dev/dri/renderD128"
+      host: "plex.arg.network"
+      port: 32400
+      cpus: 8
+      memory: "8G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:32400/identity' || exit 1"
+
+    qbittorrent:
+      image: "linuxserver/qbittorrent:latest"
+      environment:
+        WEBUI_PORT: 8080
+      volumes:
+        - "/docker/qbittorrent:/config"
+        - "/media/downloads:/downloads"
+      host: "downloads.arg.network"
+      port: 8080
+      cpus: 4
+      memory: "4G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8080' || exit 1"
+
+    radarr:
+      image: "linuxserver/radarr:latest"
+      depends_on:
+        - "prowlarr"
+        - "qbittorrent"
+      volumes:
+        - "/docker/radarr:/config"
+        - "/media/videos/movies:/movies"
+        - "/media/videos/unsorted_movies:/unsorted_movies"
+        - "/media/downloads:/downloads"
+      host: "radarr.arg.network"
+      port: 7878
+      cpus: 4
+      memory: "4G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:7878/ping' || exit 1"
+
+    sonarr:
+      image: "linuxserver/sonarr:latest"
+      depends_on:
+        - "prowlarr"
+        - "qbittorrent"
+      volumes:
+        - "/docker/sonarr:/config"
+        - "/media/videos/tv_shows:/tv"
+        - "/media/videos/unsorted_tv:/unsorted_tv"
+        - "/media/downloads:/downloads"
+      host: "sonarr.arg.network"
+      port: 8989
+      cpus: 4
+      memory: "4G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
+
+    prowlarr:
+      image: "linuxserver/prowlarr:latest"
+      volumes:
+        - "/docker/prowlarr:/config"
+      host: "prowlarr.arg.network"
+      port: 9696
+      cpus: 4
+      memory: "4G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"

@@ -1,0 +1,3 @@
+dotfiles:
+  repository: "https://github.com/arg/dotfiles.git"
+  directory: "/home/arg/.dotfiles"

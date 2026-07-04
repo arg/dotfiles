@@ -1,0 +1,7 @@
+firewall:
+  ports:
+    - 80
+    - 443
+  services:
+    - "OpenSSH"
+    - "Samba"
