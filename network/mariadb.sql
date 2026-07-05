@@ -1,5 +1,0 @@
-CREATE USER monica IDENTIFIED BY 'monica';
-CREATE DATABASE monica;
-GRANT ALL PRIVILEGES ON monica.* TO 'monica'@'%';
-
-FLUSH PRIVILEGES;
