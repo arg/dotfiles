@@ -2,20 +2,10 @@ zfs:
   encrypted_credentials_directory: "/etc/credstore.encrypted"
   encrypted_dataset: "zroot/home"
   pools:
-    - "archive"
-    - "apps"
-    - "media"
-  targets:
-    - "/home/arg/apps"
-    - "/home/arg/media"
-    - "/home/arg/archive"
+    - "zroot"
   snapshots:
     hourly: 0
     daily: 15
     monthly: 12
   snapshot_datasets:
-    - "archive/archives"
-    - "archive/backups"
-    - "archive/photos"
-    - "archive/veronika"
-    - "archive/videos"
+    - "zroot/home/vault"
