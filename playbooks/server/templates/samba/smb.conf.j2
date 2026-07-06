@@ -6,7 +6,7 @@
   log file = /var/log/samba/log.%m
   log level = 0 auth:2
   max log size = 1000
-  interfaces = {{ ansible_host }}/24
+  interfaces = {{ server_ip }}/{{ server_network_prefix }}
   bind interfaces only = yes
   server role = standalone server
   access based share enum = yes
@@ -25,7 +25,7 @@
   client min protocol = SMB3
   server max protocol = SMB3
   client max protocol = SMB3
-  hosts allow = {{ ansible_default_ipv4.network }}/{{ ansible_default_ipv4.netmask }}
+  hosts allow = {{ server_network_with_mask }}
   veto files = {{ '/' + samba.veto_files | join('/') + '/' }}
   delete veto files = yes
 

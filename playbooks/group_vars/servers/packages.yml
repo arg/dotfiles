@@ -10,6 +10,7 @@ packages:
     - "build-essential"
     - "rsyslog-gnutls"
     - "samba"
+    - "avahi-daemon"
     - "rclone"
     - "curl"
     - "wget"

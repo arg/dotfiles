@@ -1,4 +1,5 @@
 samba:
+  icon: "RackMac"
   veto_files:
     - "._*"
     - ".DS_Store"

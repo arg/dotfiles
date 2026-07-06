@@ -1,7 +1,11 @@
 firewall:
+  from_ip: "192.168.0.0/24"
   ports:
-    - 80
-    - 443
+    tcp:
+      - 80
+      - 443
+    udp:
+      - 5353
   services:
     - "OpenSSH"
     - "Samba"

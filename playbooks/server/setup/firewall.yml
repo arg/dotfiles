@@ -1,17 +1,26 @@
-- name: "Configure firewall (ports)"
+- name: "Configure firewall (TCP ports)"
   community.general.ufw:
     rule: "allow"
     port: "{{ item }}"
     proto: "tcp"
-    from_ip: "192.168.0.0/24"
-  loop: "{{ firewall.ports }}"
-  register: "firewall_ports"
+    from_ip: "{{ server_network }}/{{ server_network_prefix }}"
+  loop: "{{ firewall.ports.tcp }}"
+  register: "firewall_tcp_ports"
+
+- name: "Configure firewall (UDP ports)"
+  community.general.ufw:
+    rule: "allow"
+    port: "{{ item }}"
+    proto: "udp"
+    from_ip: "{{ server_network }}/{{ server_network_prefix }}"
+  loop: "{{ firewall.ports.udp }}"
+  register: "firewall_udp_ports"
 
 - name: "Configure firewall (services)"
   community.general.ufw:
     rule: "allow"
     name: "{{ item }}"
-    from_ip: "192.168.0.0/24"
+    from_ip: "{{ server_network }}/{{ server_network_prefix }}"
   loop: "{{ firewall.services }}"
   register: "firewall_services"
 
@@ -19,4 +28,4 @@
   community.general.ufw:
     state: "enabled"
     default: "deny"
-  when: "firewall_ports.changed or firewall_services.changed"
+  when: "firewall_tcp_ports.changed or firewall_udp_ports.changed or firewall_services.changed"

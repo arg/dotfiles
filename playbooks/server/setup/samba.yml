@@ -13,3 +13,19 @@
     state: "restarted"
     enabled: true
   when: "samba_config.changed"
+
+- name: "Configure Avahi SMB Service"
+  ansible.builtin.template:
+    src: "samba/avahi-smb.service.j2"
+    dest: "/etc/avahi/services/smb.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "avahi_smb_service"
+
+- name: "Restart Avahi Daemon"
+  ansible.builtin.systemd_service:
+    name: "avahi-daemon"
+    state: "restarted"
+    enabled: true
+  when: "avahi_smb_service.changed"
