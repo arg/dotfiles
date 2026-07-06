@@ -9,7 +9,7 @@ Requires=zfs-import.target
 Type=oneshot
 RemainAfterExit=yes
 LoadCredentialEncrypted={{ encrypted_credential_file }}:{{ encrypted_credential_full_path }}
-ExecStart={{ scripts_directory }}/zfs-unlock-vault.sh
+ExecStart={{ scripts_directory }}/unlock-zfs-vault.sh
 
 [Install]
 WantedBy=zfs-mount.service

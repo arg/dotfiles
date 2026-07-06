@@ -42,35 +42,27 @@
 
 - name: "Install unlock script"
   ansible.builtin.template:
-    src: "zfs/zfs-unlock-vault.sh.j2"
-    dest: "{{ scripts_directory }}/zfs-unlock-vault.sh"
+    src: "zfs/unlock-zfs-vault.sh.j2"
+    dest: "{{ scripts_directory }}/unlock-zfs-vault.sh"
     owner: "root"
     group: "root"
     mode: "0755"
 
 - name: "Install systemd service"
   ansible.builtin.template:
-    src: "zfs/zfs-unlock-vault.service.j2"
-    dest: "/etc/systemd/system/zfs-unlock-vault.service"
+    src: "zfs/unlock-zfs-vault.service.j2"
+    dest: "{{ systemd.path }}/system/unlock-zfs-vault.service"
     owner: "root"
     group: "root"
     mode: "0644"
+  register: "unlock_zfs_service"
 
 - name: "Enable systemd service"
   ansible.builtin.systemd_service:
-    name: "zfs-unlock-vault.service"
+    name: "unlock-zfs-vault.service"
     enabled: true
     daemon_reload: true
-
-    # - name: "Create ZFS mount targets"
-#   ansible.builtin.file:
-#     path: "{{ item }}"
-#     owner: "{{ ansible_user }}"
-#     group: "{{ ansible_user }}"
-#     mode: "0700"
-#     state: "directory"
-#   loop: "{{ zfs.targets }}"
-
+  when: "unlock_zfs_service.changed"
 # - name: "Schedule ZFS scrubs"
 #   ansible.builtin.systemd_service:
 #     name: "zfs-scrub-monthly@{{ item }}.timer"
