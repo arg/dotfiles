@@ -70,3 +70,37 @@
     enabled: true
     daemon_reload: true
   when: "console_powerdown_service.changed"
+
+- name: "Install fan noise fix script"
+  ansible.builtin.template:
+    src: "fan/fix-fan-noise.sh.j2"
+    dest: "{{ scripts_directory }}/fix-fan-noise.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: "Install fan noise fix service"
+  ansible.builtin.template:
+    src: "fan/fix-fan-noise.service.j2"
+    dest: "{{ systemd.path }}/system/fix-fan-noise.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "fix_fan_noise_service"
+
+- name: "Install fan noise fix timer"
+  ansible.builtin.template:
+    src: "fan/fix-fan-noise.sleep.j2"
+    dest: "{{ systemd.path }}/system-sleep/fix-fan-noise.sleep"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  register: "fix_fan_noise_timer"
+
+- name: "Enable service to fix fan noise"
+  ansible.builtin.systemd_service:
+    name: "fix-fan-noise.service"
+    state: "started"
+    enabled: true
+    daemon_reload: true
+  when: "fix_fan_noise_service.changed or fix_fan_noise_timer.changed"

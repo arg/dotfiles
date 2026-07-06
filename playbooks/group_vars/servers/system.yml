@@ -6,3 +6,5 @@ sysctl_vars:
     value: "10"
 grub:
   custom_cmdline: "fbcon=rotate:1 video=1920x1080 consoleblank=300"
+energy:
+  preference: "balance_power"

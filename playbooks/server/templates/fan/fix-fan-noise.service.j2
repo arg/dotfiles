@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/fan-fix.sh
+ExecStart={{ scripts_directory }}/fix-fan-noise.sh
 
 [Install]
 WantedBy=multi-user.target

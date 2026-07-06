@@ -1,3 +1,0 @@
-#!/bin/sh
-
-[ "$1" = post ] && /usr/local/bin/fan-fix.sh
