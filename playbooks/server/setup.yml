@@ -30,8 +30,8 @@
         encrypted_credential_full_path: "{{ zfs.encrypted_credentials_directory }}/{{ encrypted_credential_file }}"
       tags: ["zfs"]
 
-    # - import_tasks: "setup/samba.yml"
-    #   tags: ["samba"]
+    - import_tasks: "setup/samba.yml"
+      tags: ["samba"]
 
     # - import_tasks: "setup/backups.yml"
     #   tags: ["backups"]

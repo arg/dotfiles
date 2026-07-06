@@ -12,37 +12,44 @@ samba:
     - ".DocumentRevisions-V100"
   shares:
     - name: "downloads"
-      path: "/home/arg/media/downloads"
+      path: "/media/downloads"
       guest: false
       read_only: false
+
     - name: "literature"
-      path: "/home/arg/archive/literature"
+      path: "/home/arg/vault/literature"
       guest: false
       read_only: false
+
     - name: "software"
-      path: "/home/arg/media/software"
+      path: "/media/software"
       guest: true # unauthenticated users should be able to access software directory
       read_only: false
       user: "arg, veronika"
+
     - name: "videos"
-      path: "/home/arg/media/videos"
+      path: "/media/videos"
       guest: false
       read_only: false
+
     - name: "archives"
-      path: "/home/arg/archive/archives"
+      path: "/home/arg/vault/archives"
       guest: false
       read_only: true
+
     - name: "backups"
-      path: "/home/arg/archive/backups"
+      path: "/home/arg/vault/backups"
       guest: false
       read_only: true
+
     - name: "photos"
-      path: "/home/arg/archive/photos"
+      path: "/home/arg/vault/photos"
       guest: false
       read_only: true
       user: "arg, veronika"
+
     - name: "veronika"
-      path: "/home/arg/archive/veronika"
+      path: "/home/arg/vault/veronika"
       guest: false
       read_only: true
       user: "veronika"
