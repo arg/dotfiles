@@ -1,6 +1,6 @@
 [global]
-  workgroup = WORKGROUP
-  server string = Polaris
+  workgroup = {{ samba.workgroup }}
+  server string = {{ samba.server_string }}
   # Append syslog@1 if you want important messages to be sent to syslog too.
   logging = file systemd
   log file = /var/log/samba/log.%m
@@ -18,13 +18,9 @@
   security = user
   passdb backend = tdbsam
   server smb encrypt = required
-  client smb encrypt = required
-  server signing = required
-  client signing = required
+  server signing = mandatory
   server min protocol = SMB3
-  client min protocol = SMB3
   server max protocol = SMB3
-  client max protocol = SMB3
   hosts allow = {{ server_network_with_mask }}
   veto files = {{ '/' + samba.veto_files | join('/') + '/' }}
   delete veto files = yes
@@ -51,16 +47,16 @@
   create mask = 0644
   directory mask = 0755
   {% if share.read_only == true -%}
-  writable = no
+  read only = yes
   {% else -%}
-  writable = yes
+  read only = no
   {% endif -%}
   {% if share.guest == true -%}
   guest ok = yes
   {% else -%}
   guest ok = no
-  {% endif -%}
   valid users = {{ share.user | default(ansible_user) }}
+  {% endif -%}
   force user = {{ ansible_user }}
   force group = {{ ansible_user }}
 

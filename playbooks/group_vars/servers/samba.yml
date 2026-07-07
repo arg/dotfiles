@@ -1,5 +1,7 @@
 samba:
+  server_string: "Polaris"
   icon: "RackMac"
+  workgroup: "WORKGROUP"
   veto_files:
     - "._*"
     - ".DS_Store"
