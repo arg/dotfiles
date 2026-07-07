@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -eu
+
+escape_markdown() {
+    echo "$1" | sed -E 's/([_*\[\]()~`>#+\-=|{}.!])/\\\1/g'
+}
+
+bot_token="{{ secrets.telegram.bot_token }}"
+chat_id="{{ secrets.telegram.chat_id }}"
+
+escape_md() { printf '%s' "$1" | sed 's/[][_*()~`>#+=|{}.!\\-]/\\&/g'; }
+escape_code() { printf '%s' "$1" | sed 's/[\\`]/\\&/g'; }
+
+service="$(escape_md "${MONIT_SERVICE:-Monit}")"
+event="$(escape_md "${MONIT_EVENT:-Unknown event}")"
+alert_time="![${MONIT_DATE:-now}](tg://time?unix=$(date +%s)&format=DT)"
+details="$(escape_code "${MONIT_DESCRIPTION:-No description}")"
+
+text="*Monit Alert Triggered*
+*Service:* $service
+*Event:* $event
+*Time:* $alert_time
+
+*Details:*
+\`$details\`"
+
+curl --silent --show-error --max-time 10 \
+  --data-urlencode "chat_id=${chat_id}" \
+  --data-urlencode "text=${text}" \
+  --data "parse_mode=MarkdownV2" \
+  "https://api.telegram.org/bot${bot_token}/sendMessage" >/dev/null

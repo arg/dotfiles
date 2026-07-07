@@ -37,3 +37,5 @@ monit:
     check_docker: "check-docker.sh"
     check_temperature: "check-temperature.sh"
     check_fan: "check-fan.sh"
+  notifications:
+    telegram: "telegram-notification.sh"

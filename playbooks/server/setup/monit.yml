@@ -7,6 +7,15 @@
     mode: "0755"
   loop: "{{ monit.scripts | dict2items }}"
 
+- name: "Copy Monit notification scripts"
+  ansible.builtin.template:
+    src: "monit/{{ item.value }}.j2"
+    dest: "{{ scripts_directory }}/{{ item.value }}"
+    owner: "root"
+    group: "root"
+    mode: "0700"
+  loop: "{{ monit.notifications | dict2items }}"
+
 - name: "Create Monit systemd directory"
   ansible.builtin.file:
     path: "{{ systemd.path }}/system/monit.service.d"
