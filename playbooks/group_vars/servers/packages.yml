@@ -11,7 +11,7 @@ packages:
     - "rsyslog-gnutls"
     - "samba"
     - "avahi-daemon"
-    - "rclone"
+    # - "rclone" # Rclone for Ubuntu 26.04 is too outdated
     - "curl"
     - "wget"
     - "docker.io"

@@ -33,8 +33,8 @@
     - import_tasks: "setup/samba.yml"
       tags: ["samba"]
 
-    # - import_tasks: "setup/backups.yml"
-    #   tags: ["backups"]
+    - import_tasks: "setup/backups.yml"
+      tags: ["backups"]
 
     - import_tasks: "setup/docker.yml"
       tags: ["docker"]

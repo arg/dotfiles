@@ -1,13 +1,13 @@
 backups:
   logs_path: "/var/log/rclone"
   sources:
-    - path: "/home/arg/archive/archives"
+    - path: "/home/arg/vault/archives"
       hour: "1"
-    - path: "/home/arg/archive/backups"
+    - path: "/home/arg/vault/backups"
       hour: "3"
-    - path: "/home/arg/archive/photos"
+    - path: "/home/arg/vault/photos"
       hour: "5"
-    - path: "/home/arg/archive/veronika"
+    - path: "/home/arg/vault/veronika"
       hour: "7"
-    - path: "/home/arg/archive/videos"
+    - path: "/home/arg/vault/videos"
       hour: "9"
