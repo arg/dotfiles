@@ -1,13 +1,24 @@
-- name: "Clone dotfiles repository"
-  ansible.builtin.git:
-    repo: "{{ dotfiles.repository }}"
-    dest: "{{ dotfiles.directory }}"
-    clone: true
-    update: true
-  register: "dotfiles_repo"
+- name: "Check if dotfiles directory exists"
+  ansible.builtin.stat:
+    path: "{{ dotfiles.directory }}"
+  register: "dotfiles_directory"
 
 - name: "Install dotfiles"
-  ansible.builtin.make:
-    chdir: "{{ dotfiles.directory }}"
-    target: "configs"
-  when: "dotfiles_repo.changed"
+  when: "not dotfiles_directory.stat.exists"
+  block:
+    - name: "Clone dotfiles repository"
+      ansible.builtin.git:
+        repo: "{{ dotfiles.web_repository }}"
+        dest: "{{ dotfiles.directory }}"
+        clone: true
+        update: true
+
+    - name: "Set dotfiles remote to SSH"
+      ansible.builtin.command:
+        cmd: "git remote set-url origin {{ dotfiles.ssh_repository }}"
+        chdir: "{{ dotfiles.directory }}"
+
+    - name: "Symlink configs to dotfiles location"
+      ansible.builtin.make:
+        chdir: "{{ dotfiles.directory }}"
+        target: "configs"

@@ -1,3 +1,4 @@
 dotfiles:
-  repository: "https://github.com/arg/dotfiles.git"
+  web_repository: "https://github.com/arg/dotfiles.git"
+  ssh_repository: "git@github.com:arg/dotfiles.git"
   directory: "/home/arg/.dotfiles"
