@@ -119,6 +119,21 @@
     },
     "tool_permissions": {
       "tools": {
+        "mcp:datadog:get_change_stories": {
+          "default": "allow"
+        },
+        "mcp:datadog:aggregate_spans": {
+          "default": "allow"
+        },
+        "mcp:datadog:analyze_datadog_logs": {
+          "default": "allow"
+        },
+        "mcp:datadog:get_datadog_metric": {
+          "default": "allow"
+        },
+        "mcp:datadog:search_datadog_metrics": {
+          "default": "allow"
+        },
         "terminal": {
           "always_allow": [
             {

@@ -19,7 +19,7 @@
 	<key>AiMaxTokens</key>
 	<integer>1050000</integer>
 	<key>AiModel</key>
-	<string>gpt-5.4</string>
+	<string>gpt-5.5</string>
 	<key>AiResponseMaxTokens</key>
 	<integer>128000</integer>
 	<key>AitermURL</key>
@@ -1265,7 +1265,7 @@
 				<real>0.96744710206985474</real>
 			</dict>
 			<key>BM Growl</key>
-			<true/>
+			<false/>
 			<key>Background Color</key>
 			<dict>
 				<key>Alpha Component</key>
@@ -1646,7 +1646,7 @@
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Mouse Reporting allow clicks and drags</key>
-			<true/>
+			<false/>
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
@@ -1751,6 +1751,8 @@
 			<integer>2</integer>
 			<key>Shortcut</key>
 			<string></string>
+			<key>Show Offscreen Command line</key>
+			<false/>
 			<key>Show Status Bar</key>
 			<false/>
 			<key>Silence Bell</key>
@@ -3358,6 +3360,8 @@
 	<key>TmuxSyncClipboard</key>
 	<true/>
 	<key>TmuxUsesDedicatedProfile</key>
+	<false/>
+	<key>TripleClickSelectsFullWrappedLines</key>
 	<false/>
 	<key>UseBorder</key>
 	<false/>
