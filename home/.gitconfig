@@ -61,3 +61,5 @@
   defaultBranch = master
 [credential "https://git.heroku.com"]
 	helper = !heroku git:credentials
+[gpg]
+	program = /opt/homebrew/bin/gpg
