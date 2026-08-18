@@ -1,0 +1,13 @@
+[
+  {
+    "label": "Debug Rails server",
+    "adapter": "rdbg",
+    "request": "launch",
+    "command": "./bin/rails",
+    "args": ["server", "--port", "8000"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "env": {
+      "RUBY_DEBUG_OPEN": "true"
+    }
+  }
+]

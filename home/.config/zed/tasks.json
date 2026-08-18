@@ -1,0 +1,8 @@
+[
+  {
+    "label": "RSpec $ZED_RELATIVE_FILE:$ZED_ROW",
+    "command": "bundle",
+    "args": ["exec", "rspec", "\"$ZED_RELATIVE_FILE:$ZED_ROW\""],
+    "tags": ["ruby-test"]
+  }
+]
