@@ -1,8 +1,32 @@
 {
   // theme and UI settings
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry"
+    }
+  },
+  "markdown_preview_code_font_family": "Hack Nerd Font",
+  "markdown_preview_font_family": ".SystemUIFont",
+  "agent_buffer_font_size": 17.0,
+  "agent_ui_font_size": 17.0,
+  "use_system_window_tabs": true,
+  "bottom_dock_layout": "contained",
+  "preview_tabs": {
+    "enable_preview_from_project_panel": false
+  },
+  "title_bar": {
+    "show_menus": false,
+    "show_user_picture": true,
+    "show_user_menu": true,
+    "show_sign_in": true,
+    "show_onboarding_banner": false
+  },
+  "proxy": "",
+  "modeline_lines": 1,
   "cli_default_open_behavior": "existing_window",
-  "diff_view_style": "unified",
+  "diff_view_style": "split",
   "git_panel": {
+    "group_by": "status",
     "tree_view": true,
     "dock": "left",
   },
@@ -51,13 +75,15 @@
     "code_actions": false,
   },
   "tab_bar": {
+    "show_pinned_tabs_in_separate_row": false,
+    "show": true,
     "show_nav_history_buttons": false,
     "show_tab_bar_buttons": false,
   },
   "tabs": {
     "git_status": false,
     "close_position": "left",
-    "show_close_button": "always",
+    "show_close_button": "hover",
     "file_icons": false,
     "show_diagnostics": "off",
   },
@@ -89,7 +115,7 @@
   "minimap": { "show": "never" },
   "collaboration_panel": { "dock": "left", "button": false },
   "indent_guides": { "enabled": false },
-  "debugger": { "button": false },
+  // "debugger": { "button": false },
   // "search": { "button": false },
   "diagnostics": { "button": false },
   "telemetry": { "diagnostics": false, "metrics": false },
@@ -112,48 +138,49 @@
 
   // AI
   "agent": {
+    "flexible": false,
     "inline_assistant_model": {
       "provider": "copilot_chat",
       "model": "gpt-5.4",
-      "enable_thinking": false
+      "enable_thinking": false,
     },
     "tool_permissions": {
       "tools": {
         "mcp:datadog:get_change_stories": {
-          "default": "allow"
+          "default": "allow",
         },
         "mcp:datadog:aggregate_spans": {
-          "default": "allow"
+          "default": "allow",
         },
         "mcp:datadog:analyze_datadog_logs": {
-          "default": "allow"
+          "default": "allow",
         },
         "mcp:datadog:get_datadog_metric": {
-          "default": "allow"
+          "default": "allow",
         },
         "mcp:datadog:search_datadog_metrics": {
-          "default": "allow"
+          "default": "allow",
         },
         "terminal": {
           "always_allow": [
             {
-              "pattern": "^grep\\b"
+              "pattern": "^grep\\b",
             },
             {
-              "pattern": "^head\\b"
+              "pattern": "^head\\b",
             },
             {
-              "pattern": "^sort\\b"
+              "pattern": "^sort\\b",
             },
             {
-              "pattern": "^uniq\\b"
+              "pattern": "^uniq\\b",
             },
             {
-              "pattern": "^echo\\b"
-            }
-          ]
-        }
-      }
+              "pattern": "^echo\\b",
+            },
+          ],
+        },
+      },
     },
     "sidebar_side": "right",
     "dock": "right",
@@ -161,14 +188,9 @@
     "favorite_models": [
       {
         "provider": "copilot_chat",
-        "model": "claude-opus-4.6",
-        "enable_thinking": true
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.4",
+        "model": "claude-opus-5",
         "enable_thinking": true,
-        "effort": "high"
+        "effort": "xhigh"
       }
     ],
     "enable_feedback": false,
@@ -176,7 +198,7 @@
       "effort": "xhigh",
       "enable_thinking": true,
       "provider": "copilot_chat",
-      "model": "claude-opus-4.8",
+      "model": "claude-opus-5",
     },
     "thread_summary_model": {
       "provider": "copilot_chat",
@@ -185,7 +207,7 @@
   },
   "edit_predictions": {
     "copilot": {
-      "enable_next_edit_suggestions": true
+      "enable_next_edit_suggestions": true,
     },
     "allow_data_collection": "no",
     "provider": "copilot",
@@ -203,6 +225,11 @@
       "initialization_options": {
         "enabledFeatures": {
           "diagnostics": false,
+        },
+        "addonSettings": {
+          "Ruby LSP Rails": {
+            "enablePendingMigrationsPrompt": false,
+          },
         },
       },
     },
