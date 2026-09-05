@@ -111,6 +111,8 @@ docker:
 
     prowlarr:
       image: "linuxserver/prowlarr:latest"
+      depends_on:
+        - "flaresolverr"
       volumes:
         - "/docker/prowlarr:/config"
       host: "prowlarr.arg.network"
@@ -118,3 +120,12 @@ docker:
       cpus: 4
       memory: "4G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"
+
+    flaresolverr:
+      image: "flaresolverr/flaresolverr:latest"
+      environment:
+        LOG_LEVEL: "warn"
+      port: 8191
+      cpus: 4
+      memory: "6G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8191' || exit 1"
