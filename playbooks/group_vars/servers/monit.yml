@@ -10,7 +10,7 @@ monit:
       maximum: 80
     - name: "Motherboard temperature" # Not really correct, but close enough for now
       sensor: "acpitz"
-      maximum: 70
+      maximum: 75
     - name: "NVMe temperature"
       sensor: "nvme"
       maximum: 50
