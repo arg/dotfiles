@@ -138,6 +138,7 @@
 
   // AI
   "agent": {
+    "default_profile": "write",
     "flexible": false,
     "inline_assistant_model": {
       "provider": "copilot_chat",
@@ -186,6 +187,12 @@
             },
             {
               "pattern": "^git\\b"
+            },
+            {
+              "pattern": "^echo\\s+===(\\s|$)"
+            },
+            {
+              "pattern": "^ls\\s+bin(\\s|$)"
             }
           ],
         },
