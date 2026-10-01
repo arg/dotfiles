@@ -185,6 +185,12 @@
             },
             {
               "pattern": "^bundle\\s+exec(\\s|$)"
+            },
+            {
+              "pattern": "^ls\\s+config/initializers(\\s|$)"
+            },
+            {
+              "pattern": "^cat\\s+config/boot\\.rb(\\s|$)"
             }
           ]
         }
