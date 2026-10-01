@@ -127,6 +127,9 @@
     "**/.trivy"
   ],
   "agent": {
+    "threads_sidebar": {
+      "position": "right"
+    },
     "default_profile": "write",
     "flexible": false,
     "inline_assistant_model": {
@@ -196,7 +199,6 @@
         }
       }
     },
-    "sidebar_side": "right",
     "dock": "right",
     "use_modifier_to_send": true,
     "favorite_models": [
