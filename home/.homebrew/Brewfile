@@ -1,3 +1,4 @@
+brew "ffmpeg"
 brew "fish"
 brew "fzf"
 brew "gh"
