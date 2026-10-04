@@ -33,12 +33,12 @@
   },
   "context_servers": {
     "github": {
-      "enabled": true,
+      "enabled": false,
       "url": "https://api.githubcopilot.com/mcp/",
       "headers": { "Authorization": "Bearer <token>" }
     },
     "datadog": {
-      "enabled": true,
+      "enabled": false,
       "url": "https://mcp.datadoghq.com/api/unstable/mcp-server/mcp"
     }
   },
@@ -222,6 +222,9 @@
     }
   },
   "edit_predictions": {
+    "zed": {
+      "prediction_debounce": 0
+    },
     "copilot": {
       "enable_next_edit_suggestions": true
     },
