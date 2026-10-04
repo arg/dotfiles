@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+FB={{ console.framebuffer_attribute }}
+TTY=/dev/tty1
+IDLE={{ console.idle_timeout }}
+FLAG=/run/console-powerdown-flag
+
+last=$(stat -c '%X %Y' "$TTY" | tr ' ' '\n' | sort -n | tail -1)
+idle=$(( $(date +%s) - last ))
+
+if [ "$idle" -ge "$IDLE" ]; then
+    [ -e "$FLAG" ] && exit 0
+    echo 4 > "$FB"
+    : > "$FLAG"
+else
+    [ -e "$FLAG" ] || exit 0
+    echo 0 > "$FB"
+    rm -f "$FLAG"
+fi

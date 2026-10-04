@@ -8,3 +8,6 @@ grub:
   custom_cmdline: "fbcon=rotate:1 video=1920x1080"
 energy:
   preference: "balance_power"
+console:
+  idle_timeout: 300
+  framebuffer_attribute: "/sys/class/graphics/fb0/blank"

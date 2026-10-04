@@ -1,0 +1,11 @@
+[Unit]
+Description=Power down console after idle
+ConditionPathExists={{ console.framebuffer_attribute }}
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart={{ scripts_directory }}/console-powerdown.sh
+
+[Install]
+WantedBy=multi-user.target

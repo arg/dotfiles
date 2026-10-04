@@ -54,22 +54,39 @@
     cmd: "update-grub"
   when: "grub_config.changed"
 
+- name: "Install console powerdown script"
+  ansible.builtin.template:
+    src: "console/console-powerdown.sh.j2"
+    dest: "{{ scripts_directory }}/console-powerdown.sh"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
 - name: "Install console powerdown service"
-  ansible.builtin.copy:
-    src: "systemd/console-powerdown.service"
+  ansible.builtin.template:
+    src: "console/console-powerdown.service.j2"
     dest: "{{ systemd.path }}/system/console-powerdown.service"
     owner: "root"
     group: "root"
     mode: "0644"
   register: "console_powerdown_service"
 
+- name: "Install console powerdown timer"
+  ansible.builtin.template:
+    src: "console/console-powerdown.timer.j2"
+    dest: "{{ systemd.path }}/system/console-powerdown.timer"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "console_powerdown_timer"
+
 - name: "Enable console powerdown service"
   ansible.builtin.systemd_service:
-    name: "console-powerdown.service"
+    name: "console-powerdown.timer"
     state: "started"
     enabled: true
     daemon_reload: true
-  when: "console_powerdown_service.changed"
+  when: "console_powerdown_service.changed or console_powerdown_timer.changed"
 
 - name: "Install fan noise fix script"
   ansible.builtin.template:
