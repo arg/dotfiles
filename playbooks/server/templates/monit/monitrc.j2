@@ -35,14 +35,14 @@ check process "{{ service.name }}" with pidfile {{ service.pidfile }}
 check program "Sensor: {{ sensor.name }}" with path "{{ scripts_directory }}/{{ monit.scripts.check_temperature }} {{ sensor.sensor }} {{ sensor.maximum }}"
   group "Temperature"
   every 2 cycles
-  if status != 0 then exec "{{ scripts_directory }}/{{ monit.notifications.telegram }}"
+  if status != 0 for 2 cycles then exec "{{ scripts_directory }}/{{ monit.notifications.telegram }}"
 {% endfor %}
 
 {% for sensor in monit.fan_sensors %}
 check program "Fan: {{ sensor.name }}" with path "{{ scripts_directory }}/{{ monit.scripts.check_fan }} {{ sensor.sensor }} {{ sensor.minimum }}"
   group "Fans"
   every 2 cycles
-  if status != 0 then exec "{{ scripts_directory }}/{{ monit.notifications.telegram }}"
+  if status != 0 for 2 cycles then exec "{{ scripts_directory }}/{{ monit.notifications.telegram }}"
 {% endfor %}
 
 {% for name, _ in docker.compose.items() %}
