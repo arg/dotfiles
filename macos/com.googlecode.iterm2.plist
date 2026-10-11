@@ -1673,7 +1673,7 @@
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Mouse Reporting allow clicks and drags</key>
-			<false/>
+			<true/>
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>

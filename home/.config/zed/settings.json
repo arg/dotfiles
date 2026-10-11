@@ -4,9 +4,7 @@
     "code_font_family": "Hack Nerd Font"
   },
   "agent_servers": {
-    "claude-acp": {
-      "type": "registry"
-    }
+
   },
   "agent_buffer_font_size": 17.0,
   "agent_ui_font_size": 17.0,
@@ -25,7 +23,7 @@
   "proxy": "",
   "modeline_lines": 1,
   "cli_default_open_behavior": "existing_window",
-  "diff_view_style": "split",
+  "diff_view_style": "unified",
   "git_panel": {
     "group_by": "status",
     "tree_view": true,
@@ -190,10 +188,10 @@
               "pattern": "^bundle\\s+exec(\\s|$)"
             },
             {
-              "pattern": "^ls\\s+config/initializers(\\s|$)"
+              "pattern": "^rg\\b"
             },
             {
-              "pattern": "^cat\\s+config/boot\\.rb(\\s|$)"
+              "pattern": "^ls\\s+gems(\\s|$)"
             }
           ]
         }
