@@ -19,4 +19,6 @@ brew "vifm"
 brew "wget"
 brew "yt-dlp"
 
+cask "claude"
+cask "claude-code"
 cask "font-hack-nerd-font"
