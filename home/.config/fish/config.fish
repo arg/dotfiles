@@ -46,6 +46,7 @@ alias rm="rm -i"
 alias df="df -h"
 alias free="free -m"
 alias brakeman="brakeman -A -6 --summary -q --no-pager"
+alias zed="open -n -a \"Zed\" ."
 
 # MacOS specific settings
 if test (uname) = "Darwin"
