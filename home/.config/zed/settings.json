@@ -41,6 +41,7 @@
     }
   },
   "theme": "Gruvbox Dark",
+  "use_display_p3": true,
   "ui_font_family": "Hack Nerd Font",
   "relative_line_numbers": "enabled",
   "ui_font_size": 17,
@@ -126,6 +127,16 @@
     "**/.zed"
   ],
   "agent": {
+    "sandbox_permissions": {
+      "network_hosts": [
+        "api.github.com",
+        "github.com",
+        "*.actions.githubusercontent.com",
+        "*.blob.core.windows.net",
+        "docs.aws.amazon.com",
+        "raw.githubusercontent.com"
+      ]
+    },
     "threads_sidebar": {
       "position": "right"
     },
@@ -138,6 +149,16 @@
     },
     "tool_permissions": {
       "tools": {
+        "skill": {
+          "default": "allow"
+        },
+        "fetch": {
+          "always_allow": [
+            {
+              "pattern": "^https?://docs\\.aws\\.amazon\\.com"
+            }
+          ]
+        },
         "mcp:datadog:get_change_stories": {
           "default": "allow"
         },
@@ -196,6 +217,18 @@
             },
             {
               "pattern": "^wc\\b"
+            },
+            {
+              "pattern": "^gh\\s+pr(\\s|$)"
+            },
+            {
+              "pattern": "^gh\\s+run(\\s|$)"
+            },
+            {
+              "pattern": "^cut\\b"
+            },
+            {
+              "pattern": "^gh\\s+api(\\s|$)"
             }
           ]
         }
