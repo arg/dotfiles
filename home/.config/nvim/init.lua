@@ -170,29 +170,13 @@ require("lazy").setup({
   -- nvim-treesitter {{{
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
---    main = "nvim-treesitter.configs",
-    opts = {
-      ensure_installed = { "ruby", "dockerfile", "fish", "json", "yaml", "html", "javascript", "scss", "rust",
-                           "terraform", "toml", "lua", "pascal", "go" },
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { "ruby" }
-      },
-      indent = {
-        enable = true,
-        disable = { "ruby" } -- Treesitter indentation is broken for Ruby so we use vim-ruby instead
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<space>",
-          node_incremental = "<space>",
-          node_decremental = "<bs>",
-          scope_incremental = false
-        }
-      }
-    }
+    config = function()
+      require("nvim-treesitter").install({ "ruby", "dockerfile", "fish", "json", "yaml", "html", "javascript", "scss",
+                                           "rust", "terraform", "toml", "lua", "pascal", "go" })
+    end
   },
   -- }}}
   -- telescope {{{
@@ -644,6 +628,29 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.spell = true
     vim.opt_local.spelllang = "en_us"
+  end
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "Enable Treesitter highlighting, indentation and incremental selection",
+  callback = function(args)
+    local parser = vim.treesitter.get_parser(args.buf, nil, { error = false })
+    if not parser then
+      return
+    end
+
+    vim.treesitter.start(args.buf)
+
+    if args.match == "ruby" then
+      vim.bo[args.buf].syntax = "ruby"
+    elseif vim.treesitter.query.get(parser:lang(), "indents") then
+      vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end
+
+    local opts = { buffer = args.buf, remap = true, silent = true }
+    vim.keymap.set("n", "<Space>", "van", vim.tbl_extend("force", opts, { desc = "Start Treesitter selection" }))
+    vim.keymap.set("x", "<Space>", "an", vim.tbl_extend("force", opts, { desc = "Expand Treesitter selection" }))
+    vim.keymap.set("x", "<BS>", "in", vim.tbl_extend("force", opts, { desc = "Shrink Treesitter selection" }))
   end
 })
 
