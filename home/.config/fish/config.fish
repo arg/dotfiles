@@ -55,7 +55,7 @@ end
 
 function fish_user_key_bindings
   for mode in insert default visual
-    bind -M $mode -k nul accept-autosuggestion
+    bind -M $mode ctrl-space accept-autosuggestion
   end
 end
 
