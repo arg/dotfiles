@@ -1,3 +1,8 @@
 {
-  "hosts": ["unix:///var/run/docker.sock"]
+  "ip": "127.0.0.1",
+  "default-network-opts": {
+    "bridge": {
+      "com.docker.network.bridge.host_binding_ipv4": "127.0.0.1"
+    }
+  }
 }

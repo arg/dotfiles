@@ -1,11 +1,11 @@
 firewall:
-  from_ip: "192.168.0.0/24"
   ports:
     tcp:
       - 80
       - 443
     udp:
-      - 5353
+      - 5353 # mDNS (Avahi)
+      - 60100 # Mosh, connect with "mosh -p 60100"
   services:
     - "OpenSSH"
     - "Samba"

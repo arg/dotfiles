@@ -19,6 +19,6 @@
         chdir: "{{ dotfiles.directory }}"
 
     - name: "Symlink configs to dotfiles location"
-      ansible.builtin.make:
+      community.general.make:
         chdir: "{{ dotfiles.directory }}"
         target: "configs"

@@ -1,3 +1,12 @@
+- name: "Create Samba share directories"
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: "directory"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+  loop: "{{ samba.shares }}"
+
 - name: "Configure Samba"
   ansible.builtin.template:
     src: "samba/smb.conf.j2"
@@ -14,7 +23,22 @@
     enabled: true
   when: "samba_config.changed"
 
-- name: "Configure Avahi SMB Service"
+- name: "Check Samba user"
+  ansible.builtin.command:
+    cmd: "pdbedit --user={{ ansible_user }}"
+  register: "samba_user"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Create Samba user"
+  ansible.builtin.command:
+    cmd: "smbpasswd -s -a {{ ansible_user }}"
+    stdin: "{{ secrets.samba.password }}\n{{ secrets.samba.password }}"
+  when: "samba_user.rc != 0"
+  no_log: true
+
+- name: "Configure Avahi SMB service"
   ansible.builtin.template:
     src: "samba/avahi-smb.service.j2"
     dest: "/etc/avahi/services/smb.service"
@@ -23,7 +47,7 @@
     mode: "0644"
   register: "avahi_smb_service"
 
-- name: "Restart Avahi Daemon"
+- name: "Restart Avahi daemon"
   ansible.builtin.systemd_service:
     name: "avahi-daemon"
     state: "restarted"

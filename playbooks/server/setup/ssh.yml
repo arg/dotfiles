@@ -5,11 +5,12 @@
     owner: "root"
     group: "root"
     mode: "0600"
+    validate: "/usr/sbin/sshd -t -f %s"
   register: "sshd_config"
 
 - name: "Restart SSH server"
   ansible.builtin.systemd_service:
-    name: "sshd"
+    name: "ssh"
     state: "restarted"
     enabled: true
   when: "sshd_config.changed"

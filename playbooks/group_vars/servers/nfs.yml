@@ -1,0 +1,7 @@
+nfs:
+  server: "{{ hostvars['sirius']['ansible_host'] }}"
+  options: "nosuid,nodev,nofail,x-systemd.automount,noatime"
+  shares:
+    - name: "media"
+      write: true
+    - name: "photos"

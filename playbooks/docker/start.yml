@@ -1,7 +1,7 @@
 - name: "Start network services"
   hosts: "docker_hosts"
   tasks:
-    - name: "docker compose up"
+    - name: "Run docker compose up"
       community.docker.docker_compose_v2:
         project_src: "{{ docker_directory }}"
         state: "present"

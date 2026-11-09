@@ -1,3 +1,4 @@
+timezone: "Europe/Madrid"
 systemd:
   path: "/usr/lib/systemd"
   journal_size: "2G"

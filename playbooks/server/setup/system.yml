@@ -1,6 +1,6 @@
 - name: "Set timezone"
-  ansible.builtin.timezone:
-    name: "Europe/Madrid"
+  community.general.timezone:
+    name: "{{ timezone }}"
 
 - name: "Set sysctl variables"
   ansible.posix.sysctl:
@@ -11,113 +11,121 @@
     reload: true
   loop: "{{ sysctl_vars }}"
 
-- name: "Create journal systemd directory"
-  ansible.builtin.file:
-    path: "{{ systemd.path }}/journald.conf.d"
-    state: "directory"
-    recurse: true
-
-- name: "Configure journal"
-  ansible.builtin.template:
-    src: "journal/journal-size.conf.j2"
-    dest: "{{ systemd.path }}/journald.conf.d/journal-size.conf"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  register: "journal_config"
-
-- name: "Restart systemd-journald service"
-  ansible.builtin.systemd_service:
-    name: "systemd-journald"
-    state: "restarted"
-    enabled: true
-    daemon_reload: true
-  when: "journal_config.changed"
-
 - name: "Enable fstrim timer"
   ansible.builtin.systemd_service:
     name: "fstrim.timer"
     state: "started"
     enabled: true
 
+- name: "Configure systemd journal"
+  block:
+    - name: "Create journal systemd directory"
+      ansible.builtin.file:
+        path: "{{ systemd.path }}/journald.conf.d"
+        state: "directory"
+        recurse: true
+
+    - name: "Configure journal"
+      ansible.builtin.template:
+        src: "journal/journal-size.conf.j2"
+        dest: "{{ systemd.path }}/journald.conf.d/journal-size.conf"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: "journal_config"
+
+    - name: "Restart systemd-journald service"
+      ansible.builtin.systemd_service:
+        name: "systemd-journald"
+        state: "restarted"
+        enabled: true
+        daemon_reload: true
+      when: "journal_config.changed"
+
 - name: "Configure GRUB"
-  ansible.builtin.template:
-    src: "grub/custom.cfg.j2"
-    dest: "/etc/default/grub.d/99-custom.cfg"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  register: "grub_config"
+  block:
+    - name: "Write custom GRUB configuration"
+      ansible.builtin.template:
+        src: "grub/custom.cfg.j2"
+        dest: "/etc/default/grub.d/99-custom.cfg"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: "grub_config"
 
-- name: "Generate GRUB configuration"
-  ansible.builtin.command:
-    cmd: "update-grub"
-  when: "grub_config.changed"
+    - name: "Generate GRUB configuration"
+      ansible.builtin.command:
+        cmd: "update-grub"
+      when: "grub_config.changed"
 
-- name: "Install console powerdown script"
-  ansible.builtin.template:
-    src: "console/console-powerdown.sh.j2"
-    dest: "{{ scripts_directory }}/console-powerdown.sh"
-    owner: "root"
-    group: "root"
-    mode: "0755"
+- name: "Configure console powerdown service"
+  block:
+    - name: "Install console powerdown script"
+      ansible.builtin.template:
+        src: "console/console-powerdown.sh.j2"
+        dest: "{{ scripts_directory }}/console-powerdown.sh"
+        owner: "root"
+        group: "root"
+        mode: "0755"
 
-- name: "Install console powerdown service"
-  ansible.builtin.template:
-    src: "console/console-powerdown.service.j2"
-    dest: "{{ systemd.path }}/system/console-powerdown.service"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  register: "console_powerdown_service"
+    - name: "Install console powerdown service"
+      ansible.builtin.template:
+        src: "console/console-powerdown.service.j2"
+        dest: "{{ systemd.path }}/system/console-powerdown.service"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: "console_powerdown_service"
 
-- name: "Install console powerdown timer"
-  ansible.builtin.template:
-    src: "console/console-powerdown.timer.j2"
-    dest: "{{ systemd.path }}/system/console-powerdown.timer"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  register: "console_powerdown_timer"
+    - name: "Install console powerdown timer"
+      ansible.builtin.template:
+        src: "console/console-powerdown.timer.j2"
+        dest: "{{ systemd.path }}/system/console-powerdown.timer"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: "console_powerdown_timer"
 
-- name: "Enable console powerdown service"
-  ansible.builtin.systemd_service:
-    name: "console-powerdown.timer"
-    state: "started"
-    enabled: true
-    daemon_reload: true
-  when: "console_powerdown_service.changed or console_powerdown_timer.changed"
+    - name: "Enable console powerdown service"
+      ansible.builtin.systemd_service:
+        name: "console-powerdown.timer"
+        state: "started"
+        enabled: true
+        daemon_reload: true
+      when: "console_powerdown_service.changed or console_powerdown_timer.changed"
 
-- name: "Install fan noise fix script"
-  ansible.builtin.template:
-    src: "fan/fix-fan-noise.sh.j2"
-    dest: "{{ scripts_directory }}/fix-fan-noise.sh"
-    owner: "root"
-    group: "root"
-    mode: "0755"
+- name: "Fix fan noise"
+  block:
+    - name: "Install fan noise fix script"
+      ansible.builtin.template:
+        src: "fan/fix-fan-noise.sh.j2"
+        dest: "{{ scripts_directory }}/fix-fan-noise.sh"
+        owner: "root"
+        group: "root"
+        mode: "0755"
 
-- name: "Install fan noise fix service"
-  ansible.builtin.template:
-    src: "fan/fix-fan-noise.service.j2"
-    dest: "{{ systemd.path }}/system/fix-fan-noise.service"
-    owner: "root"
-    group: "root"
-    mode: "0644"
-  register: "fix_fan_noise_service"
+    - name: "Install fan noise fix service"
+      ansible.builtin.template:
+        src: "fan/fix-fan-noise.service.j2"
+        dest: "{{ systemd.path }}/system/fix-fan-noise.service"
+        owner: "root"
+        group: "root"
+        mode: "0644"
+      register: "fix_fan_noise_service"
 
-- name: "Install fan noise fix timer"
-  ansible.builtin.template:
-    src: "fan/fix-fan-noise.sleep.j2"
-    dest: "{{ systemd.path }}/system-sleep/fix-fan-noise.sleep"
-    owner: "root"
-    group: "root"
-    mode: "0755"
-  register: "fix_fan_noise_timer"
+    - name: "Install fan noise fix sleep hook"
+      ansible.builtin.template:
+        src: "fan/fix-fan-noise.sleep.j2"
+        dest: "{{ systemd.path }}/system-sleep/fix-fan-noise.sleep"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      register: "fix_fan_noise_sleep_hook"
 
-- name: "Enable service to fix fan noise"
-  ansible.builtin.systemd_service:
-    name: "fix-fan-noise.service"
-    state: "started"
-    enabled: true
-    daemon_reload: true
-  when: "fix_fan_noise_service.changed or fix_fan_noise_timer.changed"
+    - name: "Enable service to fix fan noise"
+      ansible.builtin.systemd_service:
+        name: "fix-fan-noise.service"
+        state: "started"
+        enabled: true
+        daemon_reload: true
+      when: "fix_fan_noise_service.changed or fix_fan_noise_sleep_hook.changed"

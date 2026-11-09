@@ -1,11 +1,12 @@
 docker:
   variables:
-    puid: 1000
-    pgid: 1000
-    tz: "Europe/Madrid"
+    puid: "{{ ansible_facts['getent_passwd'][ansible_user][1] }}"
+    pgid: "{{ ansible_facts['getent_passwd'][ansible_user][2] }}"
+    tz: "{{ timezone }}"
   compose:
     traefik:
-      image: "traefik:v3"
+      image: "traefik:v3.7"
+      network_mode: "host"
       command:
         - "--ping=true"
         - "--providers.docker=true"
@@ -24,28 +25,13 @@ docker:
         - "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=8.8.8.8:53"
         - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.disablechecks=true"
         - "--certificatesresolvers.letsencrypt.acme.dnschallenge.propagation.delaybeforechecks=60s"
-        - "--serverstransport.insecureskipverify=true"
       secrets: true
-      external_ports:
-        - "80:80"
-        - "443:443"
       volumes:
-        - "/docker/letsencrypt:/letsencrypt"
-        - "/var/run/docker.sock:/var/run/docker.sock"
+        - "{{ docker_directory }}/letsencrypt:/letsencrypt"
+        - "/var/run/docker.sock:/var/run/docker.sock:ro"
       cpus: 2
       memory: "1G"
       healthcheck: "traefik healthcheck --ping"
-
-    monit:
-      image: "caddy:latest"
-      command: "caddy reverse-proxy --from http://polaris.arg.network --to unix//run/monit/httpd.sock"
-      volumes:
-        - "/run/monit:/run/monit"
-      host: "polaris.arg.network"
-      port: 80
-      cpus: 1
-      memory: "512M"
-      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost' || exit 1"
 
     plex:
       image: "linuxserver/plex:latest"
@@ -53,11 +39,10 @@ docker:
       environment:
         VERSION: "docker"
       volumes:
-        - "/docker/plex:/config"
-        - "/media/videos:/videos"
+        - "{{ docker_directory }}/plex:/config"
+        - "{{ home_directory }}/media/videos:/videos"
       devices:
-        - "/dev/dri/card1:/dev/dri/card0"
-        - "/dev/dri/renderD128:/dev/dri/renderD128"
+        - "/dev/dri:/dev/dri"
       host: "plex.arg.network"
       port: 32400
       cpus: 8
@@ -69,8 +54,8 @@ docker:
       environment:
         WEBUI_PORT: 8080
       volumes:
-        - "/docker/qbittorrent:/config"
-        - "/media/downloads:/downloads"
+        - "{{ docker_directory }}/qbittorrent:/config"
+        - "{{ home_directory }}/downloads:/downloads"
       host: "downloads.arg.network"
       port: 8080
       cpus: 4
@@ -83,10 +68,10 @@ docker:
         - "prowlarr"
         - "qbittorrent"
       volumes:
-        - "/docker/radarr:/config"
-        - "/media/videos/movies:/movies"
-        - "/media/videos/unsorted_movies:/unsorted_movies"
-        - "/media/downloads:/downloads"
+        - "{{ docker_directory }}/radarr:/config"
+        - "{{ home_directory }}/media/videos/movies:/movies"
+        - "{{ home_directory }}/media/videos/unsorted_movies:/unsorted_movies"
+        - "{{ home_directory }}/downloads:/downloads"
       host: "radarr.arg.network"
       port: 7878
       cpus: 4
@@ -99,10 +84,10 @@ docker:
         - "prowlarr"
         - "qbittorrent"
       volumes:
-        - "/docker/sonarr:/config"
-        - "/media/videos/tv_shows:/tv"
-        - "/media/videos/unsorted_tv:/unsorted_tv"
-        - "/media/downloads:/downloads"
+        - "{{ docker_directory }}/sonarr:/config"
+        - "{{ home_directory }}/media/videos/tv_shows:/tv"
+        - "{{ home_directory }}/media/videos/unsorted_tv:/unsorted_tv"
+        - "{{ home_directory }}/downloads:/downloads"
       host: "sonarr.arg.network"
       port: 8989
       cpus: 4
@@ -114,7 +99,7 @@ docker:
       depends_on:
         - "flaresolverr"
       volumes:
-        - "/docker/prowlarr:/config"
+        - "{{ docker_directory }}/prowlarr:/config"
       host: "prowlarr.arg.network"
       port: 9696
       cpus: 4

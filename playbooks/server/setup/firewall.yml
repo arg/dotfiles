@@ -3,7 +3,7 @@
     rule: "allow"
     port: "{{ item }}"
     proto: "tcp"
-    from_ip: "{{ server_network }}/{{ server_network_prefix }}"
+    from_ip: "{{ server_network }}"
   loop: "{{ firewall.ports.tcp }}"
   register: "firewall_tcp_ports"
 
@@ -12,7 +12,7 @@
     rule: "allow"
     port: "{{ item }}"
     proto: "udp"
-    from_ip: "{{ server_network }}/{{ server_network_prefix }}"
+    from_ip: "{{ server_network }}"
   loop: "{{ firewall.ports.udp }}"
   register: "firewall_udp_ports"
 
@@ -20,7 +20,7 @@
   community.general.ufw:
     rule: "allow"
     name: "{{ item }}"
-    from_ip: "{{ server_network }}/{{ server_network_prefix }}"
+    from_ip: "{{ server_network }}"
   loop: "{{ firewall.services }}"
   register: "firewall_services"
 

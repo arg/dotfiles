@@ -2,8 +2,8 @@ ansible_ssh_common_args: '-o "SetEnv TERM=dumb"'
 ansible_user: "arg"
 
 scripts_directory: "/usr/local/bin"
-docker_directory: "/docker"
+home_directory: "/home/{{ ansible_user }}"
+docker_directory: "{{ home_directory }}/docker"
 server_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
-server_network: "{{ ansible_facts['default_ipv4']['network'] }}"
-server_network_prefix: "{{ (ansible_facts['default_ipv4']['address'] + '/' + ansible_facts['default_ipv4']['netmask']) | ipaddr('prefix') }}"
-server_network_with_mask: "{{ ansible_facts['default_ipv4']['network'] }}/{{ ansible_facts['default_ipv4']['netmask'] }}"
+server_network_prefix: "{{ ansible_facts['default_ipv4']['prefix'] }}"
+server_network: "{{ ansible_facts['default_ipv4']['network'] }}/{{ server_network_prefix }}"

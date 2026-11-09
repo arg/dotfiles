@@ -12,6 +12,9 @@ services:
 {% endfor %}
 {% endif %}
     restart: "no"
+{% if service.network_mode is defined %}
+    network_mode: "{{ service.network_mode }}"
+{% endif %}
 {% if service.command is defined %}
 {% if service.command is string %}
     command: "{{ service.command }}"

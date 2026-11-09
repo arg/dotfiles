@@ -48,9 +48,8 @@ alias free="free -m"
 alias brakeman="brakeman -A -6 --summary -q --no-pager"
 alias zed="open -n -a \"Zed\" ."
 
-# MacOS specific settings
 if test (uname) = "Darwin"
-  alias tar="gtar" # install GNU tar with "brew install gnu-tar"
+  alias tar="gtar"
 end
 
 function fish_user_key_bindings
@@ -142,6 +141,10 @@ function tm -a session -d "Selects and attaches to tmux session"
 end
 
 function compress -a target -a directory -d "Compresses directory"
+  if test (count $argv) -ne 2
+    echo "Usage: compress <target.tar|target.tar.gz|target.zip|target.7z> <directory>" >&2
+    return 1
+  end
   switch $target
     case "*.tar"
       tar -cv --posix --no-xattrs --mode='a=r,u+w,a+X' --exclude='Thumbs.db' --exclude='.DS_Store' -f $target $directory
@@ -155,6 +158,10 @@ function compress -a target -a directory -d "Compresses directory"
 end
 
 function extract -a filename -d "Extracts files from the archive"
+  if test (count $argv) -ne 1
+    echo "Usage: extract <filename>" >&2
+    return 1
+  end
   switch $filename
     case "*.tar"
       tar -xvf $filename
@@ -171,6 +178,27 @@ function extract -a filename -d "Extracts files from the archive"
     case '*'
       echo "Unknown archive type"
   end
+end
+
+function archive -a target -a directory -d "Archives directory (compressed if target is .tar.gz or .tgz)"
+  if test (count $argv) -ne 2
+    echo "Usage: archive <target.tar|target.tar.gz|target.tgz> <directory>" >&2
+    return 1
+  end
+  set directory (path resolve $directory)
+  string match -qr '\.(tar\.gz|tgz)$' -- $target; and set -l gzip "--gzip"
+  set -l tar (command -s gtar tar)[1]
+  sudo $tar -c -v --numeric-owner $gzip -C (path dirname $directory) -f - (path basename $directory) > $target
+end
+
+function unarchive -a filename -a directory -d "Restores archived directory"
+  if test (count $argv) -lt 1 -o (count $argv) -gt 2
+    echo "Usage: unarchive <filename> [directory]" >&2
+    return 1
+  end
+  set -q directory[1]; or set directory "."
+  set -l tar (command -s gtar tar)[1]
+  sudo $tar -x -v --same-owner --preserve-permissions --numeric-owner -C $directory -f $filename
 end
 
 __set_dirvariables

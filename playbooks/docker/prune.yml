@@ -1,7 +1,7 @@
 - name: "Prune old images and containers"
   hosts: "docker_hosts"
   tasks:
-    - name: "docker prune"
+    - name: "Run docker prune"
       community.docker.docker_prune:
         containers: true
         images: true

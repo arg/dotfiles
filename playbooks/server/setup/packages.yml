@@ -12,18 +12,88 @@
     state: "absent"
     autoremove: true
     purge: true
-  loop: "{{ packages.remove }}"
+  loop: "{{ packages.apt.remove }}"
   register: "removed_packages"
 
 - name: "Prevent unneeded packages from being installed again"
   ansible.builtin.dpkg_selections:
     name: "{{ item }}"
     selection: "hold"
-  loop: "{{ packages.remove }}"
+  loop: "{{ packages.apt.remove }}"
   when: "removed_packages.changed"
 
 - name: "Install packages"
   ansible.builtin.apt:
-    name: "{{ packages.install }}"
+    name: "{{ packages.apt.install }}"
     state: "present"
     install_recommends: false
+
+- name: "Check versions of GitHub packages"
+  ansible.builtin.shell:
+    cmd: "{{ item.name }} --version | grep -qF {{ item.version }}"
+  loop: "{{ packages.github }}"
+  register: "github_packages"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Install GitHub packages"
+  vars:
+    github_outdated: "{{ github_packages.results | selectattr('rc', 'ne', 0) | map(attribute='item') }}"
+    github_url: "{{ item.url | replace('{version}', item.version) }}"
+    github_file: "/tmp/{{ github_url | basename }}"
+  block:
+    - name: "Download packages"
+      ansible.builtin.get_url:
+        url: "{{ github_url }}"
+        dest: "{{ github_file }}"
+        checksum: "sha256:{{ item.sha256 }}"
+        mode: "0644"
+      loop: "{{ github_outdated }}"
+
+    - name: "Install .deb packages"
+      ansible.builtin.apt:
+        deb: "{{ github_file }}"
+        allow_downgrade: true
+      loop: "{{ github_outdated | selectattr('type', 'eq', 'deb') }}"
+
+    - name: "Install binaries"
+      ansible.builtin.copy:
+        src: "{{ github_file }}"
+        dest: "{{ scripts_directory }}/{{ item.name }}"
+        remote_src: true
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop: "{{ github_outdated | selectattr('type', 'eq', 'binary') }}"
+
+    - name: "Remove previous application directories"
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: "absent"
+      loop: "{{ github_outdated | selectattr('path', 'defined') }}"
+
+    - name: "Install archives"
+      ansible.builtin.unarchive:
+        src: "{{ github_file }}"
+        dest: "{{ (item.path | dirname) if item.path is defined else scripts_directory }}"
+        include: "{{ omit if item.path is defined else [item.name] }}"
+        remote_src: true
+        owner: "root"
+        group: "root"
+        mode: "u=rwX,go=rX"
+      loop: "{{ github_outdated | selectattr('type', 'eq', 'archive') }}"
+
+    - name: "Link application directories to scripts directory"
+      ansible.builtin.file:
+        src: "{{ item.path }}/bin/{{ item.name }}"
+        dest: "{{ scripts_directory }}/{{ item.name }}"
+        state: "link"
+        force: true
+      loop: "{{ github_outdated | selectattr('path', 'defined') }}"
+
+    - name: "Remove downloaded packages"
+      ansible.builtin.file:
+        path: "{{ github_file }}"
+        state: "absent"
+      loop: "{{ github_outdated }}"

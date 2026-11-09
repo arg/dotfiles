@@ -2,5 +2,5 @@
   hosts: "servers"
   gather_facts: false
   tasks:
-   - name: "Ping server"
-     ansible.builtin.ping:
+    - name: "Ping server"
+      ansible.builtin.ping:

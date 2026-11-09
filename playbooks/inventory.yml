@@ -2,6 +2,8 @@ all:
   hosts:
     polaris:
       ansible_host: "192.168.0.6"
+    sirius:
+      ansible_host: "192.168.0.5"
   children:
     servers:
       hosts:
@@ -9,8 +11,10 @@ all:
       vars:
         ansible_become: true
         ansible_become_user: "root"
-        ansible_become_method: "su"
-        ansible_become_exe: "sudo su -"
+        ansible_become_method: "sudo"
     docker_hosts:
       hosts:
         polaris:
+    nas:
+      hosts:
+        sirius:

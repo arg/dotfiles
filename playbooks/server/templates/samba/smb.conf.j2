@@ -21,7 +21,7 @@
   server signing = mandatory
   server min protocol = SMB3
   server max protocol = SMB3
-  hosts allow = {{ server_network_with_mask }}
+  hosts allow = {{ server_network }}
   veto files = {{ '/' + samba.veto_files | join('/') + '/' }}
   delete veto files = yes
 
@@ -34,9 +34,8 @@
   fruit:zero_file_id = yes
   fruit:metadata = stream
   fruit:encoding = native
-  fruit:model = MacSamba
+  fruit:model = {{ samba.icon }}
   fruit:posix_rename = yes
-  fruit:veto_appledouble = no
   fruit:wipe_intentionally_left_blank_rfork = yes
   fruit:delete_empty_adfiles = yes
 

@@ -15,44 +15,6 @@ samba:
     - ".DocumentRevisions-V100"
   shares:
     - name: "downloads"
-      path: "/media/downloads"
+      path: "{{ home_directory }}/downloads"
       guest: false
       read_only: false
-
-    - name: "literature"
-      path: "/home/arg/vault/literature"
-      guest: false
-      read_only: false
-
-    - name: "software"
-      path: "/media/software"
-      guest: true # unauthenticated users should be able to access software directory
-      read_only: false
-      user: "arg, veronika"
-
-    - name: "videos"
-      path: "/media/videos"
-      guest: false
-      read_only: false
-
-    - name: "archives"
-      path: "/home/arg/vault/archives"
-      guest: false
-      read_only: true
-
-    - name: "backups"
-      path: "/home/arg/vault/backups"
-      guest: false
-      read_only: true
-
-    - name: "photos"
-      path: "/home/arg/vault/photos"
-      guest: false
-      read_only: true
-      user: "arg, veronika"
-
-    - name: "veronika"
-      path: "/home/arg/vault/veronika"
-      guest: false
-      read_only: true
-      user: "veronika"

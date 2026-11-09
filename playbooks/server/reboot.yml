@@ -3,7 +3,4 @@
 
   tasks:
     - name: "Reboot the server"
-      ansible.builtin.command:
-        cmd: "systemctl reboot"
-      async: 1
-      poll: 0
+      ansible.builtin.reboot:

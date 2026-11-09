@@ -1,0 +1,35 @@
+- name: "Check NFS mount points"
+  ansible.builtin.command:
+    cmd: "mountpoint -q {{ home_directory }}/{{ item.name }}"
+  loop: "{{ nfs.shares }}"
+  register: "nfs_mount_points"
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: "Create NFS mount points"
+  ansible.builtin.file:
+    path: "{{ home_directory }}/{{ item.item.name }}"
+    state: "directory"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0700"
+  loop: "{{ nfs_mount_points.results }}"
+  when: "item.rc != 0"
+
+- name: "Mount NFS shares"
+  ansible.posix.mount:
+    src: "{{ nfs.server }}:/var/nfs/shared/{{ item.name }}"
+    path: "{{ home_directory }}/{{ item.name }}"
+    fstype: "nfs"
+    opts: "{{ 'rw' if item.write | default(false) else 'ro' }},{{ nfs.options }}"
+    state: "present"
+  loop: "{{ nfs.shares }}"
+  register: "nfs_mounts"
+
+- name: "Enable NFS automounts"
+  ansible.builtin.systemd_service:
+    name: "remote-fs.target"
+    state: "restarted"
+    daemon_reload: true
+  when: "nfs_mounts.changed"
