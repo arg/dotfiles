@@ -1,7 +1,9 @@
 -- Lazy.nvim {{{
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazy_commit = "306a05526ada86a7b30af95c5cc81ffba93fef97" -- v11.17.5+4 (2025-12-17)
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
+  vim.fn.system({ "git", "clone", "--filter=blob:none", "--no-checkout", "https://github.com/folke/lazy.nvim.git", lazypath })
+  vim.fn.system({ "git", "-C", lazypath, "checkout", "--quiet", lazy_commit })
 end
 -- }}}
 
@@ -143,9 +145,16 @@ vim.lsp.enable("cucumber_language_server")
 
 -- Plugins {{{
 require("lazy").setup({
+  -- lazy.nvim {{{
+  {
+    "folke/lazy.nvim",
+    commit = lazy_commit
+  },
+  -- }}}
   -- gruvbox.nvim {{{
   {
     "ellisonleao/gruvbox.nvim",
+    commit = "154eb5ff5b96d0641307113fa385eaf0d36d9796", -- 2.0.0+122 (2026-04-15)
     priority = 1000,
     lazy = false,
     config = function()
@@ -171,6 +180,7 @@ require("lazy").setup({
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
+    commit = "a9c4e1457e2e59f1b82c8f78dcdb3b2517555200", -- main@2026-10-31
     lazy = false,
     build = ":TSUpdate",
     config = function()
@@ -182,6 +192,7 @@ require("lazy").setup({
   -- telescope {{{
   {
     "nvim-telescope/telescope.nvim",
+    commit = "1e1bab730218eaf97fce743be3f56e51075928ac", -- v0.2.2+30 (2026-11-08)
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter",
                      "nvim-telescope/telescope-ui-select.nvim",
                      "debugloop/telescope-undo.nvim" },
@@ -212,6 +223,7 @@ require("lazy").setup({
   -- nvim-cmp {{{
   {
     "hrsh7th/nvim-cmp",
+    commit = "2ffe79f1f021def8dd1fcd81deb16f1bb0d989f3", -- v0.0.2+33 (2026-07-10)
     config = function()
       local cmp = require("cmp")
       cmp.setup({
@@ -292,6 +304,7 @@ require("lazy").setup({
   -- bufferline {{{
   {
     "akinsho/bufferline.nvim",
+    commit = "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3", -- v4.9.1 (2025-01-14)
     opts = {
       options = {
         numbers = "none",
@@ -329,7 +342,8 @@ require("lazy").setup({
   -- }}}
   -- nvim-tree {{{
   {
-    "kyazdani42/nvim-tree.lua",
+    "nvim-tree/nvim-tree.lua",
+    commit = "f632f208c52e942af1db6d3793ccdd4752dd28ac", -- v1.19+6 (2026-11-02)
     opts = {
       open_on_tab = true,
       git = { enable = true },
@@ -362,7 +376,8 @@ require("lazy").setup({
   -- lualine {{{
   {
     "nvim-lualine/lualine.nvim",
-    dependencies = { "kyazdani42/nvim-tree.lua" },
+    commit = "221ce6b2d999187044529f49da6554a92f740a96", -- master@2026-05-31
+    dependencies = { "nvim-tree/nvim-tree.lua" },
     config = function()
       local custom_gruvbox = require("lualine.themes.gruvbox")
       custom_gruvbox.normal.c.bg = "#3c3836"
@@ -425,24 +440,27 @@ require("lazy").setup({
   -- gitsigns {{{
   {
     "lewis6991/gitsigns.nvim",
+    commit = "1e9d0fbfe7ff848bc402d2c2e2854fb4eff2dce7", -- v2.1.0+80 (2026-10-29)
     config = true
   },
   -- }}}
   -- vim-fugitive {{{
   {
-    "tpope/vim-fugitive"
+    "tpope/vim-fugitive",
+    commit = "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0" -- v3.7+193 (2026-03-07)
   },
   -- }}}
   -- vim-sayonara {{{
   {
-    "mhinz/vim-sayonara"
+    "mhinz/vim-sayonara",
+    commit = "75c73f3cf3e96f8c09db5291970243699aadc02c" -- master@2021-09-03
   },
   -- }}}
   -- auto-save {{{
   {
     "pocco81/auto-save.nvim",
     branch = "dev",
-    commit = "9aceacfd184c34a2d878492a67bbd6b909b9480c",
+    commit = "9aceacfd184c34a2d878492a67bbd6b909b9480c", -- dev@2022-08-08
     opts = {
       execution_message = { message = "" },
       trigger_events = { "InsertLeave", "TextChanged" }
@@ -452,6 +470,7 @@ require("lazy").setup({
   -- nvim-comment {{{
   {
     "terrortylor/nvim-comment",
+    commit = "e9ac16ab056695cad6461173693069ec070d2b23", -- main@2022-08-09
     main = "nvim_comment",
     opts = {
       marker_padding = true,
@@ -462,6 +481,7 @@ require("lazy").setup({
   -- copilot {{{
   {
     "github/copilot.vim",
+    commit = "a12fd5672110c8aa7e3c8419e28c96943ca179be", -- v1.59.0 (2026-01-09)
     config = function()
       -- Apparently there is a bug somewhere (Copilot?) that adds extra characters when using <C-J>
       -- This is why I have to rely on the default mapping for now (<Tab>), which may conflict with other plugins
@@ -473,78 +493,17 @@ require("lazy").setup({
     end
   },
   -- }}}
-  -- codecompanion {{{
-  {
-    "olimorris/codecompanion.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
-    opts = {
-      display = {
-        action_palette = {
-          width = 95,
-          height = 10,
-          prompt = "Prompt ",
-          provider = "telescope",
-          opts = {
-            show_default_actions = true, -- Show the default actions in the action palette?
-            show_default_prompt_library = true, -- Show the default prompt library in the action palette?
-          }
-        },
-        chat = {
-          window = {
-            layout = "vertical", -- float|vertical|horizontal|buffer
-            position = "right", -- left|right|top|bottom (nil will default depending on vim.opt.splitright|vim.opt.splitbelow)
-            border = "single",
-            width = 0.79,
-            relative = "editor",
-            full_height = true,
-            opts = {
-              breakindent = true,
-              cursorcolumn = false,
-              cursorline = false,
-              foldcolumn = "0",
-              linebreak = true,
-              list = false,
-              numberwidth = 1,
-              signcolumn = "no",
-              spell = false,
-              wrap = true
-            }
-          }
-        }
-      },
-      strategies = {
-        chat = {
-          adapter = {
-            name = "copilot",
-            model = "claude-sonnet-4-20250514"
-          },
-          keymaps = {
-            send = {
-              modes = { n = "<C-s>", i = "<C-s>" },
-              opts = {},
-            },
-            close = {
-              modes = { n = "<C-c>", i = "<C-c>" },
-              opts = {},
-            },
-          }
-        },
-        inline = {
-          adapter = "copilot"
-        }
-      }
-    }
-  },
-  -- }}}
   -- nvim-lastplace {{{
   {
     "ethanholz/nvim-lastplace",
+    commit = "0bb6103c506315044872e0f84b1f736c4172bb20", -- main@2023-07-27
     config = true
   },
   -- }}}
   -- vim-ruby {{{
   {
     "vim-ruby/vim-ruby",
+    commit = "bf3a5994ce63796db7b1b04aea92772271f387aa", -- master@2025-04-28
     config = function()
       vim.g.ruby_indent_assignment_style = "variable"
     end
@@ -553,6 +512,7 @@ require("lazy").setup({
   -- vim-test {{{
   {
     "vim-test/vim-test",
+    commit = "7a5f7e1848b573de556adffe718097933d827d32", -- v3.6.0+1 (2026-11-01)
     dependencies = { "preservim/vimux" },
     config = function()
       vim.g["test#strategy"] = "vimux"
@@ -564,6 +524,7 @@ require("lazy").setup({
   -- vim-rails {{{
   {
     "tpope/vim-rails",
+    commit = "b0a5c76f86ea214ade36ab0b811e730c3f0add67", -- v5.4+253 (2025-02-19)
     dependencies = { "vim-ruby/vim-ruby" },
     config = function()
       vim.g.rails_projections = {
@@ -577,6 +538,7 @@ require("lazy").setup({
   -- NeoTest {{{
   {
   "nvim-neotest/neotest",
+    commit = "27bf921498043f7ecd821d6db68d05de244bbd02", -- v5.20.0+1 (2026-08-16)
     dependencies = { "olimorris/neotest-rspec", "nvim-neotest/nvim-nio" },
     config = function()
       require("neotest").setup({
@@ -585,6 +547,32 @@ require("lazy").setup({
         }
       })
     end
+  },
+  -- }}}
+  -- Dependencies {{{
+  {
+    "nvim-lua/plenary.nvim",
+    commit = "74b06c6c75e4eeb3108ec01852001636d85a932b" -- v0.1.4+40 (2026-04-10)
+  },
+  {
+    "nvim-telescope/telescope-ui-select.nvim",
+    commit = "6e51d7da30bd139a6950adf2a47fda6df9fa06d2" -- master@2023-12-04
+  },
+  {
+    "debugloop/telescope-undo.nvim",
+    commit = "928d0c2dc9606e01e2cc547196f48d2eaecf58e5" -- main@2025-01-31
+  },
+  {
+    "preservim/vimux",
+    commit = "d6cb7f63a8bb428ffc27060b7f83c77fb115589c" -- 1.1.0+114 (2026-02-27)
+  },
+  {
+    "olimorris/neotest-rspec",
+    commit = "7629f8c2837becb72090fbafce58506bb56a00f0" -- main@2026-06-18
+  },
+  {
+    "nvim-neotest/nvim-nio",
+    commit = "edcc181a875301dd21840189aa2f2f9ad69fc172" -- v1.10.1+1 (2026-07-15)
   }
   -- }}}
 })
@@ -607,7 +595,6 @@ vim.keymap.set("n", "<C-g>", ":Telescope live_grep<CR>", { silent = true, desc =
 vim.keymap.set("n", "<C-f>", ":Telescope lsp_document_symbols<CR>", { silent = true, desc = "List LSP symbols from current file" })
 vim.keymap.set("n", "<C-t>", ":Telescope lsp_workspace_symbols<CR>", { silent = true, desc = "List LSP symbols from all files" })
 vim.keymap.set("n", "<C-u>", ":Telescope undo<CR>", { silent = true, desc = "Show undo tree" })
-vim.keymap.set("n", "<C-q>", ":CodeCompanionChat Toggle<CR>", { silent = true, desc = "Open CodeCompanion action palette" })
 vim.keymap.set({ "n", "v" }, "<Leader>c", ":CommentToggle<CR>", { silent = true, desc = "Toggle line comment" })
 vim.keymap.set("n", "<C-s>", function() vim.lsp.buf.format({ async = true }) end, { silent = true, desc = "Format code" })
 vim.keymap.set("n", "<C-]>", function() vim.lsp.buf.definition() end, { silent = true, desc = "Go to definition" })
