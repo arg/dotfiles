@@ -80,7 +80,7 @@ vim.g.clipboard = {
   name = "OSC 52",
   copy = {
     ["+"] = osc52.copy("+"),
-    ["*"] = osc52.copy("*")
+    ["*"] = osc52.copy("+")
   },
   paste = {
     ["+"] = paste,
