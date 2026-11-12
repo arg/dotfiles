@@ -6,6 +6,8 @@
     group: "{{ ansible_user }}"
     mode: "0755"
   loop: "{{ samba.shares }}"
+  loop_control:
+    label: "{{ item.path }}"
 
 - name: "Configure Samba"
   ansible.builtin.template:

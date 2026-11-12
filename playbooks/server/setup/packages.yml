@@ -32,6 +32,8 @@
   ansible.builtin.shell:
     cmd: "{{ item.name }} --version | grep -qF {{ item.version }}"
   loop: "{{ packages.github }}"
+  loop_control:
+    label: "{{ item.name }}"
   register: "github_packages"
   changed_when: false
   failed_when: false
@@ -50,12 +52,16 @@
         checksum: "sha256:{{ item.sha256 }}"
         mode: "0644"
       loop: "{{ github_outdated }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: "Install .deb packages"
       ansible.builtin.apt:
         deb: "{{ github_file }}"
         allow_downgrade: true
       loop: "{{ github_outdated | selectattr('type', 'eq', 'deb') }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: "Install binaries"
       ansible.builtin.copy:
@@ -66,12 +72,16 @@
         group: "root"
         mode: "0755"
       loop: "{{ github_outdated | selectattr('type', 'eq', 'binary') }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: "Remove previous application directories"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: "absent"
       loop: "{{ github_outdated | selectattr('path', 'defined') }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: "Install archives"
       ansible.builtin.unarchive:
@@ -83,6 +93,8 @@
         group: "root"
         mode: "u=rwX,go=rX"
       loop: "{{ github_outdated | selectattr('type', 'eq', 'archive') }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: "Link application directories to scripts directory"
       ansible.builtin.file:
@@ -91,9 +103,13 @@
         state: "link"
         force: true
       loop: "{{ github_outdated | selectattr('path', 'defined') }}"
+      loop_control:
+        label: "{{ item.name }}"
 
     - name: "Remove downloaded packages"
       ansible.builtin.file:
         path: "{{ github_file }}"
         state: "absent"
       loop: "{{ github_outdated }}"
+      loop_control:
+        label: "{{ item.name }}"
