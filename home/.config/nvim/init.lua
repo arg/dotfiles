@@ -101,46 +101,94 @@ vim.lsp.config("*", {
   },
 })
 
--- install LSP with:
--- gem install ruby-lsp
--- gem install rubocop
--- npm install -g @cucumber/language-server (Node.js v22 required)
+local function bundled_server(cmd, config)
+  return vim.tbl_extend("force", config, {
+    cmd = function(dispatchers, client_config)
+      return vim.lsp.rpc.start(vim.list_extend({ "bundle", "exec" }, cmd), dispatchers, {
+        cwd = client_config.root_dir,
+        env = { RUBY_YJIT_ENABLE = "1" }
+      })
+    end,
+    root_dir = function(bufnr, on_dir)
+      local root = vim.fs.root(bufnr, "Gemfile.lock")
+      if root and vim.iter(vim.fn.readfile(root .. "/Gemfile.lock")):any(function(line)
+        return vim.startswith(line, "    " .. cmd[1] .. " (")
+      end) then
+        on_dir(root)
+      end
+    end
+  })
+end
+
+local function node_server(path, config)
+  return vim.tbl_extend("force", config, {
+    cmd = function(dispatchers, client_config)
+      return vim.lsp.rpc.start({ client_config.root_dir .. "/" .. path, "--stdio" }, dispatchers, {
+        cwd = client_config.root_dir
+      })
+    end,
+    root_dir = function(bufnr, on_dir)
+      local root = vim.fs.root(bufnr, "package.json")
+      if root and vim.fn.executable(root .. "/" .. path) == 1 then
+        on_dir(root)
+      end
+    end
+  })
+end
 
   -- ruby-lsp {{{
-vim.lsp.config("ruby-lsp", {
-  cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "ruby-lsp" },
+vim.lsp.config("ruby_lsp", bundled_server({ "ruby-lsp" }, {
   filetypes = { "ruby" },
   init_options = {
     formatter = "none"
-  }
-})
-vim.lsp.enable("ruby-lsp", {
-  on_init = function(client, _)
-    -- I don't like this semantic highlighting. IMO vim-ruby does a better job.
+  },
+  on_init = function(client)
     client.server_capabilities.semanticTokensProvider = false
-    -- Uncomment the following lines if you want to use standalone Rubocop for diagnostics and formatting
     client.server_capabilities.diagnosticProvider = false
     client.server_capabilities.documentFormattingProvider = false
   end
-})
+}))
   -- }}}
 
   -- rubocop {{{
-vim.lsp.config("rubocop", {
-  cmd = { "env", "RUBY_YJIT_ENABLE=1", "bundle", "exec", "rubocop", "--lsp" },
+vim.lsp.config("rubocop", bundled_server({ "rubocop", "--lsp" }, {
   filetypes = { "ruby" }
-})
-vim.lsp.enable("rubocop")
--- }}}
-
-  -- cucumber-language-server {{{
-vim.lsp.config("cucumber_language_server", {
-  cmd = { "npx", "cucumber-language-server", "--stdio" },
-  filetypes = { "cucumber" }
-})
-vim.lsp.enable("cucumber_language_server")
+}))
   -- }}}
 
+  -- herb-language-server {{{
+vim.lsp.config("herb_ls", node_server("node_modules/.bin/herb-language-server", {
+  filetypes = { "eruby" }
+}))
+  -- }}}
+
+  -- cucumber-language-server {{{
+vim.lsp.config("cucumber_language_server", node_server("bin/cucumber-language-server", {
+  filetypes = { "cucumber" }
+}))
+  -- }}}
+
+  -- tailwindcss-language-server {{{
+vim.lsp.config("tailwindcss", node_server("node_modules/.bin/tailwindcss-language-server", {
+  filetypes = { "css", "eruby", "ruby" },
+  settings = {
+    tailwindCSS = {
+      includeLanguages = {
+        eruby = "erb",
+        ruby = "html"
+      },
+      experimental = {
+        classRegex = { [[\bclass:\s*["']([^"']*)]] }
+      },
+      files = {
+        exclude = { "**/.git/**", "**/node_modules/**", "**/.hg/**", "**/.svn/**", "**/.bundle/**" }
+      }
+    }
+  }
+}))
+  -- }}}
+
+vim.lsp.enable({ "ruby_lsp", "rubocop", "herb_ls", "cucumber_language_server", "tailwindcss" })
 -- }}}
 
 -- Plugins {{{
@@ -224,7 +272,9 @@ require("lazy").setup({
   {
     "hrsh7th/nvim-cmp",
     commit = "2ffe79f1f021def8dd1fcd81deb16f1bb0d989f3", -- v0.0.2+33 (2026-07-10)
+    dependencies = { "hrsh7th/cmp-nvim-lsp" },
     config = function()
+      vim.lsp.config("*", { capabilities = require("cmp_nvim_lsp").default_capabilities() })
       local cmp = require("cmp")
       cmp.setup({
         completion = { autocomplete = false },
@@ -573,6 +623,10 @@ require("lazy").setup({
   {
     "nvim-neotest/nvim-nio",
     commit = "edcc181a875301dd21840189aa2f2f9ad69fc172" -- v1.10.1+1 (2026-07-15)
+  },
+  {
+    "hrsh7th/cmp-nvim-lsp",
+    commit = "cd4ee08a988deb47ac3726f418fb27fe1a95729d" -- main@2026-11-05
   }
   -- }}}
 })
