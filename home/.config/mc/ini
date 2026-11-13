@@ -6,7 +6,7 @@ auto_save_setup=true
 preallocate_space=false
 auto_menu=false
 use_internal_view=true
-use_internal_edit=true
+use_internal_edit=false
 clear_before_exec=true
 confirm_delete=true
 confirm_overwrite=true
@@ -23,7 +23,7 @@ mouse_move_pages_viewer=true
 mouse_close_dialog=false
 fast_refresh=false
 drop_menus=true
-wrap_mode=true
+wrap_mode=false
 old_esc_mode=true
 old_esc_mode_timeout=0
 cd_symlinks=true
@@ -80,7 +80,7 @@ editor_filesize_threshold=64M
 editor_stop_format_chars=-+*\\,.;:&>
 mcview_eof=
 ignore_ftp_chattr_errors=true
-skin=modarin256-defbg
+skin=modarin256-defbg-thin
 
 filepos_max_saved_entries=1024
 
@@ -89,6 +89,7 @@ editor_state_full_filename=false
 safe_overwrite=false
 
 shadows=false
+shell_directory_timeout=900
 
 [Layout]
 message_visible=false
@@ -100,7 +101,7 @@ menubar_visible=false
 free_space=true
 horizontal_split=false
 vertical_equal=true
-left_panel_size=52
+left_panel_size=96
 horizontal_equal=true
 top_panel_size=1
 
@@ -123,6 +124,7 @@ xterm-256color=
 color_terminals=
 
 screen-256color=
+tmux-256color=
 
 [Panels]
 show_mini_info=true
@@ -175,7 +177,7 @@ diff_tab_expansion=false
 diff_ignore_case=false
 
 [Panelize]
-Find *.orig after patching=find . -name \\*.orig -print
 Find SUID and SGID programs=find . \\( \\( -perm -04000 -a -perm /011 \\) -o \\( -perm -02000 -a -perm /01 \\) \\) -print
-Find rejects after patching=find . -name \\*.rej -print
+Find *.orig after patching=find . -name \\*.orig -print
 Modified git files=git ls-files --modified
+Find rejects after patching=find . -name \\*.rej -print
