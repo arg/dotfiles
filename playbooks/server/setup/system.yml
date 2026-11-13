@@ -7,6 +7,7 @@
     name: "{{ item.name }}"
     value: "{{ item.value }}"
     state: "present"
+    sysctl_file: "/etc/sysctl.d/99-custom.conf"
     sysctl_set: true
     reload: true
   loop: "{{ sysctl_vars }}"
