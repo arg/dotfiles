@@ -243,12 +243,14 @@ require("lazy").setup({
     commit = "1e1bab730218eaf97fce743be3f56e51075928ac", -- v0.2.2+30 (2026-11-08)
     dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter",
                      "nvim-telescope/telescope-ui-select.nvim",
-                     "debugloop/telescope-undo.nvim" },
+                     "debugloop/telescope-undo.nvim",
+                     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" } },
     config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup({
         defaults = {
-          file_ignore_patterns = { "^.git/", ".lock$", ".keep$", ".enc$", "^coverage/", "^tmp/", "^log/" },
+          file_ignore_patterns = { "^.git/", ".lock$", ".keep$", ".enc$", "^coverage/", "^tmp/", "^log/",
+            "^node_modules/", "^.bundle/", "^.design-sync/", "^.vscode/", "^.idea/", "^.zed/" }
         },
         pickers = {
           find_files = { hidden = true }
@@ -627,6 +629,11 @@ require("lazy").setup({
   {
     "hrsh7th/cmp-nvim-lsp",
     commit = "cd4ee08a988deb47ac3726f418fb27fe1a95729d" -- main@2026-11-05
+  },
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    commit = "b25b749b9db64d375d782094e2b9dce53ad53a40", -- main@2026-05-06
+    build = "make"
   }
   -- }}}
 })
