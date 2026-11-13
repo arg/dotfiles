@@ -16,6 +16,7 @@ packages:
       - "mosh"
       - "nfs-common"
       - "nvme-cli"
+      - "ripgrep"
       - "samba"
       - "tmux"
       - "unzip"
