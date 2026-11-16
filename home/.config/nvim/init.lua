@@ -413,7 +413,8 @@ require("lazy").setup({
         }
       },
       filters = {
-        custom = { "^.git$", "^node_modules$", "^tmp$", "^log$", "^coverage$" }
+        custom = { "^.git$", "^node_modules$", "^tmp$", "^log$", "^coverage$", "^.claude", "^.design-sync",
+                   "^.vscode", "^.idea", "^.zed", ".agents" }
       },
       actions = {
         change_dir = { enable = false },
