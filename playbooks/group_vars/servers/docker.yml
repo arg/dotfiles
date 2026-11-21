@@ -33,6 +33,16 @@ docker:
       memory: "1G"
       healthcheck: "traefik healthcheck --ping"
 
+    gluetun:
+      image: "qmcgaw/gluetun:v3.41.3"
+      secrets: true
+      cap_add:
+        - "NET_ADMIN"
+      devices:
+        - "/dev/net/tun:/dev/net/tun"
+      cpus: 2
+      memory: "1G"
+
     plex:
       image: "linuxserver/plex:latest"
       secrets: true
@@ -74,6 +84,7 @@ docker:
         - "{{ home_directory }}/downloads:/downloads"
       host: "radarr.arg.network"
       port: 7878
+      network_mode: "service:gluetun"
       cpus: 4
       memory: "4G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:7878/ping' || exit 1"
@@ -90,6 +101,7 @@ docker:
         - "{{ home_directory }}/downloads:/downloads"
       host: "sonarr.arg.network"
       port: 8989
+      network_mode: "service:gluetun"
       cpus: 4
       memory: "4G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
@@ -102,6 +114,7 @@ docker:
         - "{{ docker_directory }}/prowlarr:/config"
       host: "prowlarr.arg.network"
       port: 9696
+      network_mode: "service:gluetun"
       cpus: 4
       memory: "4G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:9696/ping' || exit 1"
@@ -111,6 +124,7 @@ docker:
       environment:
         LOG_LEVEL: "warn"
       port: 8191
+      network_mode: "service:gluetun"
       cpus: 4
       memory: "6G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8191' || exit 1"

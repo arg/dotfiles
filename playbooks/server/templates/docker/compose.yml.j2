@@ -15,6 +15,21 @@ services:
 {% if service.network_mode is defined %}
     network_mode: "{{ service.network_mode }}"
 {% endif %}
+{% set attached = docker.compose | dict2items | selectattr("value.network_mode", "defined") | selectattr("value.network_mode", "equalto", "service:" ~ name) | map(attribute="key") | list %}
+{% if attached %}
+    networks:
+      default:
+        aliases:
+{% for alias in attached %}
+          - "{{ alias }}"
+{% endfor %}
+{% endif %}
+{% if service.cap_add is defined %}
+    cap_add:
+{% for capability in service.cap_add %}
+      - "{{ capability }}"
+{% endfor %}
+{% endif %}
 {% if service.command is defined %}
 {% if service.command is string %}
     command: "{{ service.command }}"
