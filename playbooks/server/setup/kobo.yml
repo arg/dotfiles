@@ -1,0 +1,28 @@
+- name: "Get user details"
+  ansible.builtin.getent:
+    database: "passwd"
+    key: "{{ ansible_user }}"
+
+- name: "Create Kobo mount directory"
+  ansible.builtin.file:
+    path: "{{ kobo.directory }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: "Install Kobo mount unit"
+  ansible.builtin.template:
+    src: "kobo/kobo.mount.j2"
+    dest: "{{ systemd.path }}/system/{{ kobo.unit }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: "kobo_mount_unit"
+
+- name: "Enable Kobo mount unit"
+  ansible.builtin.systemd_service:
+    name: "{{ kobo.unit }}"
+    enabled: true
+    daemon_reload: true
+  when: "kobo_mount_unit.changed"

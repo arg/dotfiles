@@ -1,0 +1,6 @@
+kobo:
+  label: "KOBOeReader"
+  directory: "/media/usb"
+  path: "/media/usb/kobo"
+  unit: "media-usb-kobo.mount"
+  options: "nosuid,nodev,noexec,noatime,flush,utf8"

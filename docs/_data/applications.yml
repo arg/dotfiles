@@ -28,6 +28,11 @@
   url: 'https://sonarr.arg.network'
   hostname: 'sonarr.arg.network'
 
+- name: 'Lidarr'
+  description: 'Music organizer'
+  url: 'https://lidarr.arg.network'
+  hostname: 'lidarr.arg.network'
+
 - name: 'Prowlarr'
   description: 'Indexer management'
   url: 'https://prowlarr.arg.network'
@@ -37,6 +42,11 @@
   description: 'BitTorrent client'
   url: 'https://downloads.arg.network'
   hostname: 'downloads.arg.network'
+
+- name: 'Calibre'
+  description: 'Books organizer'
+  url: 'https://calibre.arg.network'
+  hostname: 'calibre.arg.network'
 
 - name: 'IT-Tools'
   description: 'Tools for developers'

@@ -26,6 +26,9 @@
     - import_tasks: "setup/nfs.yml"
       tags: ["nfs"]
 
+    - import_tasks: "setup/kobo.yml"
+      tags: ["kobo"]
+
     - import_tasks: "setup/docker.yml"
       tags: ["docker"]
 

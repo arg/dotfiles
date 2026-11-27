@@ -6,7 +6,7 @@
         project_src: "{{ docker_directory }}"
         state: "present"
         recreate: "always"
-        pull: "never"
+        pull: "missing"
         wait: true
         wait_timeout: 120
       register: "compose_restart"

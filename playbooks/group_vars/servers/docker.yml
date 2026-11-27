@@ -107,6 +107,22 @@ docker:
       memory: "4G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8989/ping' || exit 1"
 
+    lidarr:
+      image: "linuxserver/lidarr:latest"
+      depends_on:
+        - "prowlarr"
+        - "qbittorrent"
+      volumes:
+        - "{{ docker_directory }}/lidarr:/config"
+        - "{{ home_directory }}/media/music:/music"
+        - "{{ home_directory }}/downloads:/downloads"
+      host: "lidarr.arg.network"
+      port: 8686
+      # network_mode: "service:gluetun"
+      cpus: 4
+      memory: "4G"
+      healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8686/ping' || exit 1"
+
     prowlarr:
       image: "linuxserver/prowlarr:latest"
       depends_on:
@@ -129,3 +145,23 @@ docker:
       cpus: 4
       memory: "6G"
       healthcheck: "curl --output /dev/null --silent --head --fail 'http://localhost:8191' || exit 1"
+
+    calibre:
+      image: "linuxserver/calibre:latest"
+      secrets: true
+      environment:
+        CUSTOM_USER: "{{ ansible_user }}"
+        DISABLE_SUDO: "true"
+        DISABLE_TERMINALS: "true"
+      volumes:
+        - "{{ docker_directory }}/calibre:/config"
+        - "{{ home_directory }}/literature/Books:/books"
+        - "{{ kobo.directory }}:{{ kobo.directory }}:rslave"
+      devices:
+        - "/dev/dri:/dev/dri"
+      shm_size: "1G"
+      host: "calibre.arg.network"
+      port: 8080
+      cpus: 4
+      memory: "4G"
+      healthcheck: "curl --output /dev/null --silent --head 'http://localhost:8080' || exit 1"

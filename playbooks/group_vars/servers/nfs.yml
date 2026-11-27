@@ -4,4 +4,6 @@ nfs:
   shares:
     - name: "media"
       write: true
+    - name: "literature"
+      write: true
     - name: "photos"

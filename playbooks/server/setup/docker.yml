@@ -35,15 +35,16 @@
   vars:
     variables: "{{ docker.variables }}"
 
-- name: "Generate secrets.env file for Docker Compose"
+- name: "Generate secrets files for Docker Compose"
   ansible.builtin.template:
     src: "docker/variables.env.j2"
-    dest: "{{ docker_directory }}/secrets.env"
+    dest: "{{ docker_directory }}/secrets.{{ item }}.env"
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: "0600"
   vars:
-    variables: "{{ secrets.docker }}"
+    variables: "{{ secrets.docker[item] }}"
+  loop: "{{ docker.compose | dict2items | selectattr('value.secrets', 'defined') | selectattr('value.secrets') | map(attribute='key') }}"
   no_log: true
 
 - name: "Generate Docker Compose stack definition"

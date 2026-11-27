@@ -1,0 +1,11 @@
+[Unit]
+Description=Kobo e-reader
+
+[Mount]
+What=/dev/disk/by-label/{{ kobo.label }}
+Where={{ kobo.path }}
+Type=vfat
+Options={{ kobo.options }},uid={{ docker.variables.puid }},gid={{ docker.variables.pgid }}
+
+[Install]
+WantedBy=dev-disk-by\x2dlabel-{{ kobo.label }}.device

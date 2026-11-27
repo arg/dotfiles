@@ -89,6 +89,15 @@ resource "cloudflare_record" "atlas" {
   comment = "Core i7/3050/32/4TB"
 }
 
+resource "cloudflare_record" "calibre" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "calibre"
+  value = "192.168.0.6"
+  proxied = false
+  comment = "Books organizer"
+}
+
 resource "cloudflare_record" "downloads" {
   zone_id = var.cloudflare_zone_id
   type = "A"
@@ -114,6 +123,15 @@ resource "cloudflare_record" "ipmi" {
   value = "192.168.0.5"
   proxied = false
   comment = "Supermicro IPMI interface"
+}
+
+resource "cloudflare_record" "lidarr" {
+  zone_id = var.cloudflare_zone_id
+  type = "A"
+  name = "lidarr"
+  value = "192.168.0.6"
+  proxied = false
+  comment = "Music organizer"
 }
 
 resource "cloudflare_record" "localhost" {

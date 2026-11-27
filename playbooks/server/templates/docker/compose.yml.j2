@@ -49,7 +49,7 @@ services:
     env_file:
       - "variables.env"
 {% if service.secrets | default(false) %}
-      - "secrets.env"
+      - "secrets.{{ name }}.env"
 {% endif %}
 {% if service.environment is defined %}
     environment:
@@ -75,6 +75,9 @@ services:
 {% for device in service.devices %}
       - "{{ device }}"
 {% endfor %}
+{% endif %}
+{% if service.shm_size is defined %}
+    shm_size: "{{ service.shm_size }}"
 {% endif %}
     deploy:
       resources:
